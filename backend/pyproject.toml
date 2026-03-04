@@ -1,0 +1,72 @@
+[project]
+name = "gestronomy-backend"
+version = "0.1.0"
+description = "Gestronomy — AI-Powered Restaurant Management System"
+requires-python = ">=3.11"
+dependencies = [
+    # Web framework
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "python-multipart>=0.0.12",
+    # Database
+    "sqlalchemy[asyncio]>=2.0.36",
+    "asyncpg>=0.30.0",
+    "psycopg2-binary>=2.9.10",
+    "alembic>=1.14.0",
+    # Redis
+    "redis>=5.2.0",
+    # Auth
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "bcrypt>=4.2.0",
+    # Validation & settings
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.6.0",
+    "email-validator>=2.2.0",
+    # Task queue
+    "celery[redis]>=5.4.0",
+    # AI / LLM
+    "anthropic>=0.39.0",
+    # ML / Data
+    "scikit-learn>=1.5.0",
+    "prophet>=1.1.6",
+    "pandas>=2.2.0",
+    "numpy>=1.26.0",
+    # OCR
+    "pytesseract>=0.3.13",
+    "Pillow>=11.0.0",
+    # Computer Vision
+    "opencv-python-headless>=4.10.0",
+    "ultralytics>=8.3.0",
+    # Utilities
+    "httpx>=0.28.0",
+    "python-dateutil>=2.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "httpx>=0.28.0",
+    "ruff>=0.8.0",
+    "factory-boy>=3.3.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

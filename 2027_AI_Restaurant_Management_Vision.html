@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2027 AI-Powered Restaurant Management System — Complete Vision Report</title>
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    color: #1a1a2e;
+    background: #f5f6fa;
+  }
+
+  /* ===== COVER PAGE ===== */
+  .cover {
+    background: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+  }
+  .cover .badge {
+    background: #e94560;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    display: inline-block;
+  }
+  .cover h1 {
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+  }
+  .cover h1 span { color: #e94560; }
+  .cover .subtitle {
+    font-size: 20px;
+    color: #a8b2d8;
+    margin-bottom: 40px;
+    max-width: 700px;
+  }
+  .cover .meta {
+    display: flex;
+    gap: 40px;
+    margin-top: 50px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .cover .meta-item {
+    text-align: center;
+  }
+  .cover .meta-item .val {
+    font-size: 32px;
+    font-weight: 800;
+    color: #e94560;
+  }
+  .cover .meta-item .lbl {
+    font-size: 12px;
+    color: #a8b2d8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .cover .date {
+    margin-top: 60px;
+    color: #a8b2d8;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .cover .divider {
+    width: 80px;
+    height: 4px;
+    background: #e94560;
+    margin: 30px auto;
+    border-radius: 2px;
+  }
+
+  /* ===== PAGE WRAPPER ===== */
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 30px;
+  }
+
+  /* ===== TOC ===== */
+  .toc-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  .toc-section h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0f3460;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #e94560;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 40px;
+  }
+  .toc-grid a {
+    color: #0f3460;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 6px 0;
+    border-bottom: 1px dashed #dde;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+  .toc-grid a:hover { color: #e94560; }
+  .toc-grid a .num {
+    font-weight: 700;
+    color: #e94560;
+    min-width: 28px;
+    font-size: 12px;
+  }
+
+  /* ===== SECTION CARDS ===== */
+  .section-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    border-left: 5px solid #0f3460;
+  }
+  .section-card.accent-red { border-left-color: #e94560; }
+  .section-card.accent-green { border-left-color: #0d7377; }
+  .section-card.accent-purple { border-left-color: #7b2d8b; }
+  .section-card.accent-orange { border-left-color: #f97316; }
+  .section-card.accent-teal { border-left-color: #0891b2; }
+  .section-card.accent-indigo { border-left-color: #4f46e5; }
+  .section-card.accent-pink { border-left-color: #db2777; }
+  .section-card.accent-yellow { border-left-color: #ca8a04; }
+
+  /* ===== HEADINGS ===== */
+  h2.section-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0f3460;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  h2.section-title .module-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff;
+    background: #0f3460;
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+  .section-card.accent-red h2.section-title .module-tag { background: #e94560; }
+  .section-card.accent-green h2.section-title .module-tag { background: #0d7377; }
+  .section-card.accent-purple h2.section-title .module-tag { background: #7b2d8b; }
+  .section-card.accent-orange h2.section-title .module-tag { background: #f97316; }
+  .section-card.accent-teal h2.section-title .module-tag { background: #0891b2; }
+  .section-card.accent-indigo h2.section-title .module-tag { background: #4f46e5; }
+  .section-card.accent-pink h2.section-title .module-tag { background: #db2777; }
+  .section-card.accent-yellow h2.section-title .module-tag { background: #ca8a04; }
+  h3.sub-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f3460;
+    margin: 24px 0 10px;
+    padding-left: 12px;
+    border-left: 3px solid #e94560;
+  }
+  p { margin-bottom: 14px; color: #2d3748; }
+
+  /* ===== TABLES ===== */
+  .table-wrap { overflow-x: auto; margin: 16px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead tr { background: #0f3460; color: #fff; }
+  thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+  tbody tr:nth-child(even) { background: #f0f4ff; }
+  tbody tr:hover { background: #e8eeff; }
+  tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #2d3748;
+  }
+  tbody td strong { color: #0f3460; }
+
+  /* ===== CODE / DIAGRAM BLOCKS ===== */
+  .code-block {
+    background: #1a1a2e;
+    color: #a8d8ea;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    padding: 24px;
+    border-radius: 8px;
+    margin: 16px 0;
+    overflow-x: auto;
+    line-height: 1.6;
+    white-space: pre;
+  }
+
+  /* ===== CALLOUT BOXES ===== */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .callout.info { background: #eff6ff; border-left: 4px solid #3b82f6; color: #1e40af; }
+  .callout.warning { background: #fffbeb; border-left: 4px solid #f59e0b; color: #92400e; }
+  .callout.success { background: #f0fdf4; border-left: 4px solid #22c55e; color: #15803d; }
+  .callout.danger { background: #fff1f2; border-left: 4px solid #f43f5e; color: #9f1239; }
+  .callout .icon { font-size: 20px; flex-shrink: 0; }
+
+  /* ===== STAT GRID ===== */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .stat-card {
+    background: linear-gradient(135deg, #0f3460, #16213e);
+    color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-card .stat-val {
+    font-size: 30px;
+    font-weight: 900;
+    color: #e94560;
+    display: block;
+  }
+  .stat-card .stat-lbl {
+    font-size: 12px;
+    color: #a8b2d8;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== FEATURE GRID ===== */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .feature-item {
+    background: #f8faff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: #2d3748;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .feature-item .fi-icon { color: #0f3460; font-size: 18px; flex-shrink: 0; }
+
+  /* ===== AGENT TABLE ===== */
+  .agent-row-auto { background: #f0fdf4 !important; }
+  .agent-row-semi { background: #fffbeb !important; }
+
+  /* ===== UL / OL ===== */
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; color: #2d3748; }
+  li strong { color: #0f3460; }
+
+  /* ===== BADGE ===== */
+  .badge-pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+  .badge-auto { background: #d1fae5; color: #065f46; }
+  .badge-semi { background: #fef3c7; color: #92400e; }
+  .badge-human { background: #fee2e2; color: #991b1b; }
+
+  /* ===== SECTION DIVIDER ===== */
+  .part-header {
+    background: linear-gradient(135deg, #e94560, #0f3460);
+    color: #fff;
+    border-radius: 12px;
+    padding: 30px 40px;
+    margin: 40px 0 24px;
+    text-align: center;
+  }
+  .part-header h2 { font-size: 22px; font-weight: 800; letter-spacing: 1px; }
+  .part-header p { color: #a8b2d8; font-size: 14px; margin-top: 6px; margin-bottom: 0; }
+
+  /* ===== SOURCES ===== */
+  .sources-list { list-style: none; padding: 0; }
+  .sources-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 13px;
+  }
+  .sources-list li a { color: #e94560; text-decoration: none; }
+  .sources-list li a:hover { text-decoration: underline; }
+
+  /* ===== PRINT ===== */
+  @media print {
+    .cover { min-height: auto; padding: 80px 40px; }
+    .section-card { box-shadow: none; border: 1px solid #ddd; }
+    body { background: #fff; }
+    a { color: inherit !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== COVER PAGE ===== -->
+<div class="cover">
+  <div class="badge">Research Report · February 2026</div>
+  <h1>The <span>2027</span> Hyper-Advanced<br>AI-Powered Restaurant<br>Management System</h1>
+  <div class="divider"></div>
+  <p class="subtitle">A Complete Forward-Looking Vision — From Architecture to Agentic Intelligence, Module A to Z</p>
+  <div class="meta">
+    <div class="meta-item"><div class="val">$342B</div><div class="lbl">Food Tech Market by 2027</div></div>
+    <div class="meta-item"><div class="val">69%</div><div class="lbl">More AI/Robotics in Restaurants</div></div>
+    <div class="meta-item"><div class="val">15%</div><div class="lbl">Decisions Made Autonomously by AI</div></div>
+    <div class="meta-item"><div class="val">13</div><div class="lbl">Core AI Modules Covered</div></div>
+  </div>
+  <div class="date">Prepared · February 24, 2026 · Gestronomy Research Division</div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="page">
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-section" id="toc">
+    <h2>Table of Contents</h2>
+    <div class="toc-grid">
+      <a href="#exec-overview"><span class="num">01</span>Executive Overview &amp; Market Projections</a>
+      <a href="#architecture"><span class="num">02</span>System Architecture — Full Stack</a>
+      <a href="#module-a"><span class="num">03</span>Module A — Agentic AI Operations Core</a>
+      <a href="#module-b"><span class="num">04</span>Module B — Zero-Touch Accounting Engine</a>
+      <a href="#module-c"><span class="num">05</span>Module C — Computer Vision Kitchen AI</a>
+      <a href="#module-d"><span class="num">06</span>Module D — Dynamic Demand Forecasting</a>
+      <a href="#module-e"><span class="num">07</span>Module E — Autonomous Inventory &amp; Supply Chain</a>
+      <a href="#module-f"><span class="num">08</span>Module F — AI Workforce Management 2027</a>
+      <a href="#module-g"><span class="num">09</span>Module G — Guest Intelligence &amp; Personalization</a>
+      <a href="#module-h"><span class="num">10</span>Module H — Real-Time Financial Dashboard</a>
+      <a href="#module-i"><span class="num">11</span>Module I — Predictive Maintenance &amp; Energy AI</a>
+      <a href="#module-j"><span class="num">12</span>Module J — Digital Twin Simulation</a>
+      <a href="#module-k"><span class="num">13</span>Module K — AI Food Safety &amp; Compliance</a>
+      <a href="#module-l"><span class="num">14</span>Module L — Multi-Location Franchise Intelligence</a>
+      <a href="#module-m"><span class="num">15</span>Module M — AI Marketing &amp; Reputation Engine</a>
+      <a href="#integration-map"><span class="num">16</span>Full System Integration Map</a>
+      <a href="#metrics"><span class="num">17</span>Key Metrics: 2025 vs 2027</a>
+      <a href="#risks"><span class="num">18</span>Challenges &amp; Risks</a>
+      <a href="#who"><span class="num">19</span>Who Should Use This System</a>
+      <a href="#conclusion"><span class="num">20</span>Conclusion</a>
+      <a href="#sources"><span class="num">21</span>Sources &amp; References</a>
+    </div>
+  </div>
+
+  <!-- ===== 01. EXECUTIVE OVERVIEW ===== -->
+  <div class="section-card accent-red" id="exec-overview">
+    <h2 class="section-title"><span class="module-tag">01</span>Executive Overview &amp; Market Projections</h2>
+    <div class="callout info">
+      <span class="icon">ℹ️</span>
+      <div><strong>Disclaimer:</strong> This report is a research-backed, forward-looking vision built from verified 2025–2026 industry data, Gartner predictions, academic research, and current AI trajectories. It describes what a fully realized, cutting-edge system will look like by 2027.</div>
+    </div>
+    <p>By 2027, the restaurant management system will no longer be software you <em>use</em> — it will be an <strong>intelligent operating system</strong> that <em>runs your business autonomously</em>. The shift from reactive dashboards to proactive, self-acting agents is not a distant possibility — it is a confirmed industry trajectory backed by billions in investment and measurable early results.</p>
+    <div class="stat-grid">
+      <div class="stat-card"><span class="stat-val">$342B</span><span class="stat-lbl">Food Tech Market by 2027</span></div>
+      <div class="stat-card"><span class="stat-val">$267B</span><span class="stat-lbl">Global AI Market by 2027</span></div>
+      <div class="stat-card"><span class="stat-val">$49B</span><span class="stat-lbl">Food &amp; Beverage AI Market</span></div>
+      <div class="stat-card"><span class="stat-val">69%</span><span class="stat-lbl">More AI/Robotics in Fast Food</span></div>
+      <div class="stat-card"><span class="stat-val">15%</span><span class="stat-lbl">Decisions Made Autonomously</span></div>
+      <div class="stat-card"><span class="stat-val">73%</span><span class="stat-lbl">Restaurant Execs Increasing AI Spend</span></div>
+    </div>
+    <p>Gartner predicts that by 2027, Agentic AI will become the <strong>#1 newly deployed technology</strong> to improve customer experience. By 2028, 33% of enterprise software applications will include agentic AI capabilities — up from less than 1% in 2024. The restaurant industry, perpetually squeezed by 3–5% net margins and persistent labor shortages, is moving faster than nearly any other sector to adopt autonomous AI.</p>
+    <div class="callout warning">
+      <span class="icon">⚠️</span>
+      <div>Gartner also predicts that <strong>40%+ of agentic AI projects will fail by 2027</strong> due to incompatible legacy infrastructure. The organizations that invest in a modern data foundation now will be the ones who win.</div>
+    </div>
+    <h3 class="sub-title">The Fundamental Shift</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>2025 (Today)</th><th>2027 (Vision)</th></tr></thead>
+        <tbody>
+          <tr><td>Dashboards that show you data</td><td>AI agents that <strong>act on data</strong></td></tr>
+          <tr><td>Scheduled reports</td><td>Conversational AI — just ask</td></tr>
+          <tr><td>Manual scheduling</td><td>Fully autonomous, demand-driven schedules</td></tr>
+          <tr><td>Reactive to problems</td><td>Predictive — prevents problems before they happen</td></tr>
+          <tr><td>Siloed systems</td><td>Unified intelligence across every touchpoint</td></tr>
+          <tr><td>Human-driven decisions</td><td>AI-recommended, human-approved (or fully autonomous)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== 02. SYSTEM ARCHITECTURE ===== -->
+  <div class="section-card" id="architecture">
+    <h2 class="section-title"><span class="module-tag">02</span>System Architecture — Full Technology Stack</h2>
+
+    <h3 class="sub-title">Layer 1 — Data Ingestion</h3>
+    <p>Every physical and digital signal from the restaurant feeds into a unified real-time data pipeline:</p>
+    <div class="code-block">DATA INGESTION LAYER
+────────────────────────────────────────────────────────────
+IoT Sensors │ POS Systems │ Kitchen Display Systems (KDS)
+IP Cameras  │ Smart Scales │ RFID Tag Readers │ Wearables
+Supplier EDI │ Bank Feeds │ Delivery Platforms (DoorDash, Uber)
+Weather APIs │ Event Calendars │ Social Media Streams
+Employee Mobile Apps │ Reservation Systems │ Loyalty Platforms
+────────────────────────────────────────────────────────────</div>
+
+    <h3 class="sub-title">Layer 2 — Real-Time Data Lake</h3>
+    <p>All ingested data lands in a cloud-native, real-time data lake — a unified schema where every event is timestamped and location-tagged:</p>
+    <div class="code-block">CLOUD DATA FABRIC
+────────────────────────────────────────────────────────────
+Primary Storage:    Google BigQuery / Snowflake
+Streaming Engine:   Apache Kafka (millions of events/second)
+Orchestration:      Apache Airflow (DAG pipelines)
+Languages:          Python + SQL
+Redundancy:         Multi-cloud: AWS + GCP + Azure
+Uptime SLA:         99.999% (less than 5 min downtime/year)
+Security:           AES-256 at rest · TLS 1.3 in transit
+Compliance:         GDPR · CCPA · SOC 2 Type II
+Edge Nodes:         Per-location compute for sub-50ms decisions
+────────────────────────────────────────────────────────────</div>
+
+    <h3 class="sub-title">Layer 3 — AI Intelligence Engine</h3>
+    <p>Multiple AI model types work in concert — each specialized for its domain:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>AI Model Type</th><th>Used For</th><th>Technology</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Large Language Models (LLMs)</strong></td><td>Natural language queries, report narration, training content generation</td><td>Fine-tuned on restaurant domain data</td></tr>
+          <tr><td><strong>Computer Vision</strong></td><td>Portion control, food safety, hygiene compliance, waste detection</td><td>Multi-model CNN + object detection</td></tr>
+          <tr><td><strong>Time-Series Forecasting</strong></td><td>Sales prediction, demand forecasting, cost projection</td><td>Transformer-based models + LSTM</td></tr>
+          <tr><td><strong>Reinforcement Learning (RL)</strong></td><td>Pricing optimization, labor scheduling, energy management</td><td>RL agents with reward functions tied to profit</td></tr>
+          <tr><td><strong>OCR + ML</strong></td><td>Invoice processing, receipt digitization</td><td>Optical Character Recognition + confidence scoring</td></tr>
+          <tr><td><strong>Recommendation Engine</strong></td><td>Guest personalization, menu suggestions, upselling</td><td>Collaborative filtering + content-based</td></tr>
+          <tr><td><strong>Anomaly Detection</strong></td><td>Cost spikes, fraud, equipment failures, compliance violations</td><td>Isolation Forest + statistical models</td></tr>
+          <tr><td><strong>NLP Sentiment Analysis</strong></td><td>Review monitoring, guest feedback, employee communication</td><td>BERT-based fine-tuned models</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub-title">Layer 4 — Agentic AI Execution Layer</h3>
+    <div class="code-block">AGENTIC EXECUTION LOOP (continuous, 24/7)
+────────────────────────────────────────────────────
+1. PERCEIVE  →  Read live data streams across all sources
+2. REASON    →  Multi-step LLM reasoning + domain model analysis
+3. PLAN      →  Generate action options with projected outcomes
+4. ACT       →  Execute approved actions via connected APIs
+5. VERIFY    →  Confirm result; trigger corrective action if needed
+6. LEARN     →  Update internal model based on outcome delta
+7. REPORT    →  Log action + outcome for human audit trail
+────────────────────────────────────────────────────</div>
+
+    <h3 class="sub-title">Layer 5 — Human Interface</h3>
+    <div class="feature-grid">
+      <div class="feature-item"><span class="fi-icon">📱</span><div><strong>Mobile App</strong> — Real-time dashboards, AI alerts, one-tap approvals. iOS + Android. English, Spanish, and 15+ languages.</div></div>
+      <div class="feature-item"><span class="fi-icon">🖥️</span><div><strong>Web Dashboard</strong> — Full enterprise command center with multi-location oversight and natural language query interface.</div></div>
+      <div class="feature-item"><span class="fi-icon">🎙️</span><div><strong>Voice Interface</strong> — Managers speak commands: "What's my food cost right now?" AI responds instantly with data + insight.</div></div>
+      <div class="feature-item"><span class="fi-icon">⌚</span><div><strong>Wearables</strong> — Smart watch alerts for critical events: equipment failure, labor overage, compliance violation.</div></div>
+    </div>
+  </div>
+
+  <!-- PART DIVIDER -->
+  <div class="part-header">
+    <h2>THE 13 CORE AI MODULES — A TO M</h2>
+    <p>Each module operates as an autonomous domain specialist, interconnected through the Agentic AI Core</p>
+  </div>
+
+  <!-- ===== MODULE A — AGENTIC AI CORE ===== -->
+  <div class="section-card accent-red" id="module-a">
+    <h2 class="section-title"><span class="module-tag">MODULE A</span>Agentic AI Operations Core</h2>
+    <p>This is the central brain of the entire system. Rather than a single AI model, the Agentic Core is a <strong>coordinated fleet of specialized AI agents</strong>, each responsible for a specific operational domain, all orchestrated by a MetaAgent that manages priorities, escalations, and cross-domain decisions.</p>
+
+    <h3 class="sub-title">The Agent Fleet</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Agent Name</th><th>Responsibility</th><th>Autonomy Level</th></tr></thead>
+        <tbody>
+          <tr class="agent-row-auto"><td><strong>FinanceAgent</strong></td><td>GL entries, reconciliation, anomaly alerts, cash flow</td><td><span class="badge-pill badge-auto">Fully Autonomous</span></td></tr>
+          <tr class="agent-row-auto"><td><strong>InventoryAgent</strong></td><td>Stock monitoring, auto-ordering, waste alerts, TVA analysis</td><td><span class="badge-pill badge-auto">Fully Autonomous</span></td></tr>
+          <tr class="agent-row-semi"><td><strong>LaborAgent</strong></td><td>Schedule generation, shift adjustment, compliance enforcement</td><td><span class="badge-pill badge-semi">Semi-Autonomous</span></td></tr>
+          <tr class="agent-row-auto"><td><strong>QualityAgent</strong></td><td>Food safety monitoring, HACCP compliance, portion control</td><td><span class="badge-pill badge-auto">Fully Autonomous</span></td></tr>
+          <tr class="agent-row-auto"><td><strong>GuestAgent</strong></td><td>Personalization, loyalty management, CRM actions</td><td><span class="badge-pill badge-auto">Fully Autonomous</span></td></tr>
+          <tr class="agent-row-semi"><td><strong>SupplyAgent</strong></td><td>Vendor negotiation triggers, order routing, price watching</td><td><span class="badge-pill badge-semi">Semi-Autonomous</span></td></tr>
+          <tr class="agent-row-auto"><td><strong>EnergyAgent</strong></td><td>HVAC, lighting, equipment power optimization</td><td><span class="badge-pill badge-auto">Fully Autonomous</span></td></tr>
+          <tr class="agent-row-semi"><td><strong>MarketingAgent</strong></td><td>Review response, social content, promotional offers</td><td><span class="badge-pill badge-semi">Semi-Autonomous</span></td></tr>
+          <tr><td><strong>MetaAgent</strong></td><td>Orchestrates all agents, resolves conflicts, escalates to humans</td><td><span class="badge-pill badge-auto">Always-On</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub-title">Autonomous Cascade — Real Example</h3>
+    <div class="code-block">TRIGGER: Weather API → Heavy rain forecast for Saturday
+─────────────────────────────────────────────────────────────────
+Step 1 │ ForecastModel  │ Calculates 22% traffic reduction expected
+Step 2 │ InventoryAgent │ Reduces produce order by 18% for Saturday delivery
+Step 3 │ LaborAgent     │ Removes 3 staff from Saturday evening schedule
+Step 4 │ MarketingAgent │ Pushes "Rainy Day Comfort Food" deal to loyalty app
+Step 5 │ FinanceAgent   │ Updates Saturday revenue forecast in live P&amp;L
+Step 6 │ MetaAgent      │ Logs all actions; notifies manager via app summary
+─────────────────────────────────────────────────────────────────
+⏱ Total time: &lt; 90 seconds   │   👤 Human involvement: Zero</div>
+
+    <div class="callout success">
+      <span class="icon">✅</span>
+      <div><strong>Key Principle:</strong> Agentic AI handles <strong>90% of rules-based decisions autonomously</strong>, leaving the judgment calls — complex, ethically nuanced, or high-stakes — to managers who now have perfect visibility and context to decide fast.</div>
+    </div>
+  </div>
+
+  <!-- ===== MODULE B — ACCOUNTING ===== -->
+  <div class="section-card accent-green" id="module-b">
+    <h2 class="section-title"><span class="module-tag">MODULE B</span>Zero-Touch Accounting Engine</h2>
+    <p>In 2027, traditional month-end closing, manual journal entries, and spreadsheet reconciliations are relics. The accounting engine operates in <strong>continuous-close mode</strong> — financials are accurate and complete at every moment of every day.</p>
+
+    <h3 class="sub-title">AI Invoice Processing (Technical Flow)</h3>
+    <div class="code-block">Vendor Invoice Arrives (email / EDI / image / PDF)
+        ↓
+OCR Engine: Scans &amp; digitizes in &lt; 3 seconds
+        ↓
+ML Extraction: Vendor · Line Items · Amounts · Dates · Tax
+        ↓
+Confidence Scoring: &gt;98% accuracy threshold
+        ↓
+Anomaly Check: Price vs. historical average · Duplicate detection
+        ↓
+Auto-Coding: GL account assigned via ML classification model
+        ↓
+Approval Routing: AI routes based on amount + vendor + location rules
+        ↓
+Auto-Pay: Approved invoices paid via ACH/wire on due date
+        ↓
+Blockchain Ledger: Immutable audit record created instantly</div>
+
+    <h3 class="sub-title">Core Capabilities</h3>
+    <div class="feature-grid">
+      <div class="feature-item"><span class="fi-icon">📒</span><div><strong>Continuous Close</strong> — Month-end is abolished. Financials accurate every hour, every day.</div></div>
+      <div class="feature-item"><span class="fi-icon">🧠</span><div><strong>NL Financial Queries</strong> — "Why did food cost spike Tuesday?" AI answers with root cause in plain English.</div></div>
+      <div class="feature-item"><span class="fi-icon">💰</span><div><strong>90-Day Cash Flow Forecast</strong> — Updated daily based on sales trajectory, payables, and seasonality.</div></div>
+      <div class="feature-item"><span class="fi-icon">📊</span><div><strong>Dynamic Budgeting</strong> — Budgets auto-adjust to actual conditions. No more static annual plans.</div></div>
+      <div class="feature-item"><span class="fi-icon">🧾</span><div><strong>Auto Tax Filing</strong> — Sales tax, payroll tax, and 1099s calculated and pre-filed per jurisdiction automatically.</div></div>
+      <div class="feature-item"><span class="fi-icon">🔗</span><div><strong>Blockchain Audit Trail</strong> — Every entry explained in plain English with immutable source-to-GL trace.</div></div>
+      <div class="feature-item"><span class="fi-icon">🚨</span><div><strong>Fraud Detection AI</strong> — Real-time anomaly scanning for duplicate payments, unusual vendors, off-hours transactions.</div></div>
+      <div class="feature-item"><span class="fi-icon">📈</span><div><strong>300+ Report Templates</strong> — Auto-scheduled, auto-distributed. P&amp;L per location, side-by-side, every morning.</div></div>
+    </div>
+    <div class="callout success">
+      <span class="icon">📉</span>
+      <div><strong>Impact:</strong> Accounting time reduced by <strong>90%</strong> (from 50% today). Invoice processing drops from seconds to sub-second. Month-end close moves from days to instant.</div>
+    </div>
+  </div>
+
+  <!-- ===== MODULE C — COMPUTER VISION ===== -->
+  <div class="section-card accent-purple" id="module-c">
+    <h2 class="section-title"><span class="module-tag">MODULE C</span>Computer Vision Kitchen Intelligence</h2>
+    <p>AI-powered cameras installed throughout the kitchen run a <strong>multi-model computer vision pipeline</strong> that monitors food quality, portion accuracy, hygiene compliance, and waste tracking — simultaneously and continuously.</p>
+
+    <h3 class="sub-title">Vision Pipeline Architecture</h3>
+    <div class="code-block">Camera Feed (HD, 30fps, thermal overlay)
+        ↓
+Frame Extraction Engine (real-time)
+        ↓
+┌──────────────────────────────────────────────┐
+│  PARALLEL MODEL EXECUTION                    │
+│  ┌─────────────────┐  ┌──────────────────┐  │
+│  │ Portion Analysis│  │ Food Safety Model│  │
+│  │ (±2g accuracy)  │  │ (temp + time)    │  │
+│  └─────────────────┘  └──────────────────┘  │
+│  ┌─────────────────┐  ┌──────────────────┐  │
+│  │ Plating Quality │  │ Hygiene/PPE Model│  │
+│  │ (vs. standard)  │  │ (gloves, hairnet)│  │
+│  └─────────────────┘  └──────────────────┘  │
+│  ┌─────────────────────────────────────────┐│
+│  │ Waste Classification Model              ││
+│  │ (overproduction / spoilage / trim)      ││
+│  └─────────────────────────────────────────┘│
+└──────────────────────────────────────────────┘
+        ↓
+Real-Time Alert Engine → Manager App / KDS / Operations Log</div>
+
+    <h3 class="sub-title">Capabilities by Category</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Category</th><th>What the AI Detects</th><th>Action Taken</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Portion Control</strong></td><td>Deviations from recipe standard (±2g accuracy)</td><td>Alert chef; reject dish before service</td></tr>
+          <tr><td><strong>Plating Quality</strong></td><td>Missing ingredients, incorrect presentation</td><td>Flag dish on KDS; hold ticket</td></tr>
+          <tr><td><strong>Cook Doneness</strong></td><td>Color, texture, surface analysis for doneness</td><td>Alert or pass dish automatically</td></tr>
+          <tr><td><strong>Food Safety</strong></td><td>Food outside safe temperature zone for &gt;15 min</td><td>Alert in &lt;30 seconds; auto-log HACCP event</td></tr>
+          <tr><td><strong>Hand Washing</strong></td><td>Staff not washing hands after raw food contact</td><td>Immediate manager alert + staff reminder</td></tr>
+          <tr><td><strong>PPE Compliance</strong></td><td>Missing gloves, hair nets, improper uniform</td><td>Alert; log compliance violation</td></tr>
+          <tr><td><strong>Waste Tracking</strong></td><td>Every item discarded — categorized and costed</td><td>Real-time waste cost dashboard; adjust prep AI</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout success">
+      <span class="icon">📉</span>
+      <div><strong>Impact:</strong> In 2024, R365 alone cut <strong>$400M in food waste</strong> industry-wide. By 2027, with computer vision active in every kitchen, this scales to <strong>billions in annual savings</strong> across the industry. Health inspection readiness becomes a daily certainty, not a periodic scramble.</div>
+    </div>
+  </div>
+
+  <!-- ===== MODULE D — FORECASTING ===== -->
+  <div class="section-card accent-orange" id="module-d">
+    <h2 class="section-title"><span class="module-tag">MODULE D</span>Dynamic Demand Forecasting Engine</h2>
+    <p>A <strong>multi-variable time-series AI</strong> trained on billions of restaurant data points. Produces per-item, per-hour sales forecasts with 93–96% accuracy — powering purchasing, scheduling, and kitchen prep decisions automatically.</p>
+
+    <h3 class="sub-title">Input Variables (40+ Signals)</h3>
+    <div class="code-block">FORECASTING MODEL INPUTS
+─────────────────────────────────────────────────────
+Historical Sales          → 3+ years · by item · by hour
+Day-of-Week Patterns      → Granular weekly seasonality
+Long-Term Seasonality     → Annual peaks, holiday trends
+Local Event Calendar      → Sports games, concerts, festivals
+Weather Forecast          → Temperature, rain, wind speed
+School Calendars          → Term dates affecting family traffic
+Competitor Activity       → AI-scraped promotions nearby
+Social Media Signals      → Trending mentions, influencer posts
+Delivery Platform Trends  → DoorDash, Uber Eats order velocity
+Reservation Data          → Confirmed covers by timeslot
+Local Economic Indicators → Consumer confidence, employment rates
+Marketing Campaign Status → Active promotions and their lift history
+─────────────────────────────────────────────────────</div>
+
+    <h3 class="sub-title">Forecast Outputs</h3>
+    <div class="feature-grid">
+      <div class="feature-item"><span class="fi-icon">📦</span><div><strong>Per-Item Sales Forecast</strong> — Next 7 days, broken down by hour, with confidence intervals.</div></div>
+      <div class="feature-item"><span class="fi-icon">🛒</span><div><strong>Purchase Recommendations</strong> — Exact quantities to order per ingredient, per vendor, per delivery day.</div></div>
+      <div class="feature-item"><span class="fi-icon">👥</span><div><strong>Staffing Recommendation</strong> — Optimal headcount per shift, by role, by station.</div></div>
+      <div class="feature-item"><span class="fi-icon">🍳</span><div><strong>Prep Quantity Plan</strong> — Exactly how much of each prep item to make before each service.</div></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>2025 (Current)</th><th>2027 (Projected)</th></tr></thead>
+        <tbody>
+          <tr><td>Forecast Accuracy (per item/hour)</td><td>85–90%</td><td><strong>93–96%</strong></td></tr>
+          <tr><td>Forecast Horizon</td><td>3–7 days</td><td><strong>14–21 days</strong></td></tr>
+          <tr><td>Model Self-Correction</td><td>Weekly retrain</td><td><strong>Continuous (real-time)</strong></td></tr>
+          <tr><td>Variables Considered</td><td>10–15</td><td><strong>40+</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== MODULE E — INVENTORY ===== -->
+  <div class="section-card accent-teal" id="module-e">
+    <h2 class="section-title"><span class="module-tag">MODULE E</span>Autonomous Inventory &amp; Supply Chain</h2>
+    <p>End-to-end autonomous procurement — from detecting that stock is low to electronically submitting the purchase order to the vendor — with zero human intervention required.</p>
+
+    <h3 class="sub-title">Autonomous Procurement Flow</h3>
+    <div class="code-block">Recipe Database + Sales Forecast (Module D output)
+        ↓
+Theoretical Usage Calculation (what we should use)
+        ↓
+Current Inventory (Smart Scales + RFID + Mobile Count)
+        ↓
+PAR Level Engine (AI-calculated safety minimums per item)
+        ↓
+Auto-Generated Purchase Orders
+        ↓
+AI Vendor Routing (best price + availability + lead time + reliability score)
+        ↓
+Electronic Order Transmitted to Vendor (EDI / API)
+        ↓
+Delivery Receipt Verification (camera weight validation + RFID scan)
+        ↓
+Instant GL Entry Posted to Accounting Module
+        ↓
+Actual vs. Theoretical Analysis updated in real time</div>
+
+    <h3 class="sub-title">Smart Physical Infrastructure</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Hardware</th><th>What It Does</th><th>AI Integration</th></tr></thead>
+        <tbody>
+          <tr><td><strong>RFID-Tagged Shelving</strong></td><td>Every ingredient tagged — system knows exact quantity, location, and expiry at all times</td><td>Auto-updates inventory database; triggers reorder when PAR hit</td></tr>
+          <tr><td><strong>Smart Prep Scales</strong></td><td>Measures every ingredient used at prep stations to gram precision</td><td>Feeds real usage into TVA analysis continuously</td></tr>
+          <tr><td><strong>Thermal IoT Sensors</strong></td><td>Continuous temperature monitoring for every cooler and freezer</td><td>Alerts before equipment fails; auto-dispatches maintenance</td></tr>
+          <tr><td><strong>Camera Receipt System</strong></td><td>Reads dates on incoming products; verifies count and weight</td><td>Tracks FIFO automatically; alerts 48h before expiry</td></tr>
+          <tr><td><strong>Barcode/QR Scanners</strong></td><td>Mobile inventory counting for staff</td><td>Real-time sync to central inventory model</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 class="sub-title">Vendor Intelligence Engine</h3>
+    <ul>
+      <li>Monitors <strong>pricing across 60+ integrated suppliers</strong> in real time</li>
+      <li>Automatic <strong>price spike alerts:</strong> If tomato prices surge 15%, system models substitution impact and alerts procurement team</li>
+      <li><strong>Supply chain risk detection:</strong> If a supplier has disruption (weather, recall, strike), system immediately suggests qualified alternatives</li>
+      <li><strong>Vendor scoring:</strong> AI rates each vendor on price, reliability, quality, and delivery accuracy — auto-routes new orders to best performer</li>
+      <li><strong>Contract intelligence:</strong> AI reads and tracks vendor contract terms; alerts when better pricing windows open</li>
+    </ul>
+  </div>
+
+  <!-- ===== MODULE F — WORKFORCE ===== -->
+  <div class="section-card accent-indigo" id="module-f">
+    <h2 class="section-title"><span class="module-tag">MODULE F</span>AI Workforce Management 2027</h2>
+    <p>The 2027 workforce module replaces guesswork and spreadsheet schedules with a fully intelligent, legally compliant, cost-optimized system that considers <strong>40+ variables simultaneously</strong> when building every schedule.</p>
+
+    <h3 class="sub-title">Scheduling AI — Input Variables</h3>
+    <div class="code-block">SCHEDULING MODEL VARIABLES (40+)
+─────────────────────────────────────────────────────────
+Sales Forecast by Hour (from Module D)
+Employee Skills Matrix (certifications, roles, stations)
+Food Handler / Liquor Certification Status + Expiry
+Labor Law Rules (overtime, minors, mandatory breaks)
+Spread-of-Hours Rules (jurisdiction-specific)
+Employee Availability &amp; Stated Preferences
+Historical Performance Data per Employee
+Guest Review Correlation (which staff improve ratings)
+Payroll Budget Target (weekly labor % goal)
+Union / CBA Rules (if applicable)
+Actual vs. Forecast Variance (real-time adjustment)
+Weather Impact on Expected Traffic
+Event Calendar (local events, holidays)
+Tip Pooling Rules and Equity Targets
+─────────────────────────────────────────────────────────
+OUTPUT: Legally compliant · Cost-optimized · Guest-experience-
+        maximizing schedule generated in seconds for all locations</div>
+
+    <h3 class="sub-title">Real-Time Labor Adjustment</h3>
+    <div class="feature-grid">
+      <div class="feature-item"><span class="fi-icon">📲</span><div><strong>Auto Call-Out</strong> — Unexpected rush hits 6pm? System sends automated offers to off-duty staff in seconds.</div></div>
+      <div class="feature-item"><span class="fi-icon">💸</span><div><strong>Early Out Recommendations</strong> — If sales slow, AI calculates savings from sending one staff home and suggests to manager.</div></div>
+      <div class="feature-item"><span class="fi-icon">⏱️</span><div><strong>Labor vs. Sales Monitor</strong> — Updated every 5 minutes. Manager sees live tracking toward/away from labor % target.</div></div>
+      <div class="feature-item"><span class="fi-icon">🔁</span><div><strong>Shift Marketplace</strong> — Staff swap shifts via app; AI validates rules compliance before approving swap.</div></div>
+    </div>
+
+    <h3 class="sub-title">AI-Powered Hiring Pipeline</h3>
+    <ul>
+      <li>Job postings <strong>auto-written and distributed</strong> to 20+ job boards by AI based on role requirements and brand voice</li>
+      <li><strong>Resume screening AI</strong> ranks candidates by match score in seconds — eliminates 80% of manual review</li>
+      <li>AI conducts <strong>initial text/video screening</strong> interviews with standardized, bias-aware question sets</li>
+      <li>Background check orchestration and I-9 verification automated</li>
+      <li>Onboarding workflows auto-triggered on hire — direct deposit, benefits enrollment, training assignment</li>
+    </ul>
+
+    <h3 class="sub-title">AI Training Platform (LMS 2027)</h3>
+    <ul>
+      <li><strong>Personalized learning paths:</strong> AI identifies skill gaps per employee and assigns targeted training modules</li>
+      <li><strong>Multilingual AI tutor:</strong> Employees interact in their native language — system supports 15+ languages</li>
+      <li><strong>Performance correlation:</strong> System identifies which training modules drive higher guest scores and promotes those</li>
+      <li><strong>Certification tracking:</strong> Auto-alerts 30/14/7 days before food handler certifications expire</li>
+      <li><strong>100+ pre-built modules</strong> covering food safety, hospitality, brand standards, and role-specific skills</li>
+    </ul>
+  </div>
+
+  <!-- ===== MODULE G — GUEST INTELLIGENCE ===== -->
+  <div class="section-card accent-pink" id="module-g">
+    <h2 class="section-title"><span class="module-tag">MODULE G</span>Guest Intelligence &amp; Hyper-Personalization</h2>
+    <p>By 2027, "personalization" moves from segment-level marketing blasts to <strong>individual-level, real-time intelligence</strong> — where every guest interaction feels like it was designed specifically for them.</p>
+
+    <h3 class="sub-title">360° Guest Profile</h3>
+    <div class="code-block">UNIFIED GUEST PROFILE (AI-Maintained)
+─────────────────────────────────────────────────────────
+Complete Order History      → Every item, modifier, time, channel
+Dietary Restrictions/Allergies → Auto-detected + self-declared
+Flavor Profile              → Inferred from order patterns
+Price Sensitivity Score     → Derived from item choice + promo response
+Favorite + Avoided Items    → Ranked by frequency and recency
+Preferred Visit Times       → Behavioral pattern analysis
+Channel Preference          → Dine-in / delivery / drive-thru / app
+Promotion Response History  → What worked, what was ignored
+Household Profile           → Inferred party size, occasion type
+Churn Risk Score            → 0–100 real-time score updated daily
+Lifetime Value (CLV)        → Projected 12-month and lifetime value
+─────────────────────────────────────────────────────────</div>
+
+    <h3 class="sub-title">Personalization In Action</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Touchpoint</th><th>AI Action</th><th>Business Outcome</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Loyalty App Menu</strong></td><td>Shows personalized menu — favorites first, AI recommendations tailored to individual profile</td><td>+20% average order value</td></tr>
+          <tr><td><strong>Churn Prevention</strong></td><td>Detects guest hasn't visited in 3 weeks (vs. usual weekly pattern) → auto-sends targeted win-back offer</td><td>Recovered revenue from at-risk guests</td></tr>
+          <tr><td><strong>Dynamic Pricing</strong></td><td>Time-of-day pricing; loyalty tier invisible discounts; happy hour auto-activates when traffic drops below forecast</td><td>Optimized margin per transaction</td></tr>
+          <tr><td><strong>AI Drive-Thru Voice</strong></td><td>Handles full order intake via natural speech; intelligent upsell: "You usually enjoy dessert — want to add one?"</td><td>86% orders handled autonomously (Wendy's 2025 pilot)</td></tr>
+          <tr><td><strong>Facial Recognition (opt-in)</strong></td><td>Loyalty members recognized at drive-thru — profile loads, AI greets by name, previous order offered</td><td>Dramatically faster service; premium guest experience</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout info">
+      <span class="icon">📊</span>
+      <div>Panera's AI personalization benchmark: <strong>+70% visit frequency</strong> and <strong>+20% average order value</strong>. By 2027, these gains compound across the industry at scale.</div>
+    </div>
+  </div>
+
+  <!-- ===== MODULE H — DASHBOARD ===== -->
+  <div class="section-card accent-teal" id="module-h">
+    <h2 class="section-title"><span class="module-tag">MODULE H</span>Real-Time Financial Intelligence Dashboard</h2>
+    <p>A single screen showing the <strong>entire business state in real time</strong> — across all locations simultaneously — with AI alerts, natural language queries, and one-tap manager actions.</p>
+
+    <h3 class="sub-title">Live Dashboard View (Simulated)</h3>
+    <div class="code-block">┌──────────────────────────────────────────────────────────────────┐
+│  RESTAURANT OS — LIVE COMMAND CENTER          02/24/2027 6:43PM │
+├────────────┬───────────────┬────────────────┬───────────────────┤
+│   SALES    │   LABOR %     │  FOOD COST %   │   NET MARGIN      │
+│   $4,821   │   28.3% ✓    │   29.1% ⚠️    │   14.2% ↑         │
+│ vs $4,200  │   Target 28% │   Target 28%  │   +1.2% vs LW     │
+├────────────┴───────────────┴────────────────┴───────────────────┤
+│  AI AGENT ACTIVITY LOG:                                          │
+│  ⚠️  Salmon running low — auto-order placed for tomorrow AM     │
+│  ✅  Schedule adjusted: sent 1 server home (sales tracking slow) │
+│  🔴  Walk-in cooler temp 42°F — tech dispatch auto-initiated     │
+│  💡  Tuesday forecast +15% (Beyoncé concert 3 blocks away)       │
+│  🎯  Guest #4821 churn risk: win-back offer sent via loyalty app │
+├──────────────────────────────────────────────────────────────────┤
+│  💬 ASK AI: "Why is food cost high today?"                       │
+│  ─────────────────────────────────────────────────────────────   │
+│  ▶ Salmon: 3 returned dishes (portion over-spec) = $47 waste     │
+│    Tomato: supplier price spike +12% vs last week = $31 impact   │
+│    Recommendation: 86 salmon Friday · switch to alternate tomato │
+│    vendor (saves $28/case · same quality score)                  │
+└──────────────────────────────────────────────────────────────────┘</div>
+
+    <h3 class="sub-title">Natural Language Interface</h3>
+    <p>Managers no longer run reports. They simply <strong>ask questions</strong> in plain language:</p>
+    <ul>
+      <li><em>"What was my best-performing item last Tuesday between 5–7pm?"</em></li>
+      <li><em>"Which location has the highest labor cost this week and why?"</em></li>
+      <li><em>"If I remove the lamb chops from the menu, how does it affect my food cost?"</em></li>
+      <li><em>"Who are my top 10 guests by lifetime value this quarter?"</em></li>
+      <li><em>"Show me the three locations most at risk of missing their EBITDA target this month."</em></li>
+    </ul>
+    <p>AI answers instantly — in plain English, with supporting charts, root cause analysis, and a recommended next action.</p>
+  </div>
+
+  <!-- ===== MODULE I — MAINTENANCE ===== -->
+  <div class="section-card accent-yellow" id="module-i">
+    <h2 class="section-title"><span class="module-tag">MODULE I</span>Predictive Maintenance &amp; Energy AI</h2>
+    <p>Every piece of restaurant equipment — ovens, fryers, refrigerators, HVAC, dishwashers, espresso machines — is connected via IoT sensors. The AI monitors equipment health <strong>continuously</strong> and predicts failures before they happen.</p>
+
+    <h3 class="sub-title">Predictive Maintenance — How It Works</h3>
+    <div class="code-block">IoT Sensors on Equipment (vibration, temperature, power draw, RPM)
+        ↓
+Real-time telemetry streamed to AI model every 30 seconds
+        ↓
+Anomaly Detection: Pattern deviates from healthy baseline
+        ↓
+Failure Probability Score calculated (0–100%)
+        ↓
+Score &gt; 70%: Manager Alert + Preventive Service Recommendation
+        ↓
+Score &gt; 90%: Automatic service ticket dispatched to approved tech
+        ↓
+Post-repair: Baseline model updated with new healthy-state data</div>
+
+    <h3 class="sub-title">Energy AI Optimization</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Energy Area</th><th>AI Action</th><th>Savings</th></tr></thead>
+        <tbody>
+          <tr><td><strong>HVAC Control</strong></td><td>Adjusts temperature based on occupancy, weather, and forecast traffic</td><td>10–18% energy reduction</td></tr>
+          <tr><td><strong>Lighting Management</strong></td><td>Dims lights in low-traffic areas automatically during slow periods</td><td>5–10% energy reduction</td></tr>
+          <tr><td><strong>Equipment Standby</strong></td><td>Powers down non-critical equipment during off-hours or between rushes</td><td>8–15% energy reduction</td></tr>
+          <tr><td><strong>Peak Load Management</strong></td><td>Staggers equipment startup to reduce peak demand charges</td><td>Up to $2,000/month per location</td></tr>
+          <tr><td><strong>Waste Detection</strong></td><td>Identifies equipment left running overnight; sends alerts</td><td>Measurable per incident</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout success">
+      <span class="icon">⚡</span>
+      <div><strong>Total Energy Savings:</strong> 15–25% reduction in energy costs per location. For a 50-location chain, this represents <strong>$500K–$1M+ in annual savings</strong>.</div>
+    </div>
+  </div>
+
+  <!-- ===== MODULE J — DIGITAL TWIN ===== -->
+  <div class="section-card accent-red" id="module-j">
+    <h2 class="section-title"><span class="module-tag">MODULE J</span>Digital Twin Restaurant Simulation</h2>
+    <p>A <strong>Digital Twin</strong> is a real-time virtual replica of every restaurant location — an exact simulation that mirrors the physical restaurant in the cloud. It enables operators to <strong>test changes, model decisions, and run crisis scenarios</strong> without touching the real business.</p>
+
+    <h3 class="sub-title">Scenario Simulations</h3>
+    <div class="feature-grid">
+      <div class="feature-item"><span class="fi-icon">💲</span><div><strong>Pricing Impact</strong> — "What happens to profit if I raise burger prices by $0.75?" AI runs thousands of scenarios and returns the most profitable option with confidence intervals.</div></div>
+      <div class="feature-item"><span class="fi-icon">⏰</span><div><strong>Hours of Operation</strong> — "If I open 2 hours earlier on weekends, what's the labor cost vs. projected revenue gain?" Full financial model returned instantly.</div></div>
+      <div class="feature-item"><span class="fi-icon">🍽️</span><div><strong>Menu Engineering</strong> — "If I remove the bottom 5 items, what happens to food cost, waste, and guest satisfaction?" Simulated before any change is made.</div></div>
+      <div class="feature-item"><span class="fi-icon">🏗️</span><div><strong>Layout Optimization</strong> — Model traffic flow through the kitchen to identify bottlenecks and test equipment placement before physical changes.</div></div>
+      <div class="feature-item"><span class="fi-icon">🚨</span><div><strong>Crisis Simulation</strong> — "If our head chef calls in sick Friday, who covers, how does service time change, what pre-communication should we send guests?"</div></div>
+      <div class="feature-item"><span class="fi-icon">🏪</span><div><strong>New Location Modeling</strong> — Before opening location #51, simulate its financial performance based on demographic and competitive data.</div></div>
+    </div>
+    <div class="callout info">
+      <span class="icon">🔮</span>
+      <div>The Digital Twin reduces the cost of wrong decisions to <strong>zero</strong> — every major change is tested in simulation before deployment. By 2027, this is the standard process for menu changes, pricing decisions, and new location planning across enterprise restaurant groups.</div>
+    </div>
+  </div>
+
+  <!-- ===== MODULE K — FOOD SAFETY ===== -->
+  <div class="section-card accent-green" id="module-k">
+    <h2 class="section-title"><span class="module-tag">MODULE K</span>AI Food Safety &amp; Compliance Automation</h2>
+    <p>By 2027, <strong>manual food safety documentation is entirely replaced by AI</strong>. HACCP plans are auto-generated, temperature logs are continuous and automatic, and health inspection readiness is a daily, AI-maintained certainty — not a periodic scramble.</p>
+
+    <h3 class="sub-title">HACCP Goes Fully Digital</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Compliance Area</th><th>2025 (Manual)</th><th>2027 (AI-Automated)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Temperature Logging</strong></td><td>Staff checks and writes down every 2–4 hours</td><td>IoT sensors log every 60 seconds, automatically</td></tr>
+          <tr><td><strong>HACCP Records</strong></td><td>Paper logbooks; missing entries common</td><td>100% digital, never missed, auto-submitted to health dept.</td></tr>
+          <tr><td><strong>Allergen Management</strong></td><td>Manual verification; high human-error risk</td><td>AI flags allergen conflicts in real time at order entry + prep</td></tr>
+          <tr><td><strong>Hygiene Compliance</strong></td><td>Manager observation; inconsistent</td><td>Computer vision monitors continuously; every violation logged</td></tr>
+          <tr><td><strong>SOP Documentation</strong></td><td>Written manually; often outdated</td><td>AI generates and updates SOPs automatically when menu changes</td></tr>
+          <tr><td><strong>Health Inspection Prep</strong></td><td>Stressful scramble before visits</td><td>Daily readiness score; gaps flagged and resolved automatically</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub-title">AI Compliance Assistant</h3>
+    <p>Staff and managers can ask the AI compliance assistant any food safety question in their native language, 24/7:</p>
+    <ul>
+      <li><em>"How long can cooked chicken sit at 140°F before I need to discard it?"</em> — AI answers with exact HACCP rule and jurisdiction-specific code reference</li>
+      <li><em>"Is it safe to use this salmon if it was delivered at 42°F instead of 38°F?"</em> — AI calculates risk and recommends action</li>
+      <li><em>"What's the cross-contamination protocol for preparing a nut-free dish on this station?"</em> — AI provides step-by-step procedure</li>
+    </ul>
+  </div>
+
+  <!-- ===== MODULE L — FRANCHISE ===== -->
+  <div class="section-card accent-purple" id="module-l">
+    <h2 class="section-title"><span class="module-tag">MODULE L</span>Multi-Location Franchise Intelligence</h2>
+    <p>For chains and franchises with 10 to 10,000 locations, the 2027 system provides a <strong>unified intelligence layer</strong> that makes every location visible, comparable, and manageable from a single command center.</p>
+
+    <h3 class="sub-title">Enterprise Oversight Features</h3>
+    <div class="feature-grid">
+      <div class="feature-item"><span class="fi-icon">🏆</span><div><strong>Real-Time Location Ranking</strong> — All locations ranked by key metrics (food cost, labor %, guest score, net margin) — updated every hour.</div></div>
+      <div class="feature-item"><span class="fi-icon">🚨</span><div><strong>Cross-Portfolio Anomaly Detection</strong> — "Location #47 food cost 6% above group average — AI flags and initiates investigation workflow automatically."</div></div>
+      <div class="feature-item"><span class="fi-icon">💡</span><div><strong>Best-Practice AI</strong> — Identifies what top-performing locations do differently and surfaces those practices to lower-performing locations automatically.</div></div>
+      <div class="feature-item"><span class="fi-icon">📋</span><div><strong>Standardization Enforcement</strong> — Recipes, portioning, training, and pricing verified by AI across every location to ensure brand consistency.</div></div>
+      <div class="feature-item"><span class="fi-icon">📊</span><div><strong>Franchise Compliance Score</strong> — Each franchisee receives a daily AI-calculated compliance score. Deviations auto-flagged to brand management.</div></div>
+      <div class="feature-item"><span class="fi-icon">🏭</span><div><strong>Commissary Intelligence</strong> — Central kitchen production and distribution orchestrated by AI to minimize waste and maximize freshness across all locations.</div></div>
+    </div>
+
+    <h3 class="sub-title">Inter-Location Benchmarking</h3>
+    <div class="code-block">ENTERPRISE BENCHMARK REPORT (AI-Generated · Daily)
+─────────────────────────────────────────────────────────
+Top Performer:    Location 12 · Miami · Net Margin 18.2%
+   Key Factor:   Lowest TVA variance (1.2%) · AI scheduling 94% accurate
+
+Needs Attention: Location 47 · Dallas · Net Margin 9.1%
+   Root Cause:   Food cost 34% (vs. 28% target) — salmon portioning
+   AI Action:    Dispatched computer vision audit; training module sent to BOH team
+
+Group Average:   Net Margin 13.8% · Food Cost 29.1% · Labor 27.4%
+─────────────────────────────────────────────────────────</div>
+  </div>
+
+  <!-- ===== MODULE M — MARKETING ===== -->
+  <div class="section-card accent-orange" id="module-m">
+    <h2 class="section-title"><span class="module-tag">MODULE M</span>AI Marketing &amp; Reputation Engine</h2>
+    <p>The 2027 marketing module operates largely autonomously — monitoring the restaurant's reputation in real time, generating and distributing content, managing loyalty at the individual level, and ensuring the restaurant is visible to AI-powered search and discovery platforms.</p>
+
+    <h3 class="sub-title">Autonomous Marketing Operations</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>What AI Does</th><th>Frequency</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Review Monitoring</strong></td><td>Reads every review on Google, Yelp, TripAdvisor, DoorDash, Uber Eats in real time. Sentiment analysis identifies recurring themes.</td><td>Continuous</td></tr>
+          <tr><td><strong>Review Response</strong></td><td>AI drafts responses in brand voice. Manager approves in one click or AI auto-responds for reviews within confidence threshold.</td><td>Within 2 hours of posting</td></tr>
+          <tr><td><strong>Social Content Creation</strong></td><td>AI generates posts, captions, and imagery descriptions based on menu, performance data, and trending topics.</td><td>Daily</td></tr>
+          <tr><td><strong>Targeted Promotions</strong></td><td>Sends individualized offers to guests based on their profile, churn risk score, and last visit trigger.</td><td>Real-time</td></tr>
+          <tr><td><strong>AI Search Optimization</strong></td><td>Optimizes presence on ChatGPT, Gemini, Perplexity, and voice assistants — the new restaurant discovery channels for Gen Z.</td><td>Weekly</td></tr>
+          <tr><td><strong>Email Campaigns</strong></td><td>AI writes, segments, and sends personalized email campaigns. Subject lines A/B tested automatically.</td><td>Event-triggered</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warning">
+      <span class="icon">🤖</span>
+      <div><strong>Critical 2027 Trend:</strong> 40% of Gen Z now uses AI chatbots (ChatGPT, Perplexity, Gemini) to find restaurant recommendations. Restaurants must optimize their <strong>"AI visibility"</strong> — not just their Google SEO — or become invisible to the next generation of diners.</div>
+    </div>
+  </div>
+
+  <!-- ===== INTEGRATION MAP ===== -->
+  <div class="section-card" id="integration-map">
+    <h2 class="section-title"><span class="module-tag">16</span>Full System Integration Map</h2>
+    <div class="code-block">                    ┌────────────────────────────────┐
+                    │      2027 RESTAURANT OS        │
+                    │    (Cloud · Edge · Mobile)     │
+                    └──────────────┬─────────────────┘
+                                   │
+        ┌──────────────────────────┼──────────────────────────┐
+        ▼                          ▼                          ▼
+┌───────────────┐       ┌──────────────────┐       ┌──────────────────┐
+│  ACCOUNTING   │       │   OPERATIONS     │       │    GUESTS        │
+│  ──────────── │       │  ──────────────  │       │  ────────────    │
+│  Auto GL      │       │  IoT Kitchen     │       │  Loyalty App     │
+│  AP/AR Auto   │       │  Computer Vision │       │  Voice AI POS    │
+│  Tax Filing   │       │  Smart Inventory │       │  CRM + Profiles  │
+│  Continuous   │       │  RFID + Scales   │       │  Dynamic Pricing │
+│  Close (24/7) │       │  HACCP AI        │       │  Personalization │
+└───────────────┘       └──────────────────┘       └──────────────────┘
+        ▼                          ▼                          ▼
+┌───────────────┐       ┌──────────────────┐       ┌──────────────────┐
+│  WORKFORCE    │       │  SUPPLY CHAIN    │       │  INTELLIGENCE    │
+│  ──────────── │       │  ──────────────  │       │  ────────────    │
+│  AI Schedule  │       │  Auto Ordering   │       │  NL Queries      │
+│  AI Hiring    │       │  Vendor AI Score │       │  Digital Twin    │
+│  AI Training  │       │  Price Watching  │       │  Benchmarking    │
+│  Payroll Auto │       │  Risk Alerts     │       │  Forecasting     │
+│  HR Lifecycle │       │  Receipt Vision  │       │  Crisis Sim.     │
+└───────────────┘       └──────────────────┘       └──────────────────┘
+                                   │
+              ┌────────────────────▼────────────────────┐
+              │         AGENTIC AI CORE (MetaAgent)      │
+              │   Always-On · 24/7 · Perceive→Act→Learn  │
+              │  FinanceAgent · InventoryAgent · LaborAgent│
+              │  QualityAgent · GuestAgent · EnergyAgent  │
+              │  SupplyAgent · MarketingAgent · MetaAgent │
+              └─────────────────────────────────────────┘
+                                   │
+              ┌────────────────────▼────────────────────┐
+              │     HUMAN INTERFACE LAYER                │
+              │  Mobile App · Web Dashboard · Voice AI   │
+              │  Wearables · Natural Language Queries    │
+              │  One-Tap Approvals · Audit Trails        │
+              └─────────────────────────────────────────┘</div>
+    <h3 class="sub-title">External Integration Partners (400+)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Category</th><th>Examples</th><th>Integration Type</th></tr></thead>
+        <tbody>
+          <tr><td><strong>POS Systems</strong></td><td>Toast, Aloha (NCR), Oracle MICROS, PAR Technology, GoTab, Square</td><td>Sales + Labor bidirectional sync</td></tr>
+          <tr><td><strong>Delivery Platforms</strong></td><td>DoorDash, Uber Eats, Grubhub</td><td>Order data, ratings, sales analytics</td></tr>
+          <tr><td><strong>Banking</strong></td><td>Direct bank feeds (all major US banks)</td><td>Auto reconciliation</td></tr>
+          <tr><td><strong>Vendors/Distributors</strong></td><td>Sysco, US Foods, regional distributors (60+)</td><td>Electronic invoicing, auto-ordering</td></tr>
+          <tr><td><strong>Payroll</strong></td><td>Paycom, ADP, Gusto, Paychex</td><td>Bidirectional hours + pay data</td></tr>
+          <tr><td><strong>Review Platforms</strong></td><td>Google, Yelp, TripAdvisor, OpenTable</td><td>Real-time monitoring + response</td></tr>
+          <tr><td><strong>IoT Hardware</strong></td><td>Smart sensors, RFID readers, thermal cameras, scales</td><td>Continuous telemetry streams</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== METRICS ===== -->
+  <div class="section-card accent-green" id="metrics">
+    <h2 class="section-title"><span class="module-tag">17</span>Key Metrics: 2025 vs. 2027 Comparison</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>2025 (Current State)</th><th>2027 (Projected)</th><th>Improvement</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Accounting time saved</strong></td><td>50%</td><td>90% (near zero-touch)</td><td>+40 points</td></tr>
+          <tr><td><strong>Food cost reduction</strong></td><td>3–5%</td><td>8–12%</td><td>2–4× improvement</td></tr>
+          <tr><td><strong>Labor cost reduction</strong></td><td>Up to 5%</td><td>8–10%</td><td>+3–5 points</td></tr>
+          <tr><td><strong>Food waste reduction</strong></td><td>Moderate</td><td>60–80% vs. baseline</td><td>Transformational</td></tr>
+          <tr><td><strong>Net profit improvement</strong></td><td>Up to 2%</td><td>4–6%</td><td>2–3× improvement</td></tr>
+          <tr><td><strong>Invoice processing time</strong></td><td>Seconds</td><td>Sub-second (&lt;500ms)</td><td>10× faster</td></tr>
+          <tr><td><strong>Demand forecast accuracy</strong></td><td>85–90%</td><td>93–96%</td><td>+6–11 points</td></tr>
+          <tr><td><strong>Compliance documentation</strong></td><td>Partially manual</td><td>100% automated</td><td>Zero manual effort</td></tr>
+          <tr><td><strong>Guest personalization</strong></td><td>Segment-level</td><td>Individual-level, real-time</td><td>Category shift</td></tr>
+          <tr><td><strong>Equipment downtime</strong></td><td>Reactive repairs</td><td>Predictive — 70% fewer failures</td><td>Major operational gain</td></tr>
+          <tr><td><strong>Scheduling time (manager)</strong></td><td>2–4 hours/week</td><td>&lt;10 minutes/week (review &amp; approve)</td><td>95% time saved</td></tr>
+          <tr><td><strong>Month-end close time</strong></td><td>Days</td><td>Instant (continuous close)</td><td>Eliminated</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== RISKS ===== -->
+  <div class="section-card accent-red" id="risks">
+    <h2 class="section-title"><span class="module-tag">18</span>Challenges &amp; Risks</h2>
+    <div class="callout danger">
+      <span class="icon">⚠️</span>
+      <div>Gartner predicts <strong>40%+ of agentic AI projects will fail by 2027</strong> because legacy systems can't support modern AI execution demands. Successful implementation requires both technology and organizational readiness.</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Challenge</th><th>Risk Level</th><th>Mitigation Strategy</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Legacy System Incompatibility</strong></td><td>🔴 High</td><td>Phased migration; API-first integration layer; 12–18 month roadmap</td></tr>
+          <tr><td><strong>Data Privacy (GDPR/CCPA)</strong></td><td>🟡 Medium</td><td>Automated PII masking; privacy-by-design architecture; consent management</td></tr>
+          <tr><td><strong>Workforce Resistance</strong></td><td>🟡 Medium</td><td>"AI amplifies, doesn't replace" messaging; manager training; change management program</td></tr>
+          <tr><td><strong>AI Hallucination Risk</strong></td><td>🟡 Medium</td><td>Human-in-the-loop for all financial approvals above defined thresholds</td></tr>
+          <tr><td><strong>Cybersecurity Exposure</strong></td><td>🔴 High</td><td>Zero-trust architecture; continuous penetration testing; SOC 2 Type II certification</td></tr>
+          <tr><td><strong>Initial Implementation Cost</strong></td><td>🟡 Medium</td><td>ROI positive within 12–18 months for multi-unit operators; modular adoption path</td></tr>
+          <tr><td><strong>Small Restaurant Accessibility</strong></td><td>🟡 Medium</td><td>Modular pricing; cloud-first architecture keeps costs scalable; entry-level tiers</td></tr>
+          <tr><td><strong>AI Governance &amp; Ethics</strong></td><td>🔴 High</td><td>AI ethics board; bias auditing on hiring AI; explainability requirements on all decisions</td></tr>
+          <tr><td><strong>Algorithmic Bias</strong></td><td>🟡 Medium</td><td>Diverse training data; regular fairness audits; human override on HR and guest decisions</td></tr>
+          <tr><td><strong>Vendor Lock-In</strong></td><td>🟡 Medium</td><td>Open API standards; data portability clauses in contracts; multi-vendor strategy</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== WHO ===== -->
+  <div class="section-card accent-indigo" id="who">
+    <h2 class="section-title"><span class="module-tag">19</span>Who Should Use This System</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Operator Type</th><th>Fit</th><th>Key Value Drivers</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Multi-unit chains (10–500 locations)</strong></td><td>✅ Perfect Fit</td><td>Full ROI on all modules; enterprise intelligence; cross-location benchmarking</td></tr>
+          <tr><td><strong>QSR / Fast Casual franchises</strong></td><td>✅ Perfect Fit</td><td>Drive-thru AI, automated ordering, robotics integration, franchise compliance scoring</td></tr>
+          <tr><td><strong>Enterprise restaurant groups (500+ locations)</strong></td><td>✅ Perfect Fit</td><td>Digital twin, commissary AI, portfolio analytics, franchise management</td></tr>
+          <tr><td><strong>Ghost kitchens / delivery-only brands</strong></td><td>✅ Excellent Fit</td><td>AI demand forecasting + autonomous inventory = core competitive advantage</td></tr>
+          <tr><td><strong>Hotel &amp; hospitality F&amp;B operations</strong></td><td>✅ Strong Fit</td><td>Multi-outlet management, catering AI, event forecasting</td></tr>
+          <tr><td><strong>Single-location independents</strong></td><td>⚠️ Partial Fit</td><td>Cost-prohibitive for full suite; use modular approach (inventory + scheduling AI)</td></tr>
+          <tr><td><strong>Micro-restaurants (&lt;$500K revenue)</strong></td><td>❌ Not Ideal</td><td>ROI insufficient; better served by simpler, cheaper point solutions</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== CONCLUSION ===== -->
+  <div class="section-card accent-red" id="conclusion">
+    <h2 class="section-title"><span class="module-tag">20</span>Conclusion</h2>
+    <p>The 2027 AI-powered restaurant management system is not an evolution of today's software — it is a <strong>category transformation</strong>. The industry is moving from passive tools that display information to active, autonomous agents that run the business.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Old Paradigm (2025)</th><th>New Paradigm (2027)</th></tr></thead>
+        <tbody>
+          <tr><td>Reporting → show me what happened</td><td><strong>Autonomous Action → fix it before it happens</strong></td></tr>
+          <tr><td>Dashboards → I read the numbers</td><td><strong>Conversational AI → I ask questions, AI answers</strong></td></tr>
+          <tr><td>Scheduled tasks → reminders to humans</td><td><strong>Always-on Agents → tasks done without reminders</strong></td></tr>
+          <tr><td>Human-driven decisions → gut + experience</td><td><strong>AI-recommended + human-approved → data + judgment</strong></td></tr>
+          <tr><td>Reactive management → firefighting</td><td><strong>Proactive, predictive operations → prevention</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Restaurants that adopt this system by 2027 will operate with <strong>near-perfect inventory accuracy, legally compliant labor scheduling, real-time financials, hyper-personalized guest experiences, automated food safety compliance, and predictive equipment maintenance</strong> — all simultaneously, with a fraction of the management overhead required today.</p>
+
+    <p>The competitive divide between AI-native and AI-absent restaurant operators will be as stark as the divide between restaurants with and without POS systems in the 1990s. The window to act is not open indefinitely.</p>
+
+    <div class="callout info">
+      <span class="icon">🏁</span>
+      <div><strong>The Bottom Line:</strong> The food tech market reaches <strong>$342 billion by 2027</strong>. The AI in food &amp; beverage market reaches <strong>$49 billion</strong>. 73% of restaurant executives are actively increasing AI investment. The transformation is not coming — it is already underway. The only question is whether your operation leads it or is disrupted by it.</div>
+    </div>
+  </div>
+
+  <!-- ===== SOURCES ===== -->
+  <div class="section-card" id="sources">
+    <h2 class="section-title"><span class="module-tag">21</span>Sources &amp; References</h2>
+    <ul class="sources-list">
+      <li>01. <a href="https://www.deloitte.com/us/en/insights/industry/retail-distribution/ai-in-restaurants.html" target="_blank">Deloitte Insights — How AI is Revolutionizing Restaurants</a></li>
+      <li>02. <a href="https://www.qsrweb.com/articles/why-2026-is-the-year-of-the-ai-driven-restaurant/" target="_blank">QSR Web — Why 2026 is the Year of the AI-Driven Restaurant</a></li>
+      <li>03. <a href="https://mitsloan.mit.edu/ideas-made-to-matter/agentic-ai-explained" target="_blank">MIT Sloan Management Review — Agentic AI, Explained</a></li>
+      <li>04. <a href="https://www.qsrmagazine.com/story/how-agentic-ai-helps-restaurants-win-the-labor-battle-without-losing-hospitality/" target="_blank">QSR Magazine — How Agentic AI Helps Restaurants Win the Labor Battle</a></li>
+      <li>05. <a href="https://www.restobiz.ca/the-rise-of-agentic-ai-in-restaurant-operations/" target="_blank">Restobiz — The Rise of Agentic AI in Restaurant Operations</a></li>
+      <li>06. <a href="https://www.salesforce.com/retail/artificial-intelligence/ai-agents-in-restaurants/" target="_blank">Salesforce — AI Agents for Restaurants: Benefits &amp; Use Cases</a></li>
+      <li>07. <a href="https://www.databricks.com/glossary/agentic-ai" target="_blank">Databricks — What Is Agentic AI?</a></li>
+      <li>08. <a href="https://deloitte.com/us/en/insights/topics/technology-management/tech-trends/2026/agentic-ai-strategy.html" target="_blank">Deloitte — Agentic AI Strategy (2026 Tech Trends)</a></li>
+      <li>09. <a href="https://www.katalystos.com/blog/the-future-of-restaurant-ai-how-smart-technology-is-reshaping-the-industry" target="_blank">Katalystos — The Future of Restaurant AI</a></li>
+      <li>10. <a href="https://mobidev.biz/blog/restaurant-technology-trends-innovations-implementation" target="_blank">Mobidev — Top 10 Restaurant Technology Trends 2026</a></li>
+      <li>11. <a href="https://www.fifth.com/corporate-finance/insights/ai-technology-restaurant-industry.aspx" target="_blank">Citizens Bank — How AI is Shaping the Restaurant Industry</a></li>
+      <li>12. <a href="https://www.restaurant365.com/" target="_blank">Restaurant365 — Official Website</a></li>
+      <li>13. <a href="https://www.restaurant365.com/product-release/spring-2024/" target="_blank">Restaurant365 — Spring 2024 Product Release Notes</a></li>
+      <li>14. <a href="https://journals.sagepub.com/doi/10.1177/00472875251392915" target="_blank">SAGE Journals — Agentic AI in Hospitality and Tourism (2025 Academic Research)</a></li>
+      <li>15. <a href="https://www.gartner.com/en/articles/strategic-predictions-for-2026" target="_blank">Gartner — Strategic Technology Predictions 2026–2028</a></li>
+      <li>16. <a href="https://www.fourth.com/article/ai-in-restaurants" target="_blank">Fourth — AI in Restaurants: 25 Tools for 2025</a></li>
+      <li>17. <a href="https://www.netsuite.com/portal/resource/articles/business-strategy/ai-in-restaurants.shtml" target="_blank">Oracle NetSuite — 15 Ways AI is Impacting the Restaurant Industry</a></li>
+      <li>18. <a href="https://www.xenia.team/articles/the-rise-of-the-robots-how-restaurants-can-automate" target="_blank">Xenia — The Rise of Robots: How Restaurants Can Automate Operations</a></li>
+      <li>19. <a href="https://get.popmenu.com/post/ai-in-restaurants" target="_blank">Popmenu — AI in Restaurants: 9 Ways Artificial Intelligence is Shaping the Food Industry</a></li>
+      <li>20. <a href="https://rsmus.com/insights/services/digital-transformation/agentic-ai-transforming-autonomous-decision-making.html" target="_blank">RSM US — Agentic AI: Transforming Autonomous Decision Making</a></li>
+    </ul>
+
+    <div style="margin-top:32px; padding:20px; background:#f0f4ff; border-radius:8px; text-align:center; font-size:13px; color:#4a5568;">
+      <strong>Report compiled by:</strong> Gestronomy Research Division &nbsp;|&nbsp;
+      <strong>Date:</strong> February 24, 2026 &nbsp;|&nbsp;
+      <strong>Classification:</strong> Research &amp; Strategic Intelligence &nbsp;|&nbsp;
+      <strong>Version:</strong> 1.0
+      <br><br>
+      <em>This document is a forward-looking research report based on verified industry data, Gartner predictions, academic publications, and current AI trajectories. It represents a vision of what leading systems will look like by 2027, not a description of any single existing product.</em>
+    </div>
+  </div>
+
+  <!-- Back to top -->
+  <div style="text-align:center; padding: 20px 0 40px;">
+    <a href="#toc" style="color:#0f3460; text-decoration:none; font-size:14px; font-weight:600;">↑ Back to Table of Contents</a>
+  </div>
+
+</div><!-- end .page -->
+</body>
+</html>

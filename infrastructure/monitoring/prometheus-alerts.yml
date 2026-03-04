@@ -1,0 +1,29 @@
+groups:
+  - name: gestronomy-slo
+    rules:
+      - alert: ApiP95LatencyHigh
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_ms_bucket[5m])) by (le)) > 800
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "API p95 latency above SLO"
+          description: "p95 API latency has remained above 800ms for 10 minutes."
+
+      - alert: ApiErrorRateHigh
+        expr: (sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))) * 100 > 1
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "API error rate above SLO"
+          description: "API 5xx error rate has remained above 1% for 10 minutes."
+
+      - alert: CeleryQueueLagHigh
+        expr: celery_queue_depth > 100
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Celery queue lag above SLO"
+          description: "Background queue lag has remained above 100 jobs for 10 minutes."
