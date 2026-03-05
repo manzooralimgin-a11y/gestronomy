@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import { ErrorBoundary } from "@/components/error-boundary";
 
 export const metadata: Metadata = {
   title: "Gestronomy — AI Restaurant Management",
@@ -16,12 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans">
-        <ErrorBoundary>
-          <a href="#main-content" className="skip-link">
-            Skip to main content
-          </a>
-          <Providers>{children}</Providers>
-        </ErrorBoundary>
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
