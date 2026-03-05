@@ -260,6 +260,16 @@ async def health_check(db: AsyncSession = Depends(get_db)):
     }
 
 
+@app.post("/api/admin/restore-data")
+async def trigger_migration(db: AsyncSession = Depends(get_db)):
+    """Triggers the master data restoration. Restricted to admin review."""
+    from migrate_master import migrate_master
+    try:
+        await migrate_master()
+        return {"status": "success", "message": "Master migration executed successfully."}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
 @app.get("/api/metrics", tags=["Observability"])
 async def get_metrics(window_minutes: int = 15):
     """Exposes internal API metrics and background queue lag."""
