@@ -10,7 +10,11 @@ import { Badge } from "@/components/ui/badge";
 import { CommandBar } from "@/components/layout/command-bar";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
-function getBreadcrumbs(pathname: string) {
+function getBreadcrumbs(pathname: string | null) {
+  if (!pathname) {
+    return [{ label: "Dashboard", href: "/" }];
+  }
+
   const segments = pathname
     .split("/")
     .filter(Boolean);

@@ -27,17 +27,11 @@ dependencies = [
     "celery[redis]>=5.4.0",
     # AI / LLM
     "anthropic>=0.39.0",
-    # ML / Data
-    "scikit-learn>=1.5.0",
-    "prophet>=1.1.6",
-    "pandas>=2.2.0",
-    "numpy>=1.26.0",
+    # ML / Data (Heavy dependencies removed for Render free tier deployment)
     # OCR
     "pytesseract>=0.3.13",
     "Pillow>=11.0.0",
-    # Computer Vision
-    "opencv-python-headless>=4.10.0",
-    "ultralytics>=8.3.0",
+    # Computer Vision (Removed opencv and ultralytics for deployment)
     # Utilities
     "httpx>=0.28.0",
     "python-dateutil>=2.9.0",
