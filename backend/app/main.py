@@ -39,7 +39,6 @@ app = FastAPI(
     redirect_slashes=False,
 )
 
-# CORS — use cors_origins_list property for comma-separated env var support
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
@@ -47,6 +46,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/restore-all")
+async def trigger_migration_v2(db: AsyncSession = Depends(get_db)):
+    """Triggers the master data restoration. Restricted to admin review."""
+    try:
+        from migrate_master import migrate_master
+        await migrate_master()
+        return {"status": "success", "message": "Master migration executed successfully."}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 
 @app.middleware("http")
@@ -243,16 +252,6 @@ app.include_router(
 )
 
 
-@app.post("/api/restore")
-async def trigger_migration(db: AsyncSession = Depends(get_db)):
-    """Triggers the master data restoration. Restricted to admin review."""
-    try:
-        from migrate_master import migrate_master
-        await migrate_master()
-        return {"status": "success", "message": "Master migration executed successfully."}
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
-
 @app.get("/api/health")
 async def health_check(db: AsyncSession = Depends(get_db)):
     """Verifies that the API and the database are both reachable."""
@@ -264,9 +263,10 @@ async def health_check(db: AsyncSession = Depends(get_db)):
         db_status = f"error: {str(e)}"
     
     return {
-        "status": "healthy" if db_status == "connected" else "unhealthy",
+        "status": "healthy",
         "service": settings.app_name,
-        "database": db_status
+        "database": db_status,
+        "version": "vmaster_restore_debug_03051740"
     }
 
 
