@@ -29,13 +29,7 @@ export interface User {
 }
 
 export async function login(credentials: LoginCredentials): Promise<TokenResponse> {
-  // FastAPI OAuth2PasswordRequestForm expects form-encoded data with "username" field
-  const formData = new URLSearchParams();
-  formData.append("username", credentials.email);
-  formData.append("password", credentials.password);
-  const { data } = await api.post<TokenResponse>("/auth/login", formData, {
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  });
+  const { data } = await api.post<TokenResponse>("/auth/login", credentials);
   localStorage.setItem("access_token", data.access_token);
   localStorage.setItem("refresh_token", data.refresh_token);
   return data;
