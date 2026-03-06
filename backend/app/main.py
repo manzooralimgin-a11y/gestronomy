@@ -52,8 +52,8 @@ async def trigger_migration_v2(db: AsyncSession = Depends(get_db)):
     """Triggers the master data restoration. Restricted to admin review."""
     try:
         from migrate_master import migrate_master
-        await migrate_master()
-        return {"status": "success", "message": "Master migration executed successfully."}
+        logs = await migrate_master()
+        return {"status": "success", "message": "Master migration executed.", "logs": logs}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
@@ -266,7 +266,7 @@ async def health_check(db: AsyncSession = Depends(get_db)):
         "status": "healthy",
         "service": settings.app_name,
         "database": db_status,
-        "version": "vmaster_restore_ready_03052210"
+        "version": "vmaster_multi_tenant_03061545"
     }
 
 
