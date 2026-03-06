@@ -266,7 +266,7 @@ async def health_check(db: AsyncSession = Depends(get_db)):
         "status": "healthy",
         "service": settings.app_name,
         "database": db_status,
-        "version": "vmaster_restore_debug_03051740"
+        "version": "vmaster_restore_ready_03052210"
     }
 
 
