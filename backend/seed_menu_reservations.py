@@ -1,4 +1,8 @@
-"""Seed menu items, floor sections, tables, and sample reservations."""
+"""Seed menu items, floor sections, tables, and sample reservations.
+
+DEPRECATED: Use migrate_master.py instead — it handles multi-tenant seeding
+and auto-creates default restaurant + admin user.
+"""
 
 import asyncio
 from datetime import date, time, datetime, timezone, timedelta

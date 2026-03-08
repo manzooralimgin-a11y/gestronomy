@@ -32,15 +32,19 @@ export default function RegisterPage() {
       await register({ full_name: fullName, email, password });
       router.push("/login");
     } catch (err: unknown) {
-      const detail = (err as { response?: { data?: { detail?: string | Array<{ msg: string }> } } })
-        ?.response?.data?.detail;
-      let message = "Registration failed. Please try again.";
-      if (typeof detail === "string") {
-        message = detail;
-      } else if (Array.isArray(detail) && detail.length > 0) {
-        message = detail.map((d) => d.msg).join(", ");
+      const axiosErr = err as { response?: { data?: { detail?: string | Array<{ msg: string }> } }; code?: string };
+      if (!axiosErr.response) {
+        setError("Cannot reach server. Please check your internet connection or try again later.");
+      } else {
+        const detail = axiosErr.response?.data?.detail;
+        let message = "Registration failed. Please try again.";
+        if (typeof detail === "string") {
+          message = detail;
+        } else if (Array.isArray(detail) && detail.length > 0) {
+          message = detail.map((d) => d.msg).join(", ");
+        }
+        setError(message);
       }
-      setError(message);
     } finally {
       setLoading(false);
     }

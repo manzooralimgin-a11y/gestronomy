@@ -31,15 +31,20 @@ export default function LoginPage() {
       setUser(user);
       router.push(getDefaultDashboardRoute(user.role));
     } catch (err: unknown) {
-      const detail = (err as { response?: { data?: { detail?: string | Array<{ msg: string }> } } })
-        ?.response?.data?.detail;
-      let message = "Invalid email or password";
-      if (typeof detail === "string") {
-        message = detail;
-      } else if (Array.isArray(detail) && detail.length > 0) {
-        message = detail.map((d) => d.msg).join(", ");
+      const axiosErr = err as { response?: { data?: { detail?: string | Array<{ msg: string }> }; status?: number }; code?: string };
+      if (!axiosErr.response) {
+        // Network error — API unreachable
+        setError("Cannot reach server. Please check your internet connection or try again later.");
+      } else {
+        const detail = axiosErr.response?.data?.detail;
+        let message = "Invalid email or password";
+        if (typeof detail === "string") {
+          message = detail;
+        } else if (Array.isArray(detail) && detail.length > 0) {
+          message = detail.map((d) => d.msg).join(", ");
+        }
+        setError(message);
       }
-      setError(message);
     } finally {
       setLoading(false);
     }

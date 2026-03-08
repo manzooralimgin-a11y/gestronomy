@@ -1,11 +1,23 @@
 import axios from "axios";
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL
-  ? `${process.env.NEXT_PUBLIC_API_URL}/api`
-  : "https://gestronomy-api.onrender.com/api";
+/**
+ * Resolve API base URL with runtime override support.
+ * Priority: localStorage override > build-time env > Render fallback.
+ * This allows the desktop app to switch API endpoints without rebuilding.
+ */
+function getApiBaseUrl(): string {
+  if (typeof window !== "undefined") {
+    const override = localStorage.getItem("gestronomy_api_url");
+    if (override) return override.replace(/\/+$/, "") + "/api";
+  }
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return `${process.env.NEXT_PUBLIC_API_URL}/api`;
+  }
+  return "https://gestronomy-api.onrender.com/api";
+}
 
 const api = axios.create({
-  baseURL,
+  baseURL: getApiBaseUrl(),
   headers: { "Content-Type": "application/json" },
 });
 
@@ -24,9 +36,13 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== "undefined") {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        window.location.href = "/login";
+        const currentPath = window.location.pathname;
+        // Avoid redirect loop if already on login page
+        if (!currentPath.includes("login")) {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+          window.location.href = "/login";
+        }
       }
     }
     return Promise.reject(error);

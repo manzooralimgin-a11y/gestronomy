@@ -3,11 +3,17 @@ type MessageHandler = (data: unknown) => void;
 function getWsUrl(): string {
   if (typeof window === "undefined") return "ws://localhost:8001/ws";
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  // Check for runtime override (same as api.ts)
+  const override = localStorage.getItem("gestronomy_api_url");
+  const apiUrl = override || process.env.NEXT_PUBLIC_API_URL;
   if (apiUrl) {
-    const url = new URL(apiUrl);
-    const protocol = url.protocol === "https:" ? "wss:" : "ws:";
-    return `${protocol}//${url.host}/ws`;
+    try {
+      const url = new URL(apiUrl);
+      const protocol = url.protocol === "https:" ? "wss:" : "ws:";
+      return `${protocol}//${url.host}/ws`;
+    } catch {
+      // invalid URL, fall through
+    }
   }
 
   return "wss://gestronomy-api.onrender.com/ws";
