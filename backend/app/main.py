@@ -266,7 +266,7 @@ async def health_check(db: AsyncSession = Depends(get_db)):
         "status": "healthy",
         "service": settings.app_name,
         "database": db_status,
-        "version": "vmaster_autoseed_03082026"
+        "version": "v1.0.0_delivery_03092026"
     }
 
 

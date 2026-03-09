@@ -47,7 +47,7 @@ MODULE_ACTIONS = {
 async def get_live_kpis(db: AsyncSession) -> list[KPISnapshot]:
     result = await db.execute(
         select(KPISnapshot)
-        .order_by(KPISnapshot.timestamp.desc())
+        .order_by(KPISnapshot.metric_name, KPISnapshot.timestamp.desc())
         .distinct(KPISnapshot.metric_name)
         .limit(50)
     )
