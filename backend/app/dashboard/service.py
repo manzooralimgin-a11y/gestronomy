@@ -45,13 +45,21 @@ MODULE_ACTIONS = {
 
 
 async def get_live_kpis(db: AsyncSession) -> list[KPISnapshot]:
+    # Simplified query to avoid problematic distinct() with scalars in some SQLAlchemy versions
     result = await db.execute(
         select(KPISnapshot)
         .order_by(KPISnapshot.metric_name, KPISnapshot.timestamp.desc())
-        .distinct(KPISnapshot.metric_name)
-        .limit(50)
+        .limit(100)
     )
-    return list(result.scalars().all())
+    all_kpis = list(result.scalars().all())
+    # Manual distinct by metric_name to ensure stability
+    seen = set()
+    distinct_kpis = []
+    for kpi in all_kpis:
+        if kpi.metric_name not in seen:
+            seen.add(kpi.metric_name)
+            distinct_kpis.append(kpi)
+    return distinct_kpis
 
 
 async def get_alerts(

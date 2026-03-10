@@ -120,7 +120,7 @@ function CheckoutInner() {
       try {
         const billRes = await api.post("/billing/bills", {
           order_id: orderId,
-          tax_rate: 0.10,
+          tax_rate: 0.19,
         });
         setBill(billRes.data);
       } catch {
@@ -147,17 +147,17 @@ function CheckoutInner() {
   }, [loadData]);
 
   /* ── Computed ── */
-  const subtotal = bill?.subtotal ?? order?.subtotal ?? 0;
+  const subtotalNet = bill?.subtotal ?? order?.subtotal ?? 0;
   const taxAmount = bill?.tax_amount ?? order?.tax_amount ?? 0;
   const discountAmount = bill?.discount_amount ?? order?.discount_amount ?? 0;
   const serviceCharge = bill?.service_charge ?? 0;
 
   const tipAmount = tipPercent !== null
-    ? subtotal * (tipPercent / 100)
+    ? (subtotalNet + taxAmount) * (tipPercent / 100)
     : customTip ? parseFloat(customTip) || 0
     : 0;
 
-  const grandTotal = subtotal + taxAmount - discountAmount + serviceCharge + tipAmount;
+  const grandTotal = subtotalNet + taxAmount - discountAmount + serviceCharge + tipAmount;
   const perPerson = splitCount > 1 ? grandTotal / splitCount : grandTotal;
 
   /* ── Actions ── */
@@ -332,9 +332,9 @@ function CheckoutInner() {
               <span className="font-bold text-right">Brutto</span>
               
               <span>19%</span>
-              <span className="text-right">{(grandTotal * 0.19 / 1.19).toFixed(2)}</span>
-              <span className="text-right">{(grandTotal / 1.19).toFixed(2)}</span>
-              <span className="text-right">{grandTotal.toFixed(2)}</span>
+              <span className="text-right">{taxAmount.toFixed(2)}</span>
+              <span className="text-right">{subtotalNet.toFixed(2)}</span>
+              <span className="text-right">{(subtotalNet + taxAmount).toFixed(2)}</span>
             </div>
 
             {/* TSE Info */}
@@ -364,7 +364,7 @@ function CheckoutInner() {
             </div>
 
             <div className="text-center text-[10px] pt-4 italic">
-              Gastronovi Office - www.gastronovi.com
+              www.Das-ELB.de
             </div>
           </div>
 
@@ -480,9 +480,9 @@ function CheckoutInner() {
               <span className="font-bold text-right">Brutto</span>
               
               <span>19%</span>
-              <span className="text-right">{(grandTotal * 0.19 / 1.19).toFixed(2)}</span>
-              <span className="text-right">{(grandTotal / 1.19).toFixed(2)}</span>
-              <span className="text-right">{grandTotal.toFixed(2)}</span>
+              <span className="text-right">{taxAmount.toFixed(2)}</span>
+              <span className="text-right">{subtotalNet.toFixed(2)}</span>
+              <span className="text-right">{(subtotalNet + taxAmount).toFixed(2)}</span>
             </div>
 
             {/* TSE Info */}
@@ -512,7 +512,7 @@ function CheckoutInner() {
             </div>
 
             <div className="text-center text-[9px] pt-4 italic">
-              Gastronovi Office - www.gastronovi.com
+              www.Das-ELB.de
             </div>
           </div>
         </div>
@@ -545,8 +545,8 @@ function CheckoutInner() {
       <div className="bg-card rounded-2xl border border-border/50 overflow-hidden">
         {/* Restaurant header */}
         <div className="text-center py-5 bg-gradient-to-b from-emerald-500/5 to-transparent border-b border-border/30">
-          <h2 className="text-xl font-bold text-foreground tracking-wide">Gestronomy</h2>
-          <p className="text-xs text-muted-foreground mt-0.5">Fine Dining Experience</p>
+          <h2 className="text-xl font-bold text-foreground tracking-wide">DAS ELB</h2>
+          <p className="text-xs text-muted-foreground mt-0.5">Hotel & Restaurant</p>
         </div>
 
         {/* Meta */}
@@ -577,11 +577,11 @@ function CheckoutInner() {
         {/* Totals */}
         <div className="px-5 py-4 border-t border-dashed border-border/30 space-y-1.5">
           <div className="flex justify-between text-sm text-muted-foreground">
-            <span>Subtotal</span>
-            <span className="font-mono tabular-nums">&euro;{subtotal.toFixed(2)}</span>
+            <span>Netto</span>
+            <span className="font-mono tabular-nums">&euro;{subtotalNet.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm text-muted-foreground">
-            <span>Tax ({((bill?.tax_rate ?? 0.10) * 100).toFixed(0)}%)</span>
+            <span>MwSt. (19%)</span>
             <span className="font-mono tabular-nums">&euro;{taxAmount.toFixed(2)}</span>
           </div>
           {discountAmount > 0 && (

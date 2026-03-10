@@ -178,7 +178,7 @@ export function PublicReceiptClient() {
                         </div>
                         <div className="space-y-1">
                             <p className="text-gray-800 font-medium">Vielen Dank für Ihren Besuch!</p>
-                            <p className="text-gray-400 text-[10px]">Gastronovi Office - www.gastronovi.com</p>
+                            <p className="text-gray-400 text-[10px]">www.Das-ELB.de</p>
                         </div>
                     </div>
                 </div>

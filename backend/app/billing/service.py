@@ -251,13 +251,10 @@ async def generate_bill(db: AsyncSession, restaurant_id: int, payload: BillCreat
     count = (count_result.scalar() or 0) + 1
     bill_number = f"BILL-{datetime.now().year}-{count:04d}"
 
-    subtotal = float(order.subtotal)
-    tax_amount = round(subtotal * payload.tax_rate, 2)
-    total = round(
-        subtotal + tax_amount + payload.service_charge
-        - float(order.discount_amount) + float(order.tip_amount),
-        2,
-    )
+    total = subtotal + payload.service_charge - float(order.discount_amount) + float(order.tip_amount)
+    # German standard: Tax is inclusive in the total price
+    tax_amount = round(total * payload.tax_rate / (1 + payload.tax_rate), 2)
+    subtotal_net = round(total - tax_amount, 2)
 
     receipt_token = secrets.token_urlsafe(32)
 
@@ -265,7 +262,7 @@ async def generate_bill(db: AsyncSession, restaurant_id: int, payload: BillCreat
         restaurant_id=restaurant_id,
         order_id=payload.order_id,
         bill_number=bill_number,
-        subtotal=subtotal,
+        subtotal=subtotal_net, # Net value
         tax_rate=payload.tax_rate,
         tax_amount=tax_amount,
         service_charge=payload.service_charge,
