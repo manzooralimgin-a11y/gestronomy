@@ -67,3 +67,4 @@ media/
 # Tauri / Rust build artifacts
 frontend/src-tauri/target/
 frontend/out/
+gestronomy copy/

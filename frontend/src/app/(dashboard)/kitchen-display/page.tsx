@@ -157,7 +157,7 @@ export default function KitchenBoardPage() {
   );
 
   return (
-    <div className="space-y-4 -mx-3 md:-mx-6 -mt-3 md:-mt-6 px-4 pt-4 pb-8 min-h-screen bg-gray-950 text-white rounded-xl">
+    <div className="space-y-4 px-4 pt-4 pb-8 min-h-screen bg-gray-950 text-white rounded-xl">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">

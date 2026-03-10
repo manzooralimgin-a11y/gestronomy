@@ -43,22 +43,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       {/* Dynamic margin based on sidebar state */}
       <div
-        className="transition-[margin-left] duration-300 ease-standard"
-        style={{
-          marginLeft: `var(--sidebar-offset, 0px)`,
-        }}
+        className={`transition-[margin-left] duration-300 ease-standard ${
+          sidebarCollapsed ? "md:ml-[72px]" : "md:ml-[260px]"
+        }`}
       >
-        {/* CSS custom property for responsive sidebar offset */}
-        <style>{`
-          @media (min-width: 768px) {
-            :root { --sidebar-offset: ${sidebarCollapsed ? '72px' : '260px'}; }
-          }
-          @media (max-width: 767px) {
-            :root { --sidebar-offset: 0px; }
-          }
-        `}</style>
         <Header onMenuToggle={() => setSidebarOpen((prev) => !prev)} />
-        <main id="main-content" className="p-4 md:p-6">
+        <main id="main-content" className="p-4 md:p-6 flex-1">
           {children}
         </main>
       </div>
