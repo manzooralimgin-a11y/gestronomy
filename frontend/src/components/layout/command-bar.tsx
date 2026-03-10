@@ -54,7 +54,7 @@ export function CommandBar() {
         aria-expanded={open}
         aria-controls="command-bar-dialog"
         onClick={() => setOpen(true)}
-        className="group flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm text-muted-foreground transition duration-fast ease-standard hover:border-border hover:text-foreground"
+        className="group flex h-9 items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 text-sm text-muted-foreground transition duration-fast ease-standard hover:bg-white/[0.08] hover:text-foreground"
       >
         <Search className="h-4 w-4" />
         <span className="hidden lg:inline">Quick actions, pages, workflows</span>
@@ -65,14 +65,14 @@ export function CommandBar() {
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-[100] flex items-start justify-center bg-black/40 p-4 pt-[12vh]">
+        <div className="fixed inset-0 z-[100] flex items-start justify-center bg-black/60 backdrop-blur-sm p-4 pt-[12vh]">
           <div
             id="command-bar-dialog"
             role="dialog"
             aria-modal="true"
-            className="w-full max-w-2xl overflow-hidden rounded-xl border border-border bg-card shadow-floating"
+            className="w-full max-w-2xl overflow-hidden rounded-xl glass shadow-floating glow-subtle"
           >
-            <div className="border-b border-border p-3">
+            <div className="border-b border-white/[0.06] p-3">
               <input
                 autoFocus
                 value={query}
@@ -103,7 +103,7 @@ export function CommandBar() {
               ))}
             </div>
 
-            <div className="border-t border-border px-3 py-2 text-xs text-muted-foreground">
+            <div className="border-t border-white/[0.06] px-3 py-2 text-xs text-muted-foreground">
               Press <kbd className="rounded border px-1">Esc</kbd> to close
             </div>
           </div>

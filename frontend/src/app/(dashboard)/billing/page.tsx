@@ -141,7 +141,7 @@ interface CashShiftType {
 const ORDER_STATUS_COLORS: Record<string, { bg: string; text: string }> = {
   open: { bg: "bg-blue-500/10", text: "text-blue-400" },
   submitted: { bg: "bg-amber-500/10", text: "text-amber-400" },
-  preparing: { bg: "bg-orange-500/10", text: "text-orange-400" },
+  preparing: { bg: "bg-emerald-500/10", text: "text-emerald-400" },
   served: { bg: "bg-emerald-500/10", text: "text-emerald-400" },
   closed: { bg: "bg-muted", text: "text-muted-foreground" },
 };
@@ -459,7 +459,7 @@ export default function BillingPage() {
             { label: "Tips", value: `€${dailySummary.total_tips.toFixed(2)}`, icon: Banknote, color: "text-cyan-400" },
             { label: "Discounts", value: `€${dailySummary.total_discounts.toFixed(2)}`, icon: Hash, color: "text-red-400" },
           ].map((stat) => (
-            <div key={stat.label} className="bg-card rounded-xl border border-border p-3 flex items-center gap-3">
+            <div key={stat.label} className="glass-card p-3 flex items-center gap-3">
               <stat.icon className={`h-5 w-5 ${stat.color}`} />
               <div>
                 <p className="text-lg font-bold text-foreground">{stat.value}</p>
@@ -471,7 +471,7 @@ export default function BillingPage() {
       )}
 
       {/* Tabs */}
-      <div className="flex items-center gap-1 bg-card rounded-xl border border-border p-1">
+      <div className="flex items-center gap-1 glass-card p-1">
         {(["pos", "orders", "summary", "shifts"] as const).map((tab) => (
           <button
             key={tab}
@@ -544,7 +544,7 @@ export default function BillingPage() {
                     key={item.id}
                     onClick={() => handleAddToOrder(item)}
                     disabled={!selectedOrder}
-                    className={`bg-card rounded-xl border border-border p-4 text-left hover:shadow-md hover:border-accent-DEFAULT/50 transition-all ${
+                    className={`glass-card p-4 text-left hover:shadow-md hover:border-accent-DEFAULT/50 transition-all ${
                       !selectedOrder ? "opacity-50 cursor-not-allowed" : "cursor-pointer active:scale-95"
                     }`}
                   >
@@ -710,7 +710,7 @@ export default function BillingPage() {
                   <div
                     key={order.id}
                     onClick={() => { loadOrder(order.id); setActiveTab("pos"); }}
-                    className="bg-card rounded-xl border border-border p-4 hover:shadow-md hover:border-accent-DEFAULT/30 transition-all cursor-pointer"
+                    className="glass-card p-4 hover:shadow-md hover:border-accent-DEFAULT/30 transition-all cursor-pointer"
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">

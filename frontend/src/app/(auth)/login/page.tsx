@@ -53,13 +53,13 @@ export default function LoginPage() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <h1 className="text-3xl font-bold text-brand-500">Gestronomy</h1>
-        <p className="mt-2 text-sm text-gray-500">Sign in to your account</p>
+        <h1 className="text-3xl font-bold text-primary text-glow">Gestronomy</h1>
+        <p className="mt-2 text-sm text-muted-foreground">Sign in to your account</p>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="text-sm font-medium text-foreground/80">
               Email
             </label>
             <Input
@@ -73,7 +73,7 @@ export default function LoginPage() {
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="text-sm font-medium text-foreground/80">
               Password
             </label>
             <Input
@@ -88,7 +88,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <p className="text-sm text-red-600 bg-red-50 rounded-md px-3 py-2">
+            <p className="text-sm text-red-400 bg-red-500/10 rounded-md px-3 py-2">
               {error}
             </p>
           )}
@@ -98,7 +98,7 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-500">
+        <p className="mt-6 text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
           <Link href="/register" className="font-medium text-brand-500 hover:underline">
             Register

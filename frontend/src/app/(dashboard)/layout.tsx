@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { getMe } from "@/lib/auth";
 import { getDefaultDashboardRoute } from "@/lib/role-routing";
 import { useAuthStore } from "@/stores/auth-store";
+import { useUIStore } from "@/stores/ui-store";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
 
@@ -13,6 +14,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const setUser = useAuthStore((s) => s.setUser);
   const token = useAuthStore((s) => s.token);
+  const sidebarCollapsed = useUIStore((s) => s.sidebarCollapsed);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -37,12 +39,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [token, setUser, router, pathname]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen mesh-gradient">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      {/* md:ml-[260px] pushes content right on desktop; on mobile the sidebar overlays */}
-      <div className="md:ml-[260px]">
+      {/* Dynamic margin based on sidebar state */}
+      <div
+        className="transition-[margin-left] duration-300 ease-standard"
+        style={{
+          marginLeft: `var(--sidebar-offset, 0px)`,
+        }}
+      >
+        {/* CSS custom property for responsive sidebar offset */}
+        <style>{`
+          @media (min-width: 768px) {
+            :root { --sidebar-offset: ${sidebarCollapsed ? '72px' : '260px'}; }
+          }
+          @media (max-width: 767px) {
+            :root { --sidebar-offset: 0px; }
+          }
+        `}</style>
         <Header onMenuToggle={() => setSidebarOpen((prev) => !prev)} />
-        <main id="main-content" className="p-3 md:p-6">
+        <main id="main-content" className="p-4 md:p-6">
           {children}
         </main>
       </div>

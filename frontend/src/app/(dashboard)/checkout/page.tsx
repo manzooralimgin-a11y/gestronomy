@@ -218,7 +218,7 @@ function CheckoutInner() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-orange-500 border-t-transparent" />
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-emerald-500 border-t-transparent" />
       </div>
     );
   }
@@ -228,7 +228,7 @@ function CheckoutInner() {
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-muted-foreground">
         <Receipt className="h-12 w-12 mb-3 opacity-50" />
         <p>Order not found</p>
-        <button onClick={() => router.push("/orders")} className="mt-4 text-orange-500 hover:underline text-sm">
+        <button onClick={() => router.push("/orders")} className="mt-4 text-emerald-500 hover:underline text-sm">
           Back to Waiter Station
         </button>
       </div>
@@ -320,13 +320,13 @@ function CheckoutInner() {
                 placeholder="Email receipt..."
                 value={receiptEmail}
                 onChange={e => setReceiptEmail(e.target.value)}
-                className="flex-1 px-3 py-2.5 rounded-xl border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+                className="flex-1 px-3 py-2.5 rounded-xl border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
               />
               <button
                 onClick={handleSendReceipt}
                 disabled={sendingReceipt || (!receiptEmail && !receiptPhone)}
-                className="px-4 py-2.5 rounded-xl bg-orange-500/10 text-orange-500 text-sm font-medium
-                  hover:bg-orange-500/20 transition-colors disabled:opacity-50"
+                className="px-4 py-2.5 rounded-xl bg-emerald-500/10 text-emerald-500 text-sm font-medium
+                  hover:bg-emerald-500/20 transition-colors disabled:opacity-50"
               >
                 {receiptSent ? <Check className="h-4 w-4" /> : <Mail className="h-4 w-4" />}
               </button>
@@ -431,7 +431,7 @@ function CheckoutInner() {
       {/* Bill card */}
       <div className="bg-card rounded-2xl border border-border/50 overflow-hidden">
         {/* Restaurant header */}
-        <div className="text-center py-5 bg-gradient-to-b from-orange-500/5 to-transparent border-b border-border/30">
+        <div className="text-center py-5 bg-gradient-to-b from-emerald-500/5 to-transparent border-b border-border/30">
           <h2 className="text-xl font-bold text-foreground tracking-wide">Gestronomy</h2>
           <p className="text-xs text-muted-foreground mt-0.5">Fine Dining Experience</p>
         </div>
@@ -494,7 +494,7 @@ function CheckoutInner() {
             <span className="font-mono tabular-nums">&euro;{grandTotal.toFixed(2)}</span>
           </div>
           {splitCount > 1 && (
-            <div className="flex justify-between text-sm text-orange-500">
+            <div className="flex justify-between text-sm text-emerald-500">
               <span>Per person ({splitCount} ways)</span>
               <span className="font-mono tabular-nums">&euro;{perPerson.toFixed(2)}</span>
             </div>
@@ -512,8 +512,8 @@ function CheckoutInner() {
               onClick={() => { setTipPercent(pct); setCustomTip(""); }}
               className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
                 ${tipPercent === pct
-                  ? "bg-orange-500 text-white shadow-lg shadow-orange-500/25"
-                  : "bg-card border border-border/50 text-muted-foreground hover:border-orange-500/30 hover:text-foreground"
+                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/25"
+                  : "bg-card border border-border/50 text-muted-foreground hover:border-emerald-500/30 hover:text-foreground"
                 }`}
             >
               {pct === 0 ? "None" : `${pct}%`}
@@ -526,7 +526,7 @@ function CheckoutInner() {
               value={customTip}
               onChange={e => { setCustomTip(e.target.value); setTipPercent(null); }}
               className="w-full py-2.5 px-3 rounded-xl border border-border/50 bg-card text-sm text-center
-                focus:outline-none focus:ring-2 focus:ring-orange-500/50 [appearance:textfield]
+                focus:outline-none focus:ring-2 focus:ring-emerald-500/50 [appearance:textfield]
                 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">&euro;</span>
@@ -554,8 +554,8 @@ function CheckoutInner() {
               className={`py-3 rounded-xl text-sm font-medium transition-all duration-200
                 flex flex-col items-center gap-1.5
                 ${paymentMethod === key
-                  ? "bg-orange-500/10 border-2 border-orange-500/50 text-orange-500"
-                  : "bg-card border border-border/50 text-muted-foreground hover:border-orange-500/20"
+                  ? "bg-emerald-500/10 border-2 border-emerald-500/50 text-emerald-500"
+                  : "bg-card border border-border/50 text-muted-foreground hover:border-emerald-500/20"
                 }`}
             >
               <Icon className="h-5 w-5" />
@@ -573,13 +573,13 @@ function CheckoutInner() {
               value={cardLastFour}
               onChange={e => setCardLastFour(e.target.value.replace(/\D/g, ""))}
               className="flex-1 px-3 py-2.5 rounded-xl border border-border bg-card text-sm
-                focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+                focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
             <select
               value={cardBrand}
               onChange={e => setCardBrand(e.target.value)}
               className="px-3 py-2.5 rounded-xl border border-border bg-card text-sm
-                focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+                focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               <option value="visa">Visa</option>
               <option value="mastercard">Mastercard</option>
@@ -601,8 +601,8 @@ function CheckoutInner() {
               onClick={() => setSplitCount(n)}
               className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
                 ${splitCount === n
-                  ? "bg-orange-500 text-white shadow-lg shadow-orange-500/25"
-                  : "bg-card border border-border/50 text-muted-foreground hover:border-orange-500/30"
+                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/25"
+                  : "bg-card border border-border/50 text-muted-foreground hover:border-emerald-500/30"
                 }`}
             >
               {n === 1 ? "No Split" : `${n} Ways`}
@@ -615,10 +615,10 @@ function CheckoutInner() {
       <button
         onClick={handlePay}
         disabled={paying}
-        className="w-full py-4 rounded-2xl bg-orange-500 text-white font-bold text-lg
-          hover:bg-orange-600 active:scale-[0.98] transition-all duration-200
+        className="w-full py-4 rounded-2xl bg-emerald-500 text-white font-bold text-lg
+          hover:bg-emerald-600 active:scale-[0.98] transition-all duration-200
           disabled:opacity-50 disabled:cursor-not-allowed
-          shadow-xl shadow-orange-500/20
+          shadow-xl shadow-emerald-500/20
           flex items-center justify-center gap-2"
       >
         {paying ? (
@@ -648,7 +648,7 @@ export default function CheckoutPage() {
     <Suspense
       fallback={
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="animate-spin rounded-full h-10 w-10 border-2 border-orange-500 border-t-transparent" />
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-emerald-500 border-t-transparent" />
         </div>
       }
     >

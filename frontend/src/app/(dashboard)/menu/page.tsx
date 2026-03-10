@@ -79,7 +79,7 @@ interface UpsellRule {
 
 /* ── category colours ── */
 const CATEGORY_COLORS = [
-  "from-orange-500/20 to-red-500/10 border-orange-500/30",
+  "from-emerald-500/20 to-red-500/10 border-emerald-500/30",
   "from-blue-500/20 to-indigo-500/10 border-blue-500/30",
   "from-emerald-500/20 to-teal-500/10 border-emerald-500/30",
   "from-purple-500/20 to-pink-500/10 border-purple-500/30",

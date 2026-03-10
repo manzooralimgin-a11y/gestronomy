@@ -11,18 +11,9 @@ import { CommandBar } from "@/components/layout/command-bar";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 function getBreadcrumbs(pathname: string | null) {
-  if (!pathname) {
-    return [{ label: "Dashboard", href: "/" }];
-  }
-
-  const segments = pathname
-    .split("/")
-    .filter(Boolean);
-
-  if (segments.length === 0) {
-    return [{ label: "Dashboard", href: "/" }];
-  }
-
+  if (!pathname) return [{ label: "Dashboard", href: "/" }];
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments.length === 0) return [{ label: "Dashboard", href: "/" }];
   return [
     { label: "Dashboard", href: "/" },
     ...segments.map((segment, index) => ({
@@ -53,28 +44,31 @@ export function Header({ onMenuToggle }: HeaderProps) {
   };
 
   return (
-    <header className="flex h-14 md:h-16 items-center justify-between border-b border-border bg-card px-3 md:px-6">
-      <div className="flex items-center gap-2">
-        {/* Hamburger menu — mobile only */}
+    <header className="flex h-14 md:h-16 items-center justify-between glass border-b border-white/[0.06] px-4 md:px-6 sticky top-0 z-30">
+      <div className="flex items-center gap-3">
+        {/* Hamburger — mobile only */}
         <button
           type="button"
           aria-label="Open navigation menu"
           onClick={onMenuToggle}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted md:hidden"
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-white/[0.06] hover:text-foreground transition-colors md:hidden"
         >
           <Menu className="h-5 w-5" />
         </button>
 
-        {/* Breadcrumbs — hidden on small mobile */}
-        <nav className="hidden sm:flex items-center gap-1.5 text-sm">
+        {/* Breadcrumbs — glass pill style */}
+        <nav className="hidden sm:flex items-center gap-1 text-sm">
           {breadcrumbs.map((crumb, index) => (
-            <span key={crumb.href} className="flex items-center gap-1.5">
-              {index > 0 && <span className="text-muted-foreground/50">/</span>}
+            <span key={crumb.href} className="flex items-center gap-1">
+              {index > 0 && (
+                <span className="text-muted-foreground/30 mx-0.5">·</span>
+              )}
               <span
                 className={cn(
+                  "transition-colors",
                   index === breadcrumbs.length - 1
                     ? "font-medium text-foreground"
-                    : "text-muted-foreground"
+                    : "text-muted-foreground/60 hover:text-muted-foreground"
                 )}
               >
                 {crumb.label}
@@ -89,41 +83,44 @@ export function Header({ onMenuToggle }: HeaderProps) {
         </span>
       </div>
 
-      <div className="flex items-center gap-2 md:gap-4">
+      <div className="flex items-center gap-2 md:gap-3">
+        {/* Command bar */}
         <div className="hidden md:block">
           <CommandBar />
         </div>
 
+        {/* Alert bell */}
         <Button
           variant="ghost"
           size="icon"
-          className="relative h-9 w-9"
+          className="relative h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-white/[0.06]"
           aria-label="Open alerts"
           onClick={() => router.push("/alerts")}
         >
-          <Bell className="h-5 w-5 text-muted-foreground" />
+          <Bell className="h-[18px] w-[18px]" />
           {unreadCount > 0 && (
-            <Badge className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center p-0 text-[10px]">
-              {unreadCount > 99 ? "99+" : unreadCount}
-            </Badge>
+            <span className="absolute -right-0.5 -top-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white ring-2 ring-[hsl(var(--background))] animate-pulse">
+              {unreadCount > 99 ? "99" : unreadCount}
+            </span>
           )}
         </Button>
 
+        {/* User menu */}
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
             <Button
               variant="ghost"
-              className="flex items-center gap-2 px-2"
+              className="flex items-center gap-2 px-2 hover:bg-white/[0.06]"
               aria-label="Open user menu"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-500 text-sm font-medium text-white">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500/80 to-emerald-600/80 text-xs font-semibold text-white ring-2 ring-emerald-500/20">
                 {user?.full_name
                   ?.split(" ")
                   .map((n) => n[0])
                   .join("")
-                  .toUpperCase() || <User className="h-4 w-4" />}
+                  .toUpperCase() || <User className="h-3.5 w-3.5" />}
               </div>
-              <span className="hidden text-sm font-medium text-foreground md:block">
+              <span className="hidden text-sm font-medium text-foreground/80 md:block">
                 {user?.full_name || "User"}
               </span>
             </Button>
@@ -131,16 +128,16 @@ export function Header({ onMenuToggle }: HeaderProps) {
 
           <DropdownMenu.Portal>
             <DropdownMenu.Content
-              className="z-50 min-w-[180px] rounded-md border border-border bg-card p-1 shadow-raised"
+              className="z-50 min-w-[180px] rounded-xl glass p-1.5 shadow-floating"
               align="end"
               sideOffset={8}
             >
-              <div className="px-3 py-2 text-sm text-muted-foreground">
+              <div className="px-3 py-2 text-xs text-muted-foreground">
                 {user?.email || "user@example.com"}
               </div>
-              <DropdownMenu.Separator className="my-1 h-px bg-border" />
+              <DropdownMenu.Separator className="my-1 h-px bg-white/[0.06]" />
               <DropdownMenu.Item
-                className="flex cursor-pointer items-center gap-2 rounded-sm px-3 py-2 text-sm text-status-danger focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] focus-visible:ring-offset-1 hover:bg-status-danger-soft"
+                className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 outline-none transition-colors"
                 onSelect={handleLogout}
               >
                 <LogOut className="h-4 w-4" />

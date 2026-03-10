@@ -19,7 +19,7 @@ interface LoyaltyData {
 }
 
 const TIER_COLORS: Record<string, string> = {
-  bronze: "bg-orange-100 text-orange-800",
+  bronze: "bg-emerald-100 text-emerald-800",
   silver: "bg-gray-200 text-gray-700",
   gold: "bg-yellow-100 text-yellow-800",
   platinum: "bg-purple-100 text-purple-800",

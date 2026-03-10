@@ -117,10 +117,10 @@ const STATUS_CONFIG: Record<string, { bg: string; text: string; dot: string; lab
 };
 
 const ITEM_STATUS: Record<string, { dot: string; text: string; label: string }> = {
-  pending: { dot: "bg-gray-400", text: "text-gray-400", label: "Waiting" },
+  pending: { dot: "bg-gray-400", text: "text-muted-foreground/60", label: "Waiting" },
   preparing: { dot: "bg-amber-400 animate-pulse", text: "text-amber-400", label: "Preparing" },
   ready: { dot: "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]", text: "text-emerald-400", label: "Ready" },
-  served: { dot: "bg-gray-500", text: "text-gray-500", label: "Served" },
+  served: { dot: "bg-white/[0.03]0", text: "text-muted-foreground", label: "Served" },
   cancelled: { dot: "bg-red-400", text: "text-red-400", label: "Cancelled" },
 };
 
@@ -530,7 +530,7 @@ export default function WaiterStationPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-orange-500 border-t-transparent" />
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-emerald-500 border-t-transparent" />
       </div>
     );
   }
@@ -544,8 +544,8 @@ export default function WaiterStationPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-orange-500/10 flex items-center justify-center">
-              <Utensils className="h-5 w-5 text-orange-500" />
+            <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+              <Utensils className="h-5 w-5 text-emerald-500" />
             </div>
             <div>
               <h1 className="text-xl font-bold text-foreground">Waiter Station</h1>
@@ -582,13 +582,13 @@ export default function WaiterStationPage() {
               placeholder="Search table..."
               value={tableSearch}
               onChange={e => setTableSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
           <select
             value={sectionFilter ?? ""}
             onChange={e => setSectionFilter(e.target.value ? Number(e.target.value) : null)}
-            className="px-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+            className="px-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
           >
             <option value="">All Sections</option>
             {sections.filter(s => s.is_active).map(s => (
@@ -621,7 +621,7 @@ export default function WaiterStationPage() {
                         className={`relative p-4 rounded-2xl border transition-all duration-200 text-left
                           ${config.bg} border-border/50
                           ${isClickable
-                            ? "hover:scale-[1.02] hover:shadow-lg hover:border-orange-500/30 cursor-pointer active:scale-[0.98]"
+                            ? "hover:scale-[1.02] hover:shadow-lg hover:border-emerald-500/30 cursor-pointer active:scale-[0.98]"
                             : "opacity-60 cursor-not-allowed"
                           }
                           ${order && activeOrders.find(o => o.id === order.id && o.item_count > 0)
@@ -671,7 +671,7 @@ export default function WaiterStationPage() {
                     key={order.id}
                     onClick={() => handleViewOrder(order)}
                     className={`p-4 rounded-2xl border border-border/50 bg-card/80 backdrop-blur-sm text-left
-                      transition-all duration-200 hover:shadow-lg hover:border-orange-500/30 active:scale-[0.98]
+                      transition-all duration-200 hover:shadow-lg hover:border-emerald-500/30 active:scale-[0.98]
                       ${isReady ? "ring-1 ring-emerald-500/40 bg-emerald-500/5" : ""}
                     `}
                   >
@@ -695,7 +695,7 @@ export default function WaiterStationPage() {
                         ${order.status === "open" ? "bg-blue-500/10 text-blue-400" :
                           order.status === "submitted" || order.status === "preparing" ? "bg-amber-500/10 text-amber-400" :
                           order.status === "served" ? "bg-emerald-500/10 text-emerald-400" :
-                          "bg-gray-500/10 text-gray-400"
+                          "bg-white/[0.03]0/10 text-muted-foreground/60"
                         }`}>
                         <CircleDot className="h-3 w-3" />
                         {order.status}
@@ -801,7 +801,7 @@ export default function WaiterStationPage() {
                 placeholder="Search menu..."
                 value={menuSearch}
                 onChange={e => setMenuSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
               />
             </div>
           </div>
@@ -812,7 +812,7 @@ export default function WaiterStationPage() {
               onClick={() => setSelectedCategory(null)}
               className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                 ${selectedCategory === null
-                  ? "bg-orange-500 text-white"
+                  ? "bg-emerald-500 text-white"
                   : "bg-muted text-muted-foreground hover:text-foreground"
                 }`}
             >
@@ -824,7 +824,7 @@ export default function WaiterStationPage() {
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all
                   ${selectedCategory === cat.id
-                    ? "bg-orange-500 text-white"
+                    ? "bg-emerald-500 text-white"
                     : "bg-muted text-muted-foreground hover:text-foreground"
                   }`}
               >
@@ -847,14 +847,14 @@ export default function WaiterStationPage() {
                     disabled={!item.is_available || addingItem === item.id}
                     className={`relative p-3 rounded-xl border text-left transition-all duration-200
                       ${item.is_available
-                        ? "border-border/50 bg-card/80 hover:border-orange-500/40 hover:shadow-md active:scale-[0.97]"
+                        ? "border-border/50 bg-card/80 hover:border-emerald-500/40 hover:shadow-md active:scale-[0.97]"
                         : "border-border/30 bg-muted/30 opacity-50 cursor-not-allowed"
                       }
-                      ${inOrder ? "ring-1 ring-orange-500/30" : ""}
+                      ${inOrder ? "ring-1 ring-emerald-500/30" : ""}
                     `}
                   >
                     {inOrder && (
-                      <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-orange-500 text-white text-xs flex items-center justify-center font-bold shadow-lg">
+                      <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-emerald-500 text-white text-xs flex items-center justify-center font-bold shadow-lg">
                         {inOrder.quantity}
                       </span>
                     )}
@@ -862,7 +862,7 @@ export default function WaiterStationPage() {
                       {item.name}
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-sm font-semibold text-orange-500">
+                      <span className="font-mono text-sm font-semibold text-emerald-500">
                         &euro;{item.price.toFixed(2)}
                       </span>
                       <span className="text-xs text-muted-foreground flex items-center gap-0.5">
@@ -888,8 +888,8 @@ export default function WaiterStationPage() {
                       </div>
                     )}
                     {addingItem === item.id && (
-                      <div className="absolute inset-0 rounded-xl bg-orange-500/10 flex items-center justify-center">
-                        <div className="h-5 w-5 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+                      <div className="absolute inset-0 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                        <div className="h-5 w-5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
                       </div>
                     )}
                   </button>
@@ -911,7 +911,7 @@ export default function WaiterStationPage() {
           <div className="p-3 border-b border-border/30">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <ShoppingCart className="h-4 w-4 text-orange-500" />
+                <ShoppingCart className="h-4 w-4 text-emerald-500" />
                 <span className="font-semibold text-sm">
                   {orderItems.length} item{orderItems.length !== 1 ? "s" : ""}
                 </span>
@@ -1031,11 +1031,11 @@ export default function WaiterStationPage() {
                           placeholder="Add note (e.g. no onion, extra spicy)..."
                           value={itemNoteDrafts[item.id] ?? ""}
                           onChange={e => setItemNoteDrafts(d => ({ ...d, [item.id]: e.target.value }))}
-                          className="flex-1 px-3 py-1.5 rounded-lg border border-border bg-background text-xs focus:outline-none focus:ring-1 focus:ring-orange-500/50"
+                          className="flex-1 px-3 py-1.5 rounded-lg border border-border bg-background text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
                         />
                         <button
                           onClick={() => handleSaveNote(item)}
-                          className="px-2 py-1.5 rounded-lg bg-orange-500/10 text-orange-400 text-xs font-medium hover:bg-orange-500/20 transition-colors"
+                          className="px-2 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 text-xs font-medium hover:bg-emerald-500/20 transition-colors"
                         >
                           Save
                         </button>
@@ -1072,8 +1072,8 @@ export default function WaiterStationPage() {
                   <button
                     onClick={handleSendToKitchen}
                     disabled={sendingToKitchen || pendingItemsCount === 0}
-                    className="w-full py-3 rounded-xl bg-orange-500 text-white font-semibold text-sm
-                      hover:bg-orange-600 active:scale-[0.98] transition-all duration-200
+                    className="w-full py-3 rounded-xl bg-emerald-500 text-white font-semibold text-sm
+                      hover:bg-emerald-600 active:scale-[0.98] transition-all duration-200
                       disabled:opacity-50 disabled:cursor-not-allowed
                       flex items-center justify-center gap-2"
                   >

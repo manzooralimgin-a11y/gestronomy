@@ -15,7 +15,7 @@ const sizeMap = {
 export function Loading({ className, size = "md" }: LoadingProps) {
   return (
     <div className={cn("flex items-center justify-center", className)}>
-      <Loader2 className={cn("animate-spin text-brand-500", sizeMap[size])} />
+      <Loader2 className={cn("animate-spin text-primary", sizeMap[size])} />
     </div>
   );
 }

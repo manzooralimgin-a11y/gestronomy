@@ -160,7 +160,7 @@ export default function KDSPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-950">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500" />
       </div>
     );
   }
@@ -170,10 +170,10 @@ export default function KDSPage() {
       {/* ── Header ── */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <ChefHat className="h-8 w-8 text-orange-400" />
+          <ChefHat className="h-8 w-8 text-emerald-400" />
           <div>
             <h1 className="text-xl font-bold">Kitchen Display</h1>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-muted-foreground">
               {orders.length} active order{orders.length !== 1 ? "s" : ""} &middot; Updated{" "}
               {lastRefresh.toLocaleTimeString()}
             </p>
@@ -182,7 +182,7 @@ export default function KDSPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={fetchData}
-            className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400"
+            className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-muted-foreground/60"
           >
             <RefreshCw className="h-4 w-4" />
           </button>
@@ -194,8 +194,8 @@ export default function KDSPage() {
         <button
           onClick={() => setSelectedStation(null)}
           className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-all ${selectedStation === null
-              ? "bg-orange-500 text-white"
-              : "bg-gray-800 text-gray-400 hover:text-white"
+              ? "bg-emerald-500 text-white"
+              : "bg-gray-800 text-muted-foreground/60 hover:text-white"
             }`}
         >
           All Stations
@@ -207,8 +207,8 @@ export default function KDSPage() {
               key={s.id}
               onClick={() => setSelectedStation(s.name)}
               className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-all ${selectedStation === s.name
-                  ? "bg-orange-500 text-white"
-                  : "bg-gray-800 text-gray-400 hover:text-white"
+                  ? "bg-emerald-500 text-white"
+                  : "bg-gray-800 text-muted-foreground/60 hover:text-white"
                 }`}
             >
               {s.display_name || s.name}
@@ -219,9 +219,9 @@ export default function KDSPage() {
       {/* ── Orders Grid ── */}
       {orders.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-32">
-          <ChefHat className="h-16 w-16 text-gray-700 mb-4" />
-          <p className="text-gray-500 text-lg">No active orders</p>
-          <p className="text-gray-600 text-sm">Orders will appear here when sent to kitchen</p>
+          <ChefHat className="h-16 w-16 text-foreground/80 mb-4" />
+          <p className="text-muted-foreground text-lg">No active orders</p>
+          <p className="text-muted-foreground text-sm">Orders will appear here when sent to kitchen</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
@@ -234,9 +234,9 @@ export default function KDSPage() {
               <div className="px-4 py-3 flex items-center justify-between border-b border-white/5">
                 <div>
                   <span className="text-lg font-bold">#{order.order_id}</span>
-                  <span className="ml-2 text-sm text-gray-400">T{order.table_number}</span>
+                  <span className="ml-2 text-sm text-muted-foreground/60">T{order.table_number}</span>
                   {order.guest_name && (
-                    <span className="ml-1 text-xs text-gray-500">&middot; {order.guest_name}</span>
+                    <span className="ml-1 text-xs text-muted-foreground">&middot; {order.guest_name}</span>
                   )}
                 </div>
                 <div className={`flex items-center gap-1 text-sm font-mono font-bold ${getTimerColor(order.elapsed_seconds)}`}>
@@ -258,15 +258,15 @@ export default function KDSPage() {
                       }`}
                   >
                     <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <span className="text-orange-400 font-bold text-sm w-5">{item.quantity}x</span>
+                      <span className="text-emerald-400 font-bold text-sm w-5">{item.quantity}x</span>
                       <span className={`text-sm truncate ${item.status === "ready" ? "text-emerald-400 line-through" :
-                          item.status === "served" ? "text-gray-600 line-through" :
+                          item.status === "served" ? "text-muted-foreground line-through" :
                             "text-white"
                         }`}>
                         {item.item_name}
                       </span>
                       {item.station && (
-                        <span className="text-xs text-gray-600 flex-shrink-0">
+                        <span className="text-xs text-muted-foreground flex-shrink-0">
                           [{item.station}]
                         </span>
                       )}
@@ -304,7 +304,7 @@ export default function KDSPage() {
               <div className="px-4 py-2 border-t border-white/5">
                 <button
                   onClick={() => bumpOrder(order.order_id)}
-                  className="w-full py-2 rounded-xl bg-orange-500/20 text-orange-400 hover:bg-orange-500/30 text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-2 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-sm font-medium transition-colors flex items-center justify-center gap-2"
                 >
                   <Flame className="h-4 w-4" />
                   Bump Order

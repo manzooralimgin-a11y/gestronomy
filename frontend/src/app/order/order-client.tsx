@@ -170,18 +170,18 @@ export function OrderClient() {
   /* ── loading / error ── */
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-orange-500" />
+      <div className="min-h-screen flex items-center justify-center bg-card">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-emerald-500" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white px-6">
+      <div className="min-h-screen flex items-center justify-center bg-card px-6">
         <div className="text-center">
           <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-3" />
-          <p className="text-gray-700 text-lg">{error}</p>
+          <p className="text-foreground/80 text-lg">{error}</p>
         </div>
       </div>
     );
@@ -190,30 +190,30 @@ export function OrderClient() {
   /* ── order confirmed ── */
   if (orderResult) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white px-6">
+      <div className="min-h-screen flex items-center justify-center bg-card px-6">
         <div className="text-center max-w-sm">
           <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
             <Check className="h-8 w-8 text-green-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Order Placed!</h1>
-          <p className="text-gray-600 mb-4">{orderResult.message}</p>
-          <div className="bg-gray-50 rounded-2xl p-4 text-sm space-y-2">
+          <h1 className="text-2xl font-bold text-foreground mb-2">Order Placed!</h1>
+          <p className="text-muted-foreground mb-4">{orderResult.message}</p>
+          <div className="bg-white/[0.03] rounded-2xl p-4 text-sm space-y-2">
             <div className="flex justify-between">
-              <span className="text-gray-500">Order #</span>
+              <span className="text-muted-foreground">Order #</span>
               <span className="font-semibold">{orderResult.order_id}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Items</span>
+              <span className="text-muted-foreground">Items</span>
               <span className="font-semibold">{orderResult.items_count}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Total</span>
-              <span className="font-bold text-orange-600">&euro;{orderResult.total.toFixed(2)}</span>
+              <span className="text-muted-foreground">Total</span>
+              <span className="font-bold text-emerald-600">&euro;{orderResult.total.toFixed(2)}</span>
             </div>
           </div>
           <button
             onClick={() => { setOrderResult(null); fetchMenu(); }}
-            className="mt-6 w-full py-3 rounded-2xl bg-orange-500 text-white font-semibold hover:bg-orange-600 transition-colors"
+            className="mt-6 w-full py-3 rounded-2xl bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition-colors"
           >
             Order More
           </button>
@@ -223,21 +223,21 @@ export function OrderClient() {
   }
 
   return (
-    <div className="min-h-screen bg-white pb-24">
+    <div className="min-h-screen bg-card pb-24">
       {/* ── Header ── */}
-      <div className="sticky top-0 z-30 bg-white border-b border-gray-100 px-4 py-3 shadow-sm">
+      <div className="sticky top-0 z-30 bg-card border-b border-white/[0.06] px-4 py-3 shadow-sm">
         <div className="max-w-lg mx-auto flex items-center justify-between">
           <div>
-            <h1 className="text-lg font-bold text-gray-900">Gestronomy</h1>
+            <h1 className="text-lg font-bold text-foreground">Gestronomy</h1>
             {tableInfo && (
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 Table {tableInfo.table_number} &middot; {tableInfo.section_name}
               </p>
             )}
           </div>
           <button
             onClick={() => setShowCart(true)}
-            className="relative flex items-center gap-1.5 px-3 py-2 rounded-xl bg-orange-500 text-white text-sm font-medium"
+            className="relative flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500 text-white text-sm font-medium"
           >
             <ShoppingCart className="h-4 w-4" />
             &euro;{cartTotal.toFixed(2)}
@@ -251,15 +251,15 @@ export function OrderClient() {
       </div>
 
       {/* ── Category Tabs ── */}
-      <div className="sticky top-[57px] z-20 bg-white border-b border-gray-100">
+      <div className="sticky top-[57px] z-20 bg-card border-b border-white/[0.06]">
         <div className="max-w-lg mx-auto flex gap-1 px-4 py-2 overflow-x-auto scrollbar-thin">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setSelectedCat(cat.id)}
               className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedCat === cat.id
-                ? "bg-orange-500 text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                ? "bg-emerald-500 text-white"
+                : "bg-white/[0.04] text-muted-foreground hover:bg-white/[0.06]"
                 }`}
             >
               {cat.name}
@@ -275,20 +275,20 @@ export function OrderClient() {
           return (
             <div
               key={item.id}
-              className={`bg-white rounded-2xl border ${qty > 0 ? "border-orange-300 shadow-sm" : "border-gray-100"
+              className={`bg-card rounded-2xl border ${qty > 0 ? "border-emerald-300 shadow-sm" : "border-white/[0.06]"
                 } p-4 transition-all`}
             >
               <div className="flex justify-between gap-3">
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 text-base">{item.name}</h3>
+                  <h3 className="font-semibold text-foreground text-base">{item.name}</h3>
                   {item.description && (
-                    <p className="text-sm text-gray-500 mt-0.5 line-clamp-2">{item.description}</p>
+                    <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">{item.description}</p>
                   )}
                   <div className="flex items-center gap-2 mt-2">
-                    <span className="text-lg font-bold text-orange-600">
+                    <span className="text-lg font-bold text-emerald-600">
                       &euro;{item.price.toFixed(2)}
                     </span>
-                    <span className="text-xs text-gray-400 flex items-center gap-0.5">
+                    <span className="text-xs text-muted-foreground/60 flex items-center gap-0.5">
                       <Clock className="h-3 w-3" /> {item.prep_time_min}m
                     </span>
                   </div>
@@ -311,22 +311,22 @@ export function OrderClient() {
                   {qty === 0 ? (
                     <button
                       onClick={() => addToCart(item)}
-                      className="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center hover:bg-orange-600 transition-colors"
+                      className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center hover:bg-emerald-600 transition-colors"
                     >
                       <Plus className="h-5 w-5" />
                     </button>
                   ) : (
-                    <div className="flex items-center gap-2 bg-orange-50 rounded-xl px-1 py-1">
+                    <div className="flex items-center gap-2 bg-emerald-50 rounded-xl px-1 py-1">
                       <button
                         onClick={() => updateQuantity(item.id, -1)}
-                        className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-orange-600"
+                        className="w-8 h-8 rounded-lg bg-card shadow-sm flex items-center justify-center text-emerald-600"
                       >
                         <Minus className="h-4 w-4" />
                       </button>
-                      <span className="w-6 text-center font-bold text-orange-600 text-sm">{qty}</span>
+                      <span className="w-6 text-center font-bold text-emerald-600 text-sm">{qty}</span>
                       <button
                         onClick={() => updateQuantity(item.id, 1)}
-                        className="w-8 h-8 rounded-lg bg-orange-500 text-white flex items-center justify-center"
+                        className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center"
                       >
                         <Plus className="h-4 w-4" />
                       </button>
@@ -344,7 +344,7 @@ export function OrderClient() {
         <div className="fixed bottom-0 left-0 right-0 z-30 p-4 bg-gradient-to-t from-white via-white to-transparent">
           <button
             onClick={() => setShowCart(true)}
-            className="w-full max-w-lg mx-auto flex items-center justify-between px-6 py-4 rounded-2xl bg-orange-500 text-white font-semibold shadow-lg shadow-orange-500/25 hover:bg-orange-600 transition-colors"
+            className="w-full max-w-lg mx-auto flex items-center justify-between px-6 py-4 rounded-2xl bg-emerald-500 text-white font-semibold shadow-lg shadow-emerald-500/25 hover:bg-emerald-600 transition-colors"
           >
             <span className="flex items-center gap-2">
               <ShoppingCart className="h-5 w-5" />
@@ -359,21 +359,21 @@ export function OrderClient() {
       {showCart && (
         <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setShowCart(false)}>
           <div
-            className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl max-h-[85vh] overflow-y-auto"
+            className="absolute bottom-0 left-0 right-0 bg-card rounded-t-3xl max-h-[85vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-              <h2 className="text-lg font-bold text-gray-900">Your Order</h2>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
+              <h2 className="text-lg font-bold text-foreground">Your Order</h2>
               <button
                 onClick={() => setShowCart(false)}
-                className="p-2 rounded-lg hover:bg-gray-100"
+                className="p-2 rounded-lg hover:bg-white/[0.04]"
               >
-                <X className="h-5 w-5 text-gray-400" />
+                <X className="h-5 w-5 text-muted-foreground/60" />
               </button>
             </div>
 
             {cart.length === 0 ? (
-              <div className="px-6 py-10 text-center text-gray-400">
+              <div className="px-6 py-10 text-center text-muted-foreground/60">
                 Your cart is empty
               </div>
             ) : (
@@ -381,8 +381,8 @@ export function OrderClient() {
                 {cart.map((ci) => (
                   <div key={ci.item.id} className="flex items-center justify-between py-2">
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 text-sm">{ci.item.name}</p>
-                      <p className="text-xs text-gray-400">
+                      <p className="font-medium text-foreground text-sm">{ci.item.name}</p>
+                      <p className="text-xs text-muted-foreground/60">
                         &euro;{ci.item.price.toFixed(2)} each
                       </p>
                     </div>
@@ -390,14 +390,14 @@ export function OrderClient() {
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => updateQuantity(ci.item.id, -1)}
-                          className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500"
+                          className="w-7 h-7 rounded-lg border border-white/[0.08] flex items-center justify-center text-muted-foreground"
                         >
                           <Minus className="h-3 w-3" />
                         </button>
                         <span className="w-6 text-center text-sm font-semibold">{ci.quantity}</span>
                         <button
                           onClick={() => updateQuantity(ci.item.id, 1)}
-                          className="w-7 h-7 rounded-lg bg-orange-500 text-white flex items-center justify-center"
+                          className="w-7 h-7 rounded-lg bg-emerald-500 text-white flex items-center justify-center"
                         >
                           <Plus className="h-3 w-3" />
                         </button>
@@ -416,27 +416,27 @@ export function OrderClient() {
                 ))}
 
                 {/* guest name */}
-                <div className="pt-3 border-t border-gray-100">
-                  <label className="text-xs text-gray-500 block mb-1">Your Name</label>
+                <div className="pt-3 border-t border-white/[0.06]">
+                  <label className="text-xs text-muted-foreground block mb-1">Your Name</label>
                   <input
                     type="text"
                     placeholder="Guest"
                     value={guestName}
                     onChange={(e) => setGuestName(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+                    className="w-full px-4 py-2.5 rounded-xl border border-white/[0.08] text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
                   />
                 </div>
 
                 {/* total + submit */}
-                <div className="pt-3 border-t border-gray-100 space-y-3">
+                <div className="pt-3 border-t border-white/[0.06] space-y-3">
                   <div className="flex justify-between text-base font-bold">
                     <span>Total</span>
-                    <span className="text-orange-600">&euro;{cartTotal.toFixed(2)}</span>
+                    <span className="text-emerald-600">&euro;{cartTotal.toFixed(2)}</span>
                   </div>
                   <button
                     onClick={submitOrder}
                     disabled={submitting}
-                    className="w-full py-4 rounded-2xl bg-orange-500 text-white font-bold text-lg hover:bg-orange-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="w-full py-4 rounded-2xl bg-emerald-500 text-white font-bold text-lg hover:bg-emerald-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {submitting ? (
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />

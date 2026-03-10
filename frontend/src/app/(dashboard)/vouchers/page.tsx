@@ -87,7 +87,7 @@ const VOUCHER_TYPE_COLORS: Record<string, string> = {
 };
 
 const TIER_COLORS: Record<string, string> = {
-  bronze: "bg-orange-500/10 text-orange-400",
+  bronze: "bg-emerald-500/10 text-emerald-400",
   silver: "bg-gray-400/10 text-gray-300",
   gold: "bg-amber-500/10 text-amber-400",
   platinum: "bg-purple-500/10 text-purple-400",

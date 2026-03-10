@@ -76,7 +76,7 @@ export function AiChat() {
         >
           {messages.length === 0 && (
             <div className="flex h-full items-center justify-center">
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-muted-foreground/60">
                 Ask anything about your restaurant operations...
               </p>
             </div>
@@ -99,15 +99,15 @@ export function AiChat() {
                   className={cn(
                     "max-w-[80%] rounded-lg px-3 py-2 text-sm",
                     msg.role === "user"
-                      ? "bg-brand-500 text-white"
-                      : "bg-gray-100 text-gray-800"
+                      ? "bg-primary/20 text-foreground"
+                      : "bg-white/[0.05] text-foreground/80"
                   )}
                 >
                   {msg.content}
                 </div>
                 {msg.role === "user" && (
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-200">
-                    <User className="h-4 w-4 text-gray-600" />
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.08]">
+                    <User className="h-4 w-4 text-foreground/60" />
                   </div>
                 )}
               </div>
@@ -117,7 +117,7 @@ export function AiChat() {
                 <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-500/10">
                   <Bot className="h-4 w-4 text-brand-500" />
                 </div>
-                <div className="flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-500">
+                <div className="flex items-center gap-2 rounded-lg bg-white/[0.05] px-3 py-2 text-sm text-muted-foreground">
                   <Loader2 className="h-3 w-3 animate-spin" />
                   Thinking...
                 </div>
@@ -128,7 +128,7 @@ export function AiChat() {
 
         <form
           onSubmit={handleSubmit}
-          className="flex gap-2 border-t border-gray-200 px-6 py-3"
+          className="flex gap-2 border-t border-white/[0.06] px-6 py-3"
         >
           <Input
             value={input}
