@@ -445,7 +445,7 @@ export default function WaiterStationPage() {
 
   const handleGoToCheckout = () => {
     if (!currentOrder) return;
-    router.push(`/orders/${currentOrder.id}/checkout`);
+    router.push(`/checkout?orderId=${currentOrder.id}`);
   };
 
   const handleBackToTables = () => {

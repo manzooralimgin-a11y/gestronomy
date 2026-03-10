@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState, useCallback, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import api from "@/lib/api";
 import {
   ArrowLeft,
@@ -77,11 +77,11 @@ interface ReceiptData {
   receipt_token: string | null;
 }
 
-/* ── Component ── */
-export default function CheckoutPage() {
-  const params = useParams();
+/* ── Inner Component (uses useSearchParams) ── */
+function CheckoutInner() {
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const orderId = Number(params.orderId);
+  const orderId = Number(searchParams.get("orderId"));
 
   const [order, setOrder] = useState<TableOrder | null>(null);
   const [orderItems, setOrderItems] = useState<OrderItemType[]>([]);
@@ -107,6 +107,7 @@ export default function CheckoutPage() {
 
   /* ── Load data ── */
   const loadData = useCallback(async () => {
+    if (!orderId) { setLoading(false); return; }
     try {
       const [orderRes, itemsRes] = await Promise.all([
         api.get(`/billing/orders/${orderId}`),
@@ -222,7 +223,7 @@ export default function CheckoutPage() {
     );
   }
 
-  if (!order) {
+  if (!orderId || !order) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-muted-foreground">
         <Receipt className="h-12 w-12 mb-3 opacity-50" />
@@ -437,7 +438,7 @@ export default function CheckoutPage() {
 
         {/* Meta */}
         <div className="px-5 py-3 flex justify-between text-xs text-muted-foreground border-b border-dashed border-border/30">
-          <span>Table T{order.table_id || "—"}</span>
+          <span>Table T{order.table_id || "\u2014"}</span>
           <span>{new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</span>
         </div>
 
@@ -638,5 +639,20 @@ export default function CheckoutPage() {
         )}
       </button>
     </div>
+  );
+}
+
+/* ── Page Component (with Suspense boundary for useSearchParams) ── */
+export default function CheckoutPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-orange-500 border-t-transparent" />
+        </div>
+      }
+    >
+      <CheckoutInner />
+    </Suspense>
   );
 }
