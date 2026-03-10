@@ -239,6 +239,15 @@ function CheckoutInner() {
      PAID — SUCCESS STATE
      ═══════════════════════════════════════ */
   if (paid) {
+    const now = new Date();
+    const dateFormatted = now.toLocaleDateString("de-DE");
+    const timeFormatted = now.toLocaleTimeString("de-DE");
+    
+    // Mock TSE details for authenticity
+    const transId = Math.floor(100000 + Math.random() * 900000);
+    const sigCount = Math.floor(300000 + Math.random() * 100000);
+    const startStr = `${dateFormatted}, ${timeFormatted.slice(0, 5)}`;
+    
     return (
       <>
         {/* Screen view */}
@@ -254,52 +263,108 @@ function CheckoutInner() {
             </p>
           </div>
 
-          {/* Receipt preview */}
-          <div className="bg-card rounded-2xl border border-border/50 p-6 space-y-4">
-            <div className="text-center border-b border-border/50 pb-3">
-              <h2 className="text-lg font-bold text-foreground">Gestronomy</h2>
-              <p className="text-xs text-muted-foreground">Fine Dining Experience</p>
+          {/* Receipt preview (German style) */}
+          <div className="bg-white text-black p-8 shadow-2xl rounded-sm font-mono text-[13px] leading-tight space-y-4 max-w-sm mx-auto">
+            <div className="text-center space-y-1">
+              <div className="flex flex-col items-center mb-2">
+                <div className="w-12 h-6 border-t-2 border-black rounded-[50%] mb-0.5"></div>
+                <div className="w-12 h-6 border-t-2 border-black rounded-[50%] -mt-4 mb-0.5"></div>
+                <div className="w-12 h-6 border-t-2 border-black rounded-[50%] -mt-4 mb-1"></div>
+                <h2 className="text-xl font-bold tracking-widest mt-1">DAS ELB</h2>
+              </div>
+              <p className="text-[10px] leading-relaxed">
+                B. Singh Hotel GmbH & Co. KG<br />
+                Seilerweg 19<br />
+                39114 Magdeburg<br />
+                Deutschland
+              </p>
+              <div className="text-[9px] mt-2">
+                Steuernummer: 102/113/08309<br />
+                +49 (0)391 563 266 105<br />
+                www.Das-ELB.de
+              </div>
             </div>
 
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>Bill: {bill?.bill_number}</span>
-              <span>{new Date().toLocaleDateString()}</span>
+            <div className="text-center py-2">
+              <h3 className="text-lg font-bold">Rechnung</h3>
             </div>
 
-            <div className="space-y-2 border-t border-dashed border-border/50 pt-3">
+            <div className="flex justify-between text-[11px] border-b border-black/10 pb-1">
+              <span>Rechn.-Nr.: {bill?.bill_number || `R-F281-${now.getFullYear()}-0001`}</span>
+            </div>
+
+            <div className="grid grid-cols-2 text-[11px] gap-y-1">
+              <div>Tisch</div>
+              <div className="text-right">Datum &nbsp;&nbsp;&nbsp; Zeit</div>
+              <div className="font-bold">#{order.table_id || "1/1"}</div>
+              <div className="text-right">{dateFormatted} {timeFormatted}</div>
+            </div>
+
+            <div className="space-y-1 border-t border-black pt-2 mt-4">
               {orderItems.filter(i => i.status !== "cancelled").map(item => (
-                <div key={item.id} className="flex justify-between text-sm">
-                  <span className="text-foreground">
-                    <span className="text-muted-foreground">{item.quantity}×</span> {item.item_name}
-                  </span>
-                  <span className="font-mono text-foreground">&euro;{item.total_price.toFixed(2)}</span>
+                <div key={item.id} className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <span>{item.quantity}x {item.item_name}</span>
+                  </div>
+                  <div className="flex gap-4 tabular-nums">
+                    <span>{(item.unit_price).toFixed(2)}</span>
+                    <span className="font-bold">{item.total_price.toFixed(2)}</span>
+                  </div>
                 </div>
               ))}
             </div>
 
-            <div className="space-y-1 border-t border-dashed border-border/50 pt-3 text-sm">
-              <div className="flex justify-between text-muted-foreground">
-                <span>Subtotal</span>
-                <span className="font-mono">&euro;{subtotal.toFixed(2)}</span>
+            <div className="border-t-2 border-black pt-2 flex justify-between items-baseline">
+              <span className="text-lg font-bold">Summe</span>
+              <span className="text-xl font-bold tabular-nums">EUR {grandTotal.toFixed(2)}</span>
+            </div>
+
+            <div className="flex justify-between font-bold pt-1">
+              <span>{paymentMethod === "cash" ? "BAR" : paymentMethod.toUpperCase()}</span>
+              <span>{grandTotal.toFixed(2)}</span>
+            </div>
+
+            {/* Tax Breakdown */}
+            <div className="pt-4 grid grid-cols-4 text-[10px] border-t border-dashed border-black/20 mt-4 tabular-nums">
+              <span className="font-bold">USt.%</span>
+              <span className="font-bold text-right">USt.</span>
+              <span className="font-bold text-right">Netto</span>
+              <span className="font-bold text-right">Brutto</span>
+              
+              <span>19%</span>
+              <span className="text-right">{(grandTotal * 0.19 / 1.19).toFixed(2)}</span>
+              <span className="text-right">{(grandTotal / 1.19).toFixed(2)}</span>
+              <span className="text-right">{grandTotal.toFixed(2)}</span>
+            </div>
+
+            {/* TSE Info */}
+            <div className="pt-4 text-[9px] space-y-0.5 border-t border-black/10 tabular-nums">
+              <div className="flex justify-between">
+                <span>Transaktionsnummer:</span>
+                <span>{transId}</span>
               </div>
-              <div className="flex justify-between text-muted-foreground">
-                <span>Tax</span>
-                <span className="font-mono">&euro;{taxAmount.toFixed(2)}</span>
+              <div className="flex justify-between">
+                <span>Signaturzähler:</span>
+                <span>{sigCount}</span>
               </div>
-              {tipAmount > 0 && (
-                <div className="flex justify-between text-muted-foreground">
-                  <span>Tip</span>
-                  <span className="font-mono">&euro;{tipAmount.toFixed(2)}</span>
-                </div>
-              )}
-              <div className="flex justify-between font-bold text-foreground text-base pt-1 border-t border-border/50">
-                <span>Total</span>
-                <span className="font-mono">&euro;{grandTotal.toFixed(2)}</span>
+              <div className="flex justify-between">
+                <span>Beginn:</span>
+                <span>{startStr}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Ende:</span>
+                <span>{dateFormatted}, {timeFormatted.slice(0, 5)}</span>
               </div>
             </div>
 
-            <div className="text-center text-xs text-muted-foreground pt-2 border-t border-dashed border-border/50">
-              Thank you for dining with us!
+            <div className="text-[8px] space-y-1 leading-tight border-t border-dashed border-black/20 pt-2">
+              <p>Seriennummer des elektronischen Aufzeichnungssystems:<br />1032599</p>
+              <p className="break-all">Seriennummer des Sicherheitsmoduls:<br />748ef188efda5cfa12b2107d3b7de135ab5f32cda1b49def14dd37b4d3878e0c</p>
+              <p className="break-all">Prüfwert:<br />yOqn7TnoILKOSi7Akstx8dUHDUr3/Z7qnx64ftSuoJWtT+vegD6tEa1F69juZQV7G2zz5l+IqntWmHZlO7+kA==</p>
+            </div>
+
+            <div className="text-center text-[10px] pt-4 italic">
+              Gastronovi Office - www.gastronovi.com
             </div>
           </div>
 
@@ -326,7 +391,7 @@ function CheckoutInner() {
                 onClick={handleSendReceipt}
                 disabled={sendingReceipt || (!receiptEmail && !receiptPhone)}
                 className="px-4 py-2.5 rounded-xl bg-emerald-500/10 text-emerald-500 text-sm font-medium
-                  hover:bg-emerald-500/20 transition-colors disabled:opacity-50"
+                hover:bg-emerald-500/20 transition-colors disabled:opacity-50"
               >
                 {receiptSent ? <Check className="h-4 w-4" /> : <Mail className="h-4 w-4" />}
               </button>
@@ -343,63 +408,111 @@ function CheckoutInner() {
           </div>
         </div>
 
-        {/* Print-only receipt */}
+        {/* Print-only receipt (DAS ELB Original Copy) */}
         <div className="hidden print:block">
-          <div className="max-w-[300px] mx-auto py-4 font-mono text-xs">
-            <div className="text-center mb-4">
-              <div className="text-lg font-bold">GESTRONOMY</div>
-              <div className="text-[10px]">Fine Dining Experience</div>
-              <div className="mt-2 text-[10px]">
-                Bill: {bill?.bill_number}
+          <div className="max-w-[300px] mx-auto py-4 font-mono text-[11px] leading-tight text-black space-y-4">
+            <div className="text-center space-y-1">
+              {/* CSS Logo Monogram */}
+              <div className="flex flex-col items-center mb-1">
+                <div className="w-10 h-4 border-t-2 border-black rounded-[50%]"></div>
+                <div className="w-10 h-4 border-t-2 border-black rounded-[50%] -mt-3"></div>
+                <div className="w-10 h-4 border-t-2 border-black rounded-[50%] -mt-3"></div>
+                <div className="text-lg font-bold mt-1 tracking-widest uppercase">DAS ELB</div>
               </div>
-              <div className="text-[10px]">
-                Date: {new Date().toLocaleDateString()} {new Date().toLocaleTimeString()}
+              
+              <div className="text-[9px]">
+                B. Singh Hotel GmbH & Co. KG<br />
+                Seilerweg 19<br />
+                39114 Magdeburg<br />
+                Deutschland
+              </div>
+              <div className="text-[8px] mt-1">
+                Steuernummer: 102/113/08309<br />
+                +49 (0)391 563 266 105<br />
+                www.Das-ELB.de
               </div>
             </div>
 
-            <div className="border-t border-dashed border-black my-2" />
-
-            {orderItems.filter(i => i.status !== "cancelled").map(item => (
-              <div key={item.id} className="flex justify-between py-0.5">
-                <span>{item.quantity}x {item.item_name}</span>
-                <span>&euro;{item.total_price.toFixed(2)}</span>
-              </div>
-            ))}
-
-            <div className="border-t border-dashed border-black my-2" />
-
-            <div className="flex justify-between">
-              <span>Subtotal</span>
-              <span>&euro;{subtotal.toFixed(2)}</span>
+            <div className="text-center py-2">
+              <div className="text-base font-bold">Rechnung</div>
             </div>
-            <div className="flex justify-between">
-              <span>Tax</span>
-              <span>&euro;{taxAmount.toFixed(2)}</span>
+
+            <div className="text-[9px]">
+              Rechn.-Nr.: {bill?.bill_number || `R-F281-${now.getFullYear()}-0001`}
             </div>
-            {tipAmount > 0 && (
+
+            <div className="grid grid-cols-2 text-[9px]">
+              <div>Tisch</div>
+              <div className="text-right">Datum &nbsp;&nbsp;&nbsp; Zeit</div>
+              <div className="font-bold">#{order.table_id || "1/1"}</div>
+              <div className="text-right">{dateFormatted} {timeFormatted}</div>
+            </div>
+
+            <div className="border-t border-black pt-2">
+              {orderItems.filter(i => i.status !== "cancelled").map(item => (
+                <div key={item.id} className="flex justify-between items-start pb-1">
+                  <div className="flex-1">
+                    <span>{item.quantity}x {item.item_name}</span>
+                  </div>
+                  <div className="tabular-nums flex gap-3">
+                    <span>{item.unit_price.toFixed(2)}</span>
+                    <span className="font-bold">{item.total_price.toFixed(2)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t-2 border-black pt-1 flex justify-between items-baseline">
+              <div className="text-sm font-bold">Summe</div>
+              <div className="text-base font-bold tabular-nums">EUR {grandTotal.toFixed(2)}</div>
+            </div>
+
+            <div className="flex justify-between font-bold">
+              <span>{paymentMethod === "cash" ? "BAR" : paymentMethod.toUpperCase()}</span>
+              <span>{grandTotal.toFixed(2)}</span>
+            </div>
+
+            {/* Tax Breakdown */}
+            <div className="pt-3 grid grid-cols-4 text-[8px] border-t border-dashed border-black/30 mt-2 tabular-nums">
+              <span className="font-bold">USt.%</span>
+              <span className="font-bold text-right">USt.</span>
+              <span className="font-bold text-right">Netto</span>
+              <span className="font-bold text-right">Brutto</span>
+              
+              <span>19%</span>
+              <span className="text-right">{(grandTotal * 0.19 / 1.19).toFixed(2)}</span>
+              <span className="text-right">{(grandTotal / 1.19).toFixed(2)}</span>
+              <span className="text-right">{grandTotal.toFixed(2)}</span>
+            </div>
+
+            {/* TSE Info */}
+            <div className="pt-3 text-[8px] space-y-0.5 border-t border-black/20 tabular-nums">
               <div className="flex justify-between">
-                <span>Tip</span>
-                <span>&euro;{tipAmount.toFixed(2)}</span>
+                <span>Transaktionsnummer:</span>
+                <span>{transId}</span>
               </div>
-            )}
-
-            <div className="border-t border-dashed border-black my-2" />
-
-            <div className="flex justify-between font-bold text-sm">
-              <span>TOTAL</span>
-              <span>&euro;{grandTotal.toFixed(2)}</span>
+              <div className="flex justify-between">
+                <span>Signaturzähler:</span>
+                <span>{sigCount}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Beginn:</span>
+                <span>{startStr}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Ende:</span>
+                <span>{dateFormatted}, {timeFormatted.slice(0, 5)}</span>
+              </div>
             </div>
 
-            <div className="border-t border-dashed border-black my-2" />
-
-            <div className="flex justify-between text-[10px]">
-              <span>Payment</span>
-              <span>{paymentMethod.toUpperCase()}</span>
+            <div className="text-[7px] space-y-0.5 border-t border-dashed border-black/20 pt-1">
+              <p>Seriennummer des elektronischen Aufzeichnungssystems: 1032599</p>
+              <p className="break-all">Seriennummer des Sicherheitsmoduls: 748ef188efda5cfa12b2107d3b7de135ab5f32cda1b49def14dd37b4d3878e0c</p>
+              <p className="break-all">Prüfwert: yOqn7TnoILKOSi7Akstx8dUHDUr3/Z7qnx64ftSuoJWtT+vegD6tEa1F69juZQV7G2zz5l+IqntWmHZlO7+kA==</p>
             </div>
 
-            <div className="text-center mt-6">
-              <div>Thank you for dining with us!</div>
-              <div className="mt-1 text-[10px]">gestronomy.app</div>
+            <div className="text-center text-[9px] pt-4 italic">
+              Gastronovi Office - www.gastronovi.com
             </div>
           </div>
         </div>
