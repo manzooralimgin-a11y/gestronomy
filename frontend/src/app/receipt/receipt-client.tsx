@@ -80,31 +80,36 @@ export function PublicReceiptClient() {
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
             <div className="bg-white rounded-2xl shadow-lg max-w-[480px] w-full overflow-hidden">
-                {/* Header */}
+                {/* Header with DAS ELB Identity */}
                 <div className="bg-gray-900 text-white p-6 text-center">
-                    <h1 className="text-2xl font-bold tracking-tight">Gestronomy</h1>
-                    <p className="text-gray-400 text-sm mt-1">Digital Receipt</p>
+                    <div className="flex flex-col items-center mb-2">
+                        <div className="w-10 h-4 border-t-2 border-white/20 rounded-[50%]"></div>
+                        <div className="w-10 h-4 border-t-2 border-white/20 rounded-[50%] -mt-3"></div>
+                        <div className="w-10 h-4 border-t-2 border-white/20 rounded-[50%] -mt-3"></div>
+                    </div>
+                    <h1 className="text-2xl font-bold tracking-widest uppercase">DAS ELB</h1>
+                    <p className="text-gray-400 text-xs mt-1">Digitale Rechnung</p>
                 </div>
 
                 <div className="p-6 space-y-5">
                     {/* Bill info */}
                     <div className="flex justify-between text-sm text-gray-500">
-                        <span>Bill #{receipt.bill_number}</span>
-                        <span>{receipt.paid_at ? new Date(receipt.paid_at).toLocaleString() : "Pending"}</span>
+                        <span>Rechn.-Nr. {receipt.bill_number}</span>
+                        <span>{receipt.paid_at ? new Date(receipt.paid_at).toLocaleString("de-DE") : "Ausstehend"}</span>
                     </div>
 
                     {/* Items */}
                     <div className="space-y-2">
                         <div className="flex justify-between text-xs font-semibold text-gray-400 uppercase tracking-wider pb-1 border-b border-gray-200">
-                            <span>Item</span>
-                            <span>Amount</span>
+                            <span>Bezeichnung</span>
+                            <span>Betrag</span>
                         </div>
                         {receipt.items.map((item) => (
                             <div key={item.id} className="flex justify-between py-1.5">
                                 <div>
                                     <span className="text-gray-800 text-sm font-medium">{item.item_name}</span>
                                     {item.quantity > 1 && (
-                                        <span className="text-gray-400 text-xs ml-2">× {item.quantity} @ €{item.unit_price.toFixed(2)}</span>
+                                        <span className="text-gray-400 text-xs ml-2">{item.quantity} × €{item.unit_price.toFixed(2)}</span>
                                     )}
                                 </div>
                                 <span className="text-gray-800 text-sm font-medium">€{item.total_price.toFixed(2)}</span>
@@ -116,35 +121,35 @@ export function PublicReceiptClient() {
                     <div className="border-t border-dashed border-gray-300" />
 
                     {/* Totals */}
-                    <div className="space-y-1.5 text-sm">
+                    <div className="space-y-1.5 text-sm font-mono">
                         <div className="flex justify-between text-gray-500">
-                            <span>Subtotal</span>
+                            <span>Zwischensumme</span>
                             <span>€{receipt.subtotal.toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between text-gray-500">
-                            <span>Tax ({(receipt.tax_rate * 100).toFixed(0)}%)</span>
+                            <span>MwSt. ({(receipt.tax_rate * 100).toFixed(0)}%)</span>
                             <span>€{receipt.tax_amount.toFixed(2)}</span>
                         </div>
                         {receipt.service_charge > 0 && (
                             <div className="flex justify-between text-gray-500">
-                                <span>Service Charge</span>
+                                <span>Servicegebühr</span>
                                 <span>€{receipt.service_charge.toFixed(2)}</span>
                             </div>
                         )}
                         {receipt.discount_amount > 0 && (
                             <div className="flex justify-between text-green-600">
-                                <span>Discount</span>
+                                <span>Rabatt</span>
                                 <span>-€{receipt.discount_amount.toFixed(2)}</span>
                             </div>
                         )}
                         {receipt.tip_amount > 0 && (
                             <div className="flex justify-between text-gray-500">
-                                <span>Tip</span>
+                                <span>Trinkgeld</span>
                                 <span>€{receipt.tip_amount.toFixed(2)}</span>
                             </div>
                         )}
-                        <div className="flex justify-between font-bold text-lg text-gray-900 pt-2 border-t border-gray-200">
-                            <span>Total</span>
+                        <div className="flex justify-between font-bold text-xl text-gray-900 pt-2 border-t border-gray-200">
+                            <span>Summe</span>
                             <span>€{receipt.total.toFixed(2)}</span>
                         </div>
                     </div>
@@ -154,10 +159,9 @@ export function PublicReceiptClient() {
                         <div className="bg-gray-50 rounded-xl p-3 space-y-1">
                             {receipt.payments.map((p) => (
                                 <div key={p.id} className="flex justify-between text-sm">
-                                    <span className="text-gray-500 capitalize">
-                                        {p.method}
+                                    <span className="text-gray-500 uppercase font-semibold">
+                                        {p.method === "cash" ? "BAR" : p.method.toUpperCase()}
                                         {p.card_last_four && ` •••• ${p.card_last_four}`}
-                                        {p.wallet_type && ` (${p.wallet_type.replace("_", " ")})`}
                                     </span>
                                     <span className="text-gray-800 font-medium">€{Math.abs(p.amount).toFixed(2)}</span>
                                 </div>
@@ -165,10 +169,17 @@ export function PublicReceiptClient() {
                         </div>
                     )}
 
-                    {/* Thank you */}
-                    <div className="text-center pt-4 border-t border-gray-200">
-                        <p className="text-gray-800 font-medium">Thank you for dining with us!</p>
-                        <p className="text-gray-400 text-xs mt-1">Powered by Gestronomy</p>
+                    {/* Business Details & Footer */}
+                    <div className="text-center pt-6 space-y-3 border-t border-gray-100">
+                        <div className="text-[10px] text-gray-400 leading-relaxed uppercase tracking-widest">
+                            B. Singh Hotel GmbH & Co. KG<br />
+                            Seilerweg 19 · 39114 Magdeburg<br />
+                            Deutschland
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-gray-800 font-medium">Vielen Dank für Ihren Besuch!</p>
+                            <p className="text-gray-400 text-[10px]">Gastronovi Office - www.gastronovi.com</p>
+                        </div>
                     </div>
                 </div>
             </div>
