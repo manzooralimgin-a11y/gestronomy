@@ -29,6 +29,7 @@ from app.billing.models import TableOrder, OrderItem, Bill, Payment, CashShift, 
 from app.vouchers.models import Voucher, VoucherRedemption, GiftCard, CustomerCard  # noqa: F401
 from app.menu_designer.models import MenuTemplate, MenuDesign  # noqa: F401
 from app.signage.models import SignageScreen, SignageContent, SignagePlaylist  # noqa: F401
+from app.integrations.models import WebhookEvent, WebhookAudit  # noqa: F401
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.database_url)

@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     # AI / LLM
     anthropic_api_key: str = ""
 
+    # Integrations
+    voicebooker_secret: str = "dev_secret_key"
+
     # Celery
     celery_broker_url: str = "redis://localhost:6379/1"
     celery_result_backend: str = "redis://localhost:6379/2"

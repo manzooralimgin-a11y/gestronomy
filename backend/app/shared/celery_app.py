@@ -26,6 +26,7 @@ celery.autodiscover_tasks([
     "app.franchise",
     "app.guests",
     "app.inventory",
+    "app.integrations",
     "app.maintenance",
     "app.marketing",
     "app.vision",
