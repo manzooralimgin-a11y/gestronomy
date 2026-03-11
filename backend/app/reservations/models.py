@@ -27,7 +27,7 @@ class Table(Base):
     section_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("floor_sections.id", ondelete="CASCADE"), nullable=False
     )
-    table_number: Mapped[str] = mapped_column(String(20), nullable=False)
+    table_number: Mapped[str] = mapped_column(String(50), nullable=False)
     capacity: Mapped[int] = mapped_column(Integer, nullable=False)
     min_capacity: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
     shape: Mapped[str] = mapped_column(String(20), default="square", nullable=False)

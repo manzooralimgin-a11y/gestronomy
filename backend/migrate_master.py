@@ -294,10 +294,9 @@ async def migrate_master():
             # 3f. FLOOR SECTIONS & TABLES
             # ---------------------------------------------------------
             sections_data = [
-                {"name": "Main Dining", "description": "Main indoor dining area", "sort_order": 1},
-                {"name": "Terrace", "description": "Outdoor seating area", "sort_order": 2},
-                {"name": "Private Room", "description": "Private dining for groups", "sort_order": 3},
-                {"name": "Bar Area", "description": "Bar counter & high tables", "sort_order": 4},
+                {"name": "Restaurant", "description": "175 seats indoor dining", "sort_order": 1},
+                {"name": "Terrasse", "description": "174 seats outdoor area", "sort_order": 2},
+                {"name": "Tagung", "description": "60 seats main area", "sort_order": 3},
             ]
 
             sec_map = {}
@@ -317,27 +316,45 @@ async def migrate_master():
                 else:
                     sec_map[s["name"]] = existing.id
 
-            tables_data = [
-                # Main Dining
-                {"section_id": sec_map.get("Main Dining"), "table_number": "M1", "capacity": 2, "min_capacity": 1, "shape": "square", "position_x": 1, "position_y": 1},
-                {"section_id": sec_map.get("Main Dining"), "table_number": "M2", "capacity": 2, "min_capacity": 1, "shape": "square", "position_x": 2, "position_y": 1},
-                {"section_id": sec_map.get("Main Dining"), "table_number": "M3", "capacity": 4, "min_capacity": 2, "shape": "square", "position_x": 3, "position_y": 1},
-                {"section_id": sec_map.get("Main Dining"), "table_number": "M4", "capacity": 4, "min_capacity": 2, "shape": "round", "position_x": 1, "position_y": 2},
-                {"section_id": sec_map.get("Main Dining"), "table_number": "M5", "capacity": 6, "min_capacity": 3, "shape": "rectangle", "position_x": 2, "position_y": 2},
-                {"section_id": sec_map.get("Main Dining"), "table_number": "M6", "capacity": 6, "min_capacity": 3, "shape": "rectangle", "position_x": 3, "position_y": 2},
-                # Terrace
-                {"section_id": sec_map.get("Terrace"), "table_number": "T1", "capacity": 2, "min_capacity": 1, "shape": "round", "position_x": 1, "position_y": 1},
-                {"section_id": sec_map.get("Terrace"), "table_number": "T2", "capacity": 2, "min_capacity": 1, "shape": "round", "position_x": 2, "position_y": 1},
-                {"section_id": sec_map.get("Terrace"), "table_number": "T3", "capacity": 4, "min_capacity": 2, "shape": "square", "position_x": 3, "position_y": 1},
-                {"section_id": sec_map.get("Terrace"), "table_number": "T4", "capacity": 4, "min_capacity": 2, "shape": "square", "position_x": 1, "position_y": 2},
-                # Private Room
-                {"section_id": sec_map.get("Private Room"), "table_number": "P1", "capacity": 8, "min_capacity": 4, "shape": "rectangle", "position_x": 1, "position_y": 1},
-                {"section_id": sec_map.get("Private Room"), "table_number": "P2", "capacity": 12, "min_capacity": 6, "shape": "rectangle", "position_x": 2, "position_y": 1},
-                # Bar Area
-                {"section_id": sec_map.get("Bar Area"), "table_number": "B1", "capacity": 2, "min_capacity": 1, "shape": "round", "position_x": 1, "position_y": 1},
-                {"section_id": sec_map.get("Bar Area"), "table_number": "B2", "capacity": 2, "min_capacity": 1, "shape": "round", "position_x": 2, "position_y": 1},
-                {"section_id": sec_map.get("Bar Area"), "table_number": "B3", "capacity": 4, "min_capacity": 2, "shape": "square", "position_x": 3, "position_y": 1},
+            table_list_restaurant = [
+                ("16", 2), ("16/1", 4), ("15", 2), ("14", 2), ("13", 2), ("12", 2), ("11", 2),
+                ("25", 4), ("24/1", 2), ("24", 4), ("24/3", 4), ("2", 4),
+                ("23/1", 2), ("23", 8), ("23/3", 4), ("22/1", 2), ("22", 7), ("22/3", 4), ("22/4", 4),
+                ("21/1", 2), ("21", 5), ("21/2", 4), ("21/3", 4), ("21/4", 4),
+                ("1/1", 4), ("1", 1), ("2/1", 4), ("2 ", 1), ("3/1", 4), ("3", 1), ("4/1", 4), ("4", 1), ("5/1", 4), ("5", 1),
+                ("1000 TAGUNG / MEETING", 0), ("10", 4),
+                ("31/1", 2), ("32", 4), ("32/1", 4), ("33/1", 2), ("33", 4), ("31", 4),
+                ("39", 4), ("33/2", 4), ("38", 4), ("34", 4), ("34/2", 4),
+                ("37", 4), ("35", 4), ("35/2", 4), ("36", 4), ("36/2", 4)
             ]
+
+            table_list_terrasse = [
+                ("76", 4), ("75", 4), ("74", 3), ("73", 2), ("72", 2), ("71", 3), ("70", 6),
+                ("83", 4), ("68", 6), ("58", 4), ("57", 4), ("56", 4), ("55", 4), ("54", 4), ("53", 4),
+                ("Lounge 1", 4), ("Lounge 2", 4), ("Lounge 3", 4),
+                ("6", 2), ("6/1", 2), ("64", 2), ("63", 3), ("62", 8), ("61", 8), ("60", 2), ("80", 4),
+                ("Lounge 4", 8), ("81", 4), ("82", 4),
+                ("47", 5), ("46", 2), ("45", 4), ("44", 4), ("43", 6), ("42", 4), ("41", 8), ("40", 6),
+                ("52", 4), ("51", 6), ("51/1", 4), ("49", 4)
+            ]
+
+            table_list_tagung = [
+                ("100", 4), ("103", 4), ("106", 4), ("109", 4), ("112", 4),
+                ("101", 4), ("104", 4), ("107", 4), ("110", 4), ("113", 4),
+                ("102", 4), ("105", 4), ("108", 4), ("111", 4), ("114", 4)
+            ]
+
+            tables_data = []
+            
+            # Map structural arrays into standardized database dictionaries
+            for idx, (tnum, cap) in enumerate(table_list_restaurant):
+                tables_data.append({"section_id": sec_map.get("Restaurant"), "table_number": str(tnum).strip(), "capacity": cap, "min_capacity": max(1, cap//2), "shape": "square", "position_x": idx % 5, "position_y": idx // 5})
+                
+            for idx, (tnum, cap) in enumerate(table_list_terrasse):
+                tables_data.append({"section_id": sec_map.get("Terrasse"), "table_number": str(tnum).strip(), "capacity": cap, "min_capacity": max(1, cap//2), "shape": "square", "position_x": idx % 5, "position_y": idx // 5})
+                
+            for idx, (tnum, cap) in enumerate(table_list_tagung):
+                tables_data.append({"section_id": sec_map.get("Tagung"), "table_number": str(tnum).strip(), "capacity": cap, "min_capacity": max(1, cap//2), "shape": "square", "position_x": idx % 5, "position_y": idx // 5})
 
             table_count = 0
             table_objs = []
