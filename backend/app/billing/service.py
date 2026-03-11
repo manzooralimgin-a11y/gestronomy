@@ -100,9 +100,9 @@ async def _recalculate_order_totals(db: AsyncSession, restaurant_id: int, order_
     )
     items = list(items_result.scalars().all())
     subtotal_gross = sum(float(i.total_price) for i in items)
-    tax_rate = 0.19  # 19% default for Germany
-    tax_amount = round(subtotal_gross * tax_rate / (1 + tax_rate), 2)
-    subtotal_net = round(subtotal_gross - tax_amount, 2)
+    tax_rate = 0.00  # Adjusted to 0% per user request (tax inclusive)
+    tax_amount = 0.00
+    subtotal_net = subtotal_gross
     order.subtotal = subtotal_net
     order.tax_amount = tax_amount
     order.total = round(subtotal_gross - float(order.discount_amount) + float(order.tip_amount), 2)
@@ -254,9 +254,10 @@ async def generate_bill(db: AsyncSession, restaurant_id: int, payload: BillCreat
 
     subtotal_gross = float(order.subtotal) + float(order.tax_amount)
     total = subtotal_gross + payload.service_charge - float(order.discount_amount) + float(order.tip_amount)
-    # German standard: Tax is inclusive in the total price
-    tax_amount = round(total * payload.tax_rate / (1 + payload.tax_rate), 2)
-    subtotal_net = round(total - tax_amount, 2)
+    # German standard: Tax is inclusive in the total price, but setting to 0 per user
+    tax_amount = 0.00
+    subtotal_net = total
+    payload.tax_rate = 0.00
 
     receipt_token = secrets.token_urlsafe(32)
 

@@ -112,15 +112,27 @@ async def migrate_master():
             # 3a. MENU CATEGORIES (full set with proper icons/colors)
             # ---------------------------------------------------------
             categories_spec = [
-                {"name": "Appetizers", "description": "Start your meal right", "icon": "appetizer", "color": "#f59e0b", "sort_order": 1},
-                {"name": "Soups", "description": "Warm & comforting", "icon": "soup", "color": "#06b6d4", "sort_order": 2},
-                {"name": "Salads", "description": "Fresh and healthy", "icon": "salad", "color": "#22c55e", "sort_order": 3},
-                {"name": "Main Course", "description": "Chef's finest selections", "icon": "main", "color": "#e94560", "sort_order": 4},
-                {"name": "Pasta", "description": "Italian classics", "icon": "pasta", "color": "#f97316", "sort_order": 5},
-                {"name": "Seafood", "description": "Ocean to table", "icon": "seafood", "color": "#3b82f6", "sort_order": 6},
-                {"name": "Desserts", "description": "Sweet endings", "icon": "dessert", "color": "#ec4899", "sort_order": 7},
-                {"name": "Beverages", "description": "Drinks & cocktails", "icon": "beverage", "color": "#8b5cf6", "sort_order": 8},
-                {"name": "General", "description": "Imported items", "icon": "menu", "color": "#6366f1", "sort_order": 9},
+                {"name": "Soups & Starters", "description": "Soups and Starters", "icon": "soup", "color": "#06b6d4", "sort_order": 1},
+                {"name": "Main Dishes", "description": "Winter Specials", "icon": "main", "color": "#e94560", "sort_order": 2},
+                {"name": "Mittagskarte", "description": "Lunch Menu", "icon": "menu", "color": "#f97316", "sort_order": 3},
+                {"name": "Indian Dishes", "description": "Indian Classics", "icon": "menu", "color": "#f59e0b", "sort_order": 4},
+                {"name": "Bowls", "description": "À la carte", "icon": "salad", "color": "#22c55e", "sort_order": 5},
+                {"name": "Desserts", "description": "Sweet endings", "icon": "dessert", "color": "#ec4899", "sort_order": 6},
+                {"name": "Drinks", "description": "Champagne & Longdrinks", "icon": "beverage", "color": "#8b5cf6", "sort_order": 7},
+                {"name": "Wine", "description": "White & Red Wines", "icon": "beverage", "color": "#8b5cf6", "sort_order": 8},
+                {"name": "Digestif", "description": "Spirits & Digestifs", "icon": "beverage", "color": "#8b5cf6", "sort_order": 9},
+                {"name": "Beer", "description": "Draft & Bottles", "icon": "beverage", "color": "#8b5cf6", "sort_order": 10},
+                {"name": "Softdrinks", "description": "Water, Kola & Juices", "icon": "beverage", "color": "#8b5cf6", "sort_order": 11},
+                {"name": "Smoothies & Shakes", "description": "Singh Laly's Specials", "icon": "beverage", "color": "#8b5cf6", "sort_order": 12},
+                {"name": "Cocktails", "description": "Cocktails & Mocktails", "icon": "beverage", "color": "#8b5cf6", "sort_order": 13},
+                {"name": "Global Glow", "description": "Fusion Cuisine", "icon": "main", "color": "#e94560", "sort_order": 14},
+                {"name": "The Warm-Up!", "description": "Appetizers & Dips", "icon": "appetizer", "color": "#f59e0b", "sort_order": 15},
+                {"name": "Es wird Ernst...", "description": "Main Courses", "icon": "main", "color": "#e94560", "sort_order": 16},
+                {"name": "Singh Laly Signature Dishes", "description": "Chef's Specials", "icon": "main", "color": "#e94560", "sort_order": 17},
+                {"name": "Küche der 1000 Aromen", "description": "Curries & Spices", "icon": "menu", "color": "#f59e0b", "sort_order": 18},
+                {"name": "End Game!", "description": "Premium Desserts", "icon": "dessert", "color": "#ec4899", "sort_order": 19},
+                {"name": "Kuchenglück & Kugelliebe", "description": "Cake & Ice Cream", "icon": "dessert", "color": "#ec4899", "sort_order": 20},
+                {"name": "Hot Drinks", "description": "Coffee & Tea", "icon": "beverage", "color": "#8b5cf6", "sort_order": 21},
             ]
 
             cat_map = {}
@@ -143,48 +155,246 @@ async def migrate_master():
             log(f"  [MENU] Categories ready ({len(cat_map)} total)")
 
             # ---------------------------------------------------------
-            # 3b. CURATED MENU ITEMS (rich data with descriptions, allergens, dietary tags)
+            # 3b. CURATED MENU ITEMS (Winterkarte Data)
             # ---------------------------------------------------------
             curated_items = [
-                # Appetizers
-                {"cat": "Appetizers", "name": "Bruschetta al Pomodoro", "description": "Toasted ciabatta with fresh tomatoes, basil, and garlic", "price": 9.50, "cost": 2.80, "prep_time_min": 8, "is_featured": True, "dietary_tags_json": {"tags": ["Vegetarian"]}, "allergens_json": {"tags": ["Gluten"]}},
-                {"cat": "Appetizers", "name": "Carpaccio di Manzo", "description": "Thinly sliced beef with arugula, parmesan, and truffle oil", "price": 14.00, "cost": 5.50, "prep_time_min": 10, "allergens_json": {"tags": ["Dairy"]}},
-                {"cat": "Appetizers", "name": "Calamari Fritti", "description": "Crispy fried squid with lemon aioli", "price": 12.00, "cost": 4.00, "prep_time_min": 10},
-                {"cat": "Appetizers", "name": "Burrata e Prosciutto", "description": "Creamy burrata with prosciutto di parma and figs", "price": 16.00, "cost": 7.00, "prep_time_min": 5, "is_featured": True, "allergens_json": {"tags": ["Dairy"]}},
-                # Soups
-                {"cat": "Soups", "name": "French Onion Soup", "description": "Classic onion soup with gruyere crouton", "price": 10.00, "cost": 2.50, "prep_time_min": 12, "allergens_json": {"tags": ["Gluten", "Dairy"]}},
-                {"cat": "Soups", "name": "Lobster Bisque", "description": "Rich & creamy lobster soup with cognac", "price": 14.00, "cost": 5.00, "prep_time_min": 10, "is_featured": True, "allergens_json": {"tags": ["Shellfish", "Dairy"]}},
-                # Salads
-                {"cat": "Salads", "name": "Caesar Salad", "description": "Romaine, parmesan, croutons, classic dressing", "price": 11.00, "cost": 3.00, "prep_time_min": 7, "dietary_tags_json": {"tags": ["Gluten-Free Option"]}},
-                {"cat": "Salads", "name": "Nicoise Salad", "description": "Tuna, olives, egg, green beans, potatoes", "price": 15.00, "cost": 5.00, "prep_time_min": 10},
-                {"cat": "Salads", "name": "Quinoa & Avocado Bowl", "description": "Quinoa, avocado, cherry tomatoes, lime dressing", "price": 13.00, "cost": 4.00, "prep_time_min": 8, "dietary_tags_json": {"tags": ["Vegan", "Gluten-Free"]}},
-                # Main Course
-                {"cat": "Main Course", "name": "Beef Tenderloin", "description": "8oz tenderloin, red wine jus, roasted vegetables", "price": 34.00, "cost": 14.00, "prep_time_min": 25, "is_featured": True, "allergens_json": {"tags": ["Dairy"]}},
-                {"cat": "Main Course", "name": "Duck Confit", "description": "Slow-cooked duck leg, lentils, orange glaze", "price": 28.00, "cost": 10.00, "prep_time_min": 20},
-                {"cat": "Main Course", "name": "Lamb Rack", "description": "Herb-crusted rack of lamb with mint pesto", "price": 36.00, "cost": 15.00, "prep_time_min": 25, "is_featured": True},
-                {"cat": "Main Course", "name": "Pan-Seared Chicken", "description": "Free-range chicken, mushroom risotto, truffle jus", "price": 24.00, "cost": 8.00, "prep_time_min": 20},
-                {"cat": "Main Course", "name": "Vegetable Wellington", "description": "Seasonal vegetables in puff pastry, mushroom duxelles", "price": 22.00, "cost": 7.00, "prep_time_min": 20, "dietary_tags_json": {"tags": ["Vegetarian"]}},
-                # Pasta
-                {"cat": "Pasta", "name": "Truffle Tagliatelle", "description": "Fresh pasta, black truffle, parmesan cream", "price": 24.00, "cost": 8.00, "prep_time_min": 15, "is_featured": True, "allergens_json": {"tags": ["Gluten", "Dairy"]}},
-                {"cat": "Pasta", "name": "Spaghetti Carbonara", "description": "Guanciale, pecorino, egg yolk, black pepper", "price": 18.00, "cost": 5.00, "prep_time_min": 12, "allergens_json": {"tags": ["Gluten", "Dairy", "Eggs"]}},
-                {"cat": "Pasta", "name": "Penne Arrabbiata", "description": "Spicy tomato sauce, garlic, chili flakes", "price": 16.00, "cost": 3.50, "prep_time_min": 12, "dietary_tags_json": {"tags": ["Vegan"]}, "allergens_json": {"tags": ["Gluten"]}},
-                {"cat": "Pasta", "name": "Lobster Linguine", "description": "Half lobster, cherry tomatoes, white wine sauce", "price": 32.00, "cost": 14.00, "prep_time_min": 18, "allergens_json": {"tags": ["Shellfish", "Gluten"]}},
-                # Seafood
-                {"cat": "Seafood", "name": "Grilled Sea Bass", "description": "Whole sea bass, lemon butter, capers", "price": 30.00, "cost": 12.00, "prep_time_min": 20, "is_featured": True},
-                {"cat": "Seafood", "name": "Salmon Fillet", "description": "Atlantic salmon, dill cream, roasted asparagus", "price": 26.00, "cost": 9.00, "prep_time_min": 18, "dietary_tags_json": {"tags": ["Gluten-Free"]}},
-                {"cat": "Seafood", "name": "Seafood Platter", "description": "Oysters, prawns, crab, lobster tail", "price": 55.00, "cost": 25.00, "prep_time_min": 15, "allergens_json": {"tags": ["Shellfish"]}},
+                # Soups & Starters
+                {"cat": "Soups & Starters", "name": "Samtige Kürbiscremesuppe", "description": "Vegan/vegetarian, with pumpkin seed oil & roasted pumpkin seeds", "price": 15.90, "cost": 4.50},
+                {"cat": "Soups & Starters", "name": "Cremige Kartoffelrahmsuppe", "description": "With fresh herbs", "price": 14.90, "cost": 4.00},
+                {"cat": "Soups & Starters", "name": "Rindertartar", "description": "With quail egg & toasted bread", "price": 19.90, "cost": 6.00},
+                {"cat": "Soups & Starters", "name": "Gerösteter Chicorée-Salat", "description": "With crispy bacon, mild honey & walnuts", "price": 14.90, "cost": 4.50},
+                {"cat": "Soups & Starters", "name": "Knusprige Bruschetta", "description": "With sautéed wild mushrooms & onion chutney", "price": 14.90, "cost": 4.00},
+            
+                # Main Dishes
+                {"cat": "Main Dishes", "name": "Zartes Entenbrustfilet", "description": "Orange gravy, pistachio dumplings & caramelized wild broccoli", "price": 29.90, "cost": 10.00},
+                {"cat": "Main Dishes", "name": "Zart gebratener Rehrücken", "description": "Gravy, caramelized wild broccoli & celery-potato purée", "price": 34.90, "cost": 12.00},
+                {"cat": "Main Dishes", "name": "Zart geschmortes Rehgulasch", "description": "With serviette dumpling & apple red cabbage", "price": 24.90, "cost": 8.00},
+                {"cat": "Main Dishes", "name": "Knusprig gebratenes Zanderfilet", "description": "With saffron risotto & green asparagus", "price": 29.90, "cost": 9.00},
+                {"cat": "Main Dishes", "name": "Goldbraun knusprig gebratenes Lachsfilet", "description": "On lemon-herb quinoa & glazed vegetables", "price": 29.90, "cost": 9.00},
+            
+                # Mittagskarte
+                {"cat": "Mittagskarte", "name": "Tomatencremesuppe", "description": "", "price": 9.90, "cost": 3.00},
+                {"cat": "Mittagskarte", "name": "Gegrillte Dorade (Sizilianische Art)", "description": "With cherry tomatoes, chili, olives, peppers & baby potatoes", "price": 24.90, "cost": 8.00},
+                {"cat": "Mittagskarte", "name": "Hausgemachte Rinderroulade", "description": "With gravy & mashed potatoes", "price": 14.90, "cost": 5.00},
+                {"cat": "Mittagskarte", "name": "Gegrillte Rinderleber", "description": "With onions, apple pieces & mashed potatoes", "price": 12.90, "cost": 4.50},
+                {"cat": "Mittagskarte", "name": "Mexikanische Pfanne", "description": "Mixed meats, corn, kidney beans, peppers & basmati rice", "price": 13.90, "cost": 5.00},
+                {"cat": "Mittagskarte", "name": "Tango Mango", "description": "Chicken fillet with mango curry sauce & basmati rice", "price": 13.90, "cost": 4.50},
+            
+                # Indian Dishes
+                {"cat": "Indian Dishes", "name": "Indische Linsensuppe", "description": "", "price": 9.90, "cost": 3.00},
+                {"cat": "Indian Dishes", "name": "Sabzi Pachrangi", "description": "Mixed vegetables, potatoes, curry sauce, cashews & raisins (vegetarian/vegan)", "price": 19.90, "cost": 6.00},
+                {"cat": "Indian Dishes", "name": "Aloo Gobi", "description": "Cauliflower & potatoes in curry sauce (vegetarian/vegan)", "price": 19.90, "cost": 6.00},
+                {"cat": "Indian Dishes", "name": "Veggie/Vegan Curry", "description": "", "price": 19.90, "cost": 6.00},
+                {"cat": "Indian Dishes", "name": "Butter Chicken", "description": "", "price": 22.90, "cost": 8.00},
+                {"cat": "Indian Dishes", "name": "Chicken Spinaci", "description": "", "price": 19.90, "cost": 7.00},
+                {"cat": "Indian Dishes", "name": "Chili Chicken", "description": "", "price": 19.90, "cost": 7.00},
+                {"cat": "Indian Dishes", "name": "Lemon Chicken", "description": "", "price": 19.90, "cost": 7.00},
+                {"cat": "Indian Dishes", "name": "Kürbis Kokos Curry (with shrimp)", "description": "", "price": 24.90, "cost": 9.00},
+            
+                # Bowls
+                {"cat": "Bowls", "name": "Veggie Bowl", "description": "Cucumber, cherry tomatoes, chickpeas, feta, olives, salad, yogurt sauce", "price": 15.90, "cost": 5.00},
+                {"cat": "Bowls", "name": "Indische Bowl", "description": "Marinated chicken, mango, rice, salad, yogurt-mint sauce", "price": 18.90, "cost": 6.00},
+            
                 # Desserts
-                {"cat": "Desserts", "name": "Tiramisu", "description": "Classic Italian mascarpone & espresso dessert", "price": 10.00, "cost": 3.00, "prep_time_min": 5, "allergens_json": {"tags": ["Dairy", "Eggs", "Gluten"]}},
-                {"cat": "Desserts", "name": "Creme Brulee", "description": "Tahitian vanilla bean, caramelized sugar", "price": 11.00, "cost": 2.50, "prep_time_min": 5, "is_featured": True, "allergens_json": {"tags": ["Dairy", "Eggs"]}},
-                {"cat": "Desserts", "name": "Chocolate Fondant", "description": "Warm chocolate lava cake, vanilla ice cream", "price": 12.00, "cost": 3.50, "prep_time_min": 12, "allergens_json": {"tags": ["Dairy", "Eggs", "Gluten"]}},
-                {"cat": "Desserts", "name": "Lemon Tart", "description": "Tangy lemon curd, meringue, berry coulis", "price": 10.00, "cost": 2.50, "prep_time_min": 5, "dietary_tags_json": {"tags": ["Vegetarian"]}},
-                {"cat": "Desserts", "name": "Sorbet Selection", "description": "Three scoops: mango, raspberry, passion fruit", "price": 8.00, "cost": 2.00, "prep_time_min": 3, "dietary_tags_json": {"tags": ["Vegan", "Gluten-Free"]}},
-                # Beverages
-                {"cat": "Beverages", "name": "Espresso", "description": "Double shot Italian espresso", "price": 3.50, "cost": 0.50, "prep_time_min": 2},
-                {"cat": "Beverages", "name": "Fresh Orange Juice", "description": "Freshly squeezed daily", "price": 5.00, "cost": 1.50, "prep_time_min": 3, "dietary_tags_json": {"tags": ["Vegan", "Gluten-Free"]}},
-                {"cat": "Beverages", "name": "Sparkling Water", "description": "San Pellegrino 750ml", "price": 4.50, "cost": 1.00, "prep_time_min": 1},
-                {"cat": "Beverages", "name": "House Red Wine", "description": "Glass of Cotes du Rhone", "price": 8.00, "cost": 2.50, "prep_time_min": 1},
-                {"cat": "Beverages", "name": "Cocktail - Negroni", "description": "Gin, Campari, sweet vermouth", "price": 12.00, "cost": 3.00, "prep_time_min": 5},
+                {"cat": "Desserts", "name": "Crème Brûlée", "description": "Tonka bean & walnut ice cream", "price": 14.90, "cost": 4.50},
+                {"cat": "Desserts", "name": "Hausgemachter Kaiserschmarrn", "description": "With apple purée or red fruit compote", "price": 14.90, "cost": 4.50},
+                {"cat": "Desserts", "name": "Cheesecake mit Sahne", "description": "", "price": 9.90, "cost": 3.00},
+                {"cat": "Desserts", "name": "Dubai Pancakes", "description": "", "price": 13.90, "cost": 4.00},
+                {"cat": "Desserts", "name": "Dubai Schokolade (100g)", "description": "", "price": 9.90, "cost": 3.00},
+                {"cat": "Desserts", "name": "Kaiserschmarrn mit Apfelmus", "description": "", "price": 13.90, "cost": 4.00},
+            
+                # Drinks - Champagne & Aperitifs
+                {"cat": "Drinks", "name": "Moët & Chandon Impérial (0,75l)", "description": "", "price": 99.00, "cost": 50.00},
+                {"cat": "Drinks", "name": "Moët & Chandon Rosé Impérial", "description": "", "price": 129.00, "cost": 65.00},
+                {"cat": "Drinks", "name": "Moët & Chandon Ice Impérial Rosé", "description": "", "price": 129.00, "cost": 65.00},
+                {"cat": "Drinks", "name": "Dom Pérignon Vintage 2010", "description": "", "price": 250.00, "cost": 125.00},
+                {"cat": "Drinks", "name": "Hennessy Cognac X.O (4cl)", "description": "", "price": 15.00, "cost": 5.00},
+                {"cat": "Drinks", "name": "Glass Sekt", "description": "", "price": 4.90, "cost": 1.50},
+                {"cat": "Drinks", "name": "Sherry", "description": "", "price": 4.90, "cost": 1.50},
+                {"cat": "Drinks", "name": "Martini", "description": "", "price": 7.90, "cost": 2.50},
+                {"cat": "Drinks", "name": "Hugo 'Elb'", "description": "", "price": 8.90, "cost": 2.50},
+                {"cat": "Drinks", "name": "Batida", "description": "", "price": 9.90, "cost": 3.00},
+                
+                # Drinks - Spritz
+                {"cat": "Drinks", "name": "Crodino Spritz (non-alcoholic)", "description": "", "price": 7.90, "cost": 2.50},
+                {"cat": "Drinks", "name": "Campari Spritz", "description": "", "price": 9.90, "cost": 3.00},
+                {"cat": "Drinks", "name": "Aperol Spritz", "description": "", "price": 8.90, "cost": 2.50},
+                {"cat": "Drinks", "name": "Sarti Lemon Spritz", "description": "", "price": 9.90, "cost": 3.00},
+                {"cat": "Drinks", "name": "Sarti Spritz", "description": "", "price": 9.90, "cost": 3.00},
+            
+                # Wine
+                {"cat": "Wine", "name": "Costaross Prosecco (0,1l)", "description": "", "price": 6.90, "cost": 2.00},
+                {"cat": "Wine", "name": "Lorenz & Dahlberg Premium Sekt (0,1l)", "description": "", "price": 7.90, "cost": 2.50},
+                {"cat": "Wine", "name": "Terra 50 Riesling Bio Feinherb (0,2l)", "description": "Bottle: 27,90 €", "price": 8.50, "cost": 3.00},
+                {"cat": "Wine", "name": "Weißburgunder Trocken (0,2l)", "description": "Bottle: 27,90 €", "price": 8.50, "cost": 3.00},
+                {"cat": "Wine", "name": "Amphore Chardonnay Trocken (0,2l)", "description": "Bottle: 27,90 €", "price": 8.50, "cost": 3.00},
+                {"cat": "Wine", "name": "Grüner Veltliner Trocken (0,2l)", "description": "Bottle: 27,90 €", "price": 8.50, "cost": 3.00},
+                {"cat": "Wine", "name": "Muskateller Second Flight (0,2l)", "description": "Bottle: 27,90 €", "price": 8.50, "cost": 3.00},
+                {"cat": "Wine", "name": "Valpolicella Ripasso Classico Superiore (0,2l)", "description": "Bottle: 49,90 €", "price": 13.50, "cost": 4.50},
+                {"cat": "Wine", "name": "Black Print Markus Schneider (0,2l)", "description": "Bottle: 45,90 €", "price": 14.90, "cost": 5.00},
+                {"cat": "Wine", "name": "Heredad Graula Airen Sauvignon Blanc Trocken (0,2l)", "description": "Flasche 27,90 €", "price": 8.50, "cost": 3.00},
+                {"cat": "Wine", "name": "Rotweincuvée Qualitätswein Trocken (0,2l)", "description": "Flasche 27,90 €", "price": 8.90, "cost": 3.00},
+                {"cat": "Wine", "name": "Merlot Bordeaux Prestige AOP (0,2l)", "description": "Flasche 29,90 €", "price": 9.90, "cost": 3.50},
+                {"cat": "Wine", "name": "Altum Gewürztraminer Edelsüß (0,2l)", "description": "Flasche 31,90 €", "price": 9.90, "cost": 3.50},
+                {"cat": "Wine", "name": "Quinta da Plansel Sweet Secrets Tinto Lieblich (0,2l)", "description": "Flasche 27,90 €", "price": 8.90, "cost": 3.00},
+            
+                # Digestif
+                {"cat": "Digestif", "name": "Baileys 5,6 auf Eis (4cl)", "description": "", "price": 9.90, "cost": 3.00},
+                {"cat": "Digestif", "name": "Havana Club (4cl)", "description": "", "price": 9.90, "cost": 3.00},
+                {"cat": "Digestif", "name": "Jack Daniels (4cl)", "description": "", "price": 10.90, "cost": 3.50},
+                {"cat": "Digestif", "name": "Tullamore Dew (4cl)", "description": "", "price": 10.90, "cost": 3.50},
+                {"cat": "Digestif", "name": "Johnnie Walker Black Label (4cl)", "description": "", "price": 10.90, "cost": 3.50},
+                {"cat": "Digestif", "name": "Dimple 15 Jahre (4cl)", "description": "", "price": 11.90, "cost": 4.00},
+                {"cat": "Digestif", "name": "Sambuca mit Kaffeebohnen (4cl)", "description": "", "price": 6.10, "cost": 2.00},
+                {"cat": "Digestif", "name": "Old Monk Rum", "description": "", "price": 7.50, "cost": 2.50},
+                {"cat": "Digestif", "name": "Jägermeister", "description": "", "price": 5.10, "cost": 1.50},
+                {"cat": "Digestif", "name": "Kümmerling", "description": "", "price": 5.10, "cost": 1.50},
+                {"cat": "Digestif", "name": "Schierker Feuerstein", "description": "", "price": 5.10, "cost": 1.50},
+                {"cat": "Digestif", "name": "Fernet Branca", "description": "", "price": 5.10, "cost": 1.50},
+                {"cat": "Digestif", "name": "Ramazzotti", "description": "", "price": 5.90, "cost": 2.00},
+                {"cat": "Digestif", "name": "Averna", "description": "", "price": 5.90, "cost": 2.00},
+                {"cat": "Digestif", "name": "Malteser Kreuz", "description": "", "price": 5.90, "cost": 2.00},
+                {"cat": "Digestif", "name": "Jubiläums Aquavit", "description": "", "price": 5.90, "cost": 2.00},
+                {"cat": "Digestif", "name": "Slivovitz", "description": "", "price": 5.90, "cost": 2.00},
+                {"cat": "Digestif", "name": "Williams Christbirne", "description": "", "price": 5.90, "cost": 2.00},
+                {"cat": "Digestif", "name": "Wodka nach Angebot", "description": "", "price": 9.90, "cost": 3.00},
+                {"cat": "Digestif", "name": "Grappa weiß", "description": "", "price": 9.90, "cost": 3.00},
+                {"cat": "Digestif", "name": "Grappa gold", "description": "", "price": 10.90, "cost": 3.50},
+                {"cat": "Digestif", "name": "Ouzo", "description": "", "price": 5.90, "cost": 2.00},
+            
+                # Beer
+                {"cat": "Beer", "name": "König Pilsner vom Fass (0,4l)", "description": "0,25l 3,10 €", "price": 5.10, "cost": 1.50},
+                {"cat": "Beer", "name": "Benedektiner Hefe vom Fass (0,5l)", "description": "0,3l 3,30 €", "price": 5.50, "cost": 1.80},
+                {"cat": "Beer", "name": "Benedektiner Hell vom Fass (0,5l)", "description": "0,3l 3,30 €", "price": 5.50, "cost": 1.80},
+                {"cat": "Beer", "name": "Köstritzer Schwarz vom Fass (0,5l)", "description": "0,3l 3,30 €", "price": 5.90, "cost": 2.00},
+                {"cat": "Beer", "name": "Benedektiner Dunkel (0,5l)", "description": "", "price": 5.50, "cost": 1.80},
+                {"cat": "Beer", "name": "Benedektiner Alkoholfrei (0,5l)", "description": "", "price": 4.90, "cost": 1.50},
+                {"cat": "Beer", "name": "Alster mit Sprite (0,4l)", "description": "0,25l 3,30 €", "price": 5.10, "cost": 1.50},
+                {"cat": "Beer", "name": "Diesel mit Cola (0,4l)", "description": "0,25l 3,30 €", "price": 5.50, "cost": 1.80},
+                {"cat": "Beer", "name": "Bananenweizen (0,5l)", "description": "0,3l 3,30 €", "price": 5.90, "cost": 2.00},
+                {"cat": "Beer", "name": "Bitburger Alkoholfrei (0,33l)", "description": "", "price": 4.50, "cost": 1.50},
+                {"cat": "Beer", "name": "Fruchtbier Apfel / Kirsche / Holunder (0,4l)", "description": "Options: Rhabarber, Johannisbeere. Alcohol-free available.", "price": 4.50, "cost": 1.50},
+            
+                # Softdrinks
+                {"cat": "Softdrinks", "name": "Fritz-Kola Original", "description": "", "price": 4.20, "cost": 1.50},
+                {"cat": "Softdrinks", "name": "Fritz-Kola Super Zero", "description": "", "price": 4.20, "cost": 1.50},
+                {"cat": "Softdrinks", "name": "Fritz-Mischmasch", "description": "", "price": 4.20, "cost": 1.50},
+                {"cat": "Softdrinks", "name": "Fritz-Limo Orange/Zitrone/Apfel-Kirsch", "description": "Honigmelone/Ingwer-Limette", "price": 4.20, "cost": 1.50},
+                {"cat": "Softdrinks", "name": "Fritz-Bio-Schorle Apfel/Rhabarber", "description": "", "price": 4.20, "cost": 1.50},
+                {"cat": "Softdrinks", "name": "Kirsch Nektar/-schorle (0,4l)", "description": "0,2l 3,10 €", "price": 4.90, "cost": 1.50},
+                {"cat": "Softdrinks", "name": "Mangosaft/-schorle (0,4l)", "description": "0,2l 3,10 €", "price": 5.10, "cost": 1.50},
+                {"cat": "Softdrinks", "name": "Multivitaminsaft/-schorle (0,4l)", "description": "0,2l 3,10 €", "price": 5.50, "cost": 1.80},
+                {"cat": "Softdrinks", "name": "Rhabarbersaft/-schorle (0,4l)", "description": "0,2l 3,10 €", "price": 5.50, "cost": 1.80},
+                {"cat": "Softdrinks", "name": "Ananassaft (0,4l)", "description": "0,2l 3,10 €", "price": 5.50, "cost": 1.80},
+                {"cat": "Softdrinks", "name": "KIBA (0,4l)", "description": "0,2l 3,50 €", "price": 5.50, "cost": 1.80},
+                {"cat": "Softdrinks", "name": "Coca Cola / Light (0,4l)", "description": "0,2l 2,90 €", "price": 4.90, "cost": 1.50},
+                {"cat": "Softdrinks", "name": "Fanta / Sprite / Spezi (0,4l)", "description": "0,2l 2,90 €", "price": 4.90, "cost": 1.50},
+                {"cat": "Softdrinks", "name": "Fachinger Mineral Medium/Still (0,7l)", "description": "0,4l 4,50 € | 0,2l 2,90 €", "price": 9.90, "cost": 3.00},
+                {"cat": "Softdrinks", "name": "Schweppes Ginger Ale/Tonic/Lemon (0,4l)", "description": "0,2l 3,10 €", "price": 4.90, "cost": 1.50},
+                {"cat": "Softdrinks", "name": "Apfel/Orange/Johannisbeer-schorle (0,4l)", "description": "0,2l 3,10 €", "price": 4.90, "cost": 1.50},
+            
+                # Smoothies & Shakes
+                {"cat": "Smoothies & Shakes", "name": "Golden Glow Smoothie", "description": "Mango, Ananas, Kurkuma, Kokoswasser, Limette", "price": 8.90, "cost": 3.00},
+                {"cat": "Smoothies & Shakes", "name": "Green Stadtpark Smoothie", "description": "Spinat, Avocado, Apfel, Ingwer, Zitrone, Minze", "price": 8.90, "cost": 3.00},
+                {"cat": "Smoothies & Shakes", "name": "Berry Splash Smoothie", "description": "Himbeere, Erdbeere, Chia, Rosenwasser, Kokosmilch", "price": 8.20, "cost": 2.80},
+                {"cat": "Smoothies & Shakes", "name": "Bollywood Banana Shake", "description": "Banane, Honig, Mandelmilch, Sesam", "price": 8.90, "cost": 3.00},
+                {"cat": "Smoothies & Shakes", "name": "Kulf Crush Shake", "description": "Hausgemachtes Mango-Kulfi-Eis, Safran, Milch, Pistazie", "price": 9.50, "cost": 3.50},
+                {"cat": "Smoothies & Shakes", "name": "Strawberry Basil Shake", "description": "Frische Erdbeeren, Basilikum, Vanilleeis, Zitronenzeste", "price": 8.90, "cost": 3.00},
+                {"cat": "Smoothies & Shakes", "name": "Mango Royale Lassi", "description": "Samtiger Mango-Lassi mit frischer Minze", "price": 7.90, "cost": 2.50},
+                {"cat": "Smoothies & Shakes", "name": "Kesar Glow", "description": "Joghurt, Safran, Kardamom, Dattelsirup", "price": 8.90, "cost": 3.00},
+                {"cat": "Smoothies & Shakes", "name": "Coconut Lassi", "description": "Kokosmilch, Joghurt, Vanille, Sesam", "price": 8.90, "cost": 3.00},
+                {"cat": "Smoothies & Shakes", "name": "Cherry Blossom Lassi", "description": "Kirsche, Joghurt, Vanille, Rosenwasser", "price": 8.50, "cost": 2.80},
+            
+                # Cocktails
+                {"cat": "Cocktails", "name": "Bollywood Negroni", "description": "Gin, Rosé Vermouth, Campari, Rosenwasser", "price": 13.50, "cost": 4.50},
+                {"cat": "Cocktails", "name": "Margarita", "description": "Tequila, Triple Sec, Limettensaft", "price": 9.90, "cost": 3.00},
+                {"cat": "Cocktails", "name": "Whiskey Passion", "description": "Whiskey, Zitronensaft, Eiweiß", "price": 10.50, "cost": 3.50},
+                {"cat": "Cocktails", "name": "Mixi Refresher", "description": "Gurke, Basilikum, Limettensaft, Tonic Water, Vodka", "price": 8.50, "cost": 2.80},
+                {"cat": "Cocktails", "name": "Blue Elbe", "description": "Gin, Zitrone, Coconut Cream, Ananas", "price": 10.90, "cost": 3.50},
+                {"cat": "Cocktails", "name": "Mellen", "description": "Tequila, Limette, Vanille, Rosenwasser", "price": 10.50, "cost": 3.50},
+                {"cat": "Cocktails", "name": "Mojito", "description": "Rum, Minze, Limette, Rohrzucker, Soda", "price": 9.90, "cost": 3.00},
+                {"cat": "Cocktails", "name": "Bacardi Cola (4cl)", "description": "Longdrink", "price": 9.90, "cost": 3.00},
+                {"cat": "Cocktails", "name": "Whiskey Cola (4cl)", "description": "Longdrink", "price": 9.90, "cost": 3.00},
+                {"cat": "Cocktails", "name": "Wodka Orange/Cola/Lemon (4cl)", "description": "Longdrink", "price": 9.90, "cost": 3.00},
+                {"cat": "Cocktails", "name": "Gin Tonic (4cl)", "description": "Longdrink", "price": 9.90, "cost": 3.00},
+                {"cat": "Cocktails", "name": "Caipirinha", "description": "Longdrink", "price": 9.90, "cost": 3.00},
+                {"cat": "Cocktails", "name": "Laly Lime Smash Mocktail", "description": "Frischer Limettensaft, Gurke, Koriander, Tonic", "price": 6.90, "cost": 2.00},
+                {"cat": "Cocktails", "name": "Kiss from the Rose Mocktail", "description": "Rosenwasser, Erdbeer Crush, Limette, Apfel", "price": 7.20, "cost": 2.20},
+                {"cat": "Cocktails", "name": "Evolution Mocktail", "description": "Passionsfrucht, Pfirsich, Ananas, Limette", "price": 7.50, "cost": 2.50},
+                {"cat": "Cocktails", "name": "Spicy Mango Mocktail", "description": "Mango, Chili, Black Salt, Ginger Ale, Tonic", "price": 7.90, "cost": 2.50},
+                {"cat": "Cocktails", "name": "Watermelon Masala Pop Mocktail", "description": "Wassermelone, Limette, Chaat Masala, Soda", "price": 7.20, "cost": 2.20},
+                {"cat": "Cocktails", "name": "Peach Garden Mocktail", "description": "Pfirsich, Grüner Tee, Zitronenzeste, Honig", "price": 6.90, "cost": 2.00},
+            
+                # Drinks Fizz & Flavor
+                {"cat": "Drinks", "name": "Classic Laly Lemon", "description": "Zitrone, Limette, Minze, Rohrzucker, Sprudel", "price": 5.50, "cost": 1.50},
+                {"cat": "Drinks", "name": "Rosen-Litschi Limo", "description": "Litschi, Rosenwasser, Zitrone", "price": 5.90, "cost": 1.80},
+                {"cat": "Drinks", "name": "Salty Lemon Pop", "description": "Zitrone, Meersalz, (Chili optional), Soda", "price": 5.50, "cost": 1.50},
+                {"cat": "Drinks", "name": "Kiwi Cooler", "description": "Kiwi, Minze, Zitrone, Soda", "price": 5.90, "cost": 1.80},
+                {"cat": "Drinks", "name": "Lavendel Lemonade", "description": "Lavendel, Blaubeere, Limette, Soda", "price": 6.20, "cost": 2.00},
+                {"cat": "Drinks", "name": "Summer Cooler", "description": "Gurke, Basilikum, Zitrone, Soda", "price": 5.80, "cost": 1.80},
+            
+                # Global Glow
+                {"cat": "Global Glow", "name": "Fresh Code", "description": "Feta, Kichererbsen, Gurke, Tomate, Joghurt, Oliven", "price": 15.90, "cost": 5.00},
+                {"cat": "Global Glow", "name": "Green Energy", "description": "Avocado, Quinoa, Brokkoli, Edamame, Wasabi-Tahini (vegan)", "price": 17.90, "cost": 6.00},
+                {"cat": "Global Glow", "name": "Tropical Crunch", "description": "Gegrillte Ananas, Curry-Kokos-Gemüse, Cashews", "price": 17.50, "cost": 5.50},
+                {"cat": "Global Glow", "name": "Sunshine Seoul (Lachs)", "description": "Sushi-Reis, Kimchi, Mango, Chili-Mayo (mit Tofu 17,90 €)", "price": 20.90, "cost": 7.00},
+                {"cat": "Global Glow", "name": "Middle Feast", "description": "Couscous, Falafel, Rote Bete, Granatapfel (vegan)", "price": 17.90, "cost": 6.00},
+                {"cat": "Global Glow", "name": "Masala Move", "description": "Hähnchen, Mango, Basmatireis, Gurke, Paprika", "price": 18.90, "cost": 6.00},
+            
+                # The Warm-Up!
+                {"cat": "The Warm-Up!", "name": "Red Velvet Tatar veggie", "description": "Rote Bete, Meerrettich, Haselnüsse", "price": 15.90, "cost": 5.00},
+                {"cat": "The Warm-Up!", "name": "Sommersonne auf Brot veggie", "description": "Bruschetta, Burrata, Mango-Chutney", "price": 15.90, "cost": 5.00},
+                {"cat": "The Warm-Up!", "name": "Pumpkin Bangkok - Thai Style", "description": "Hokkaido, Rotes Curry, Riesengarnelen", "price": 19.90, "cost": 7.00},
+                {"cat": "The Warm-Up!", "name": "Sweet Heat (vegan)", "description": "Warme Tomaten-Erdbeer-Suppe, Minze, Pinienkerne", "price": 14.90, "cost": 4.50},
+            
+                # Es wird Ernst...
+                {"cat": "Es wird Ernst...", "name": "Couscous Cauli Crush (vegan)", "description": "Blumenkohlsteak, Harissa, Granatapfel", "price": 19.50, "cost": 6.00},
+                {"cat": "Es wird Ernst...", "name": "La Canette Sauvage", "description": "Rosa Entenbrust, Orangen-Blaubeer-Jus, Kartoffelpüree", "price": 29.90, "cost": 10.00},
+                {"cat": "Es wird Ernst...", "name": "Small Bird. Big Flavor", "description": "Perlhuhn, Cranberry-Orange-Sauce, Sellerie-Püree", "price": 28.90, "cost": 9.50},
+                {"cat": "Es wird Ernst...", "name": "The Crown Steak", "description": "150g A5 Kobe Wagyu, Blattgold, Yuzu-Trüffel", "price": 89.90, "cost": 40.00},
+                {"cat": "Es wird Ernst...", "name": "Meat Me in the Tropics", "description": "Argentinisches Rinderfilet, Mango-Chili-Salsa", "price": 45.90, "cost": 15.00},
+                {"cat": "Es wird Ernst...", "name": "Wiener Vibes", "description": "Kalbsschnitzel, Süßkartoffel-Pommes, Trüffel-Mayo", "price": 27.90, "cost": 9.00},
+                {"cat": "Es wird Ernst...", "name": "Cream Catch", "description": "Pasta, Lachs, Champignons, Weißwein-Zitrone", "price": 25.90, "cost": 8.00},
+                {"cat": "Es wird Ernst...", "name": "White Shore", "description": "Steinbeißer, Kapern-Dill-Sauce, Black & White Rice", "price": 27.90, "cost": 9.00},
+                {"cat": "Es wird Ernst...", "name": "Zander con Fuego", "description": "Zanderfilet, Tamarinde-Mango-Chili", "price": 27.90, "cost": 9.00},
+            
+                # Singh Laly Signature Dishes
+                {"cat": "Singh Laly Signature Dishes", "name": "Butter Chicken - next Laly Level", "description": "24h mariniert, Holzkohle gegrillt, Brot-Waffel", "price": 25.90, "cost": 8.50},
+                {"cat": "Singh Laly Signature Dishes", "name": "Paneer Popcorn veggie", "description": "Crispy Paneer, Rote Bete-Zwiebel-Salat", "price": 17.90, "cost": 5.50},
+                {"cat": "Singh Laly Signature Dishes", "name": "Polenta Fries - Italy meets India (vegan)", "description": "Polenta-Sticks, Masala-Tomaten-Ragù", "price": 11.90, "cost": 3.00},
+            
+                # Küche der 1000 Aromen
+                {"cat": "Küche der 1000 Aromen", "name": "Kerala Greens Curry", "description": "Spinatsauce, Okraschoten, Babymais (vegan möglich)", "price": 17.50, "cost": 5.50},
+                {"cat": "Küche der 1000 Aromen", "name": "Nordindisches Daal (vegan)", "description": "Gelbes Linsencurry, Kurkuma, Ingwer, Papadam", "price": 15.90, "cost": 4.50},
+                {"cat": "Küche der 1000 Aromen", "name": "Royal Baingan (vegan)", "description": "Aubergine, schwarzer Knoblauch, Erdnuss-Tomaten-Crème", "price": 18.90, "cost": 6.00},
+                {"cat": "Küche der 1000 Aromen", "name": "Kashmiri Slow Roast", "description": "Lamm, Aprikosen-Safran-Sauce, Nuss-Reis", "price": 28.90, "cost": 10.00},
+                {"cat": "Küche der 1000 Aromen", "name": "Madras Tiger", "description": "Riesengarnelen in Tomaten-Kokos-Chili, flambiert mit Rum", "price": 25.90, "cost": 9.00},
+                {"cat": "Küche der 1000 Aromen", "name": "Laly's Chicken Pops", "description": "Tandoori-Wings in Tamarinden-Glaze", "price": 14.90, "cost": 4.50},
+            
+                # End Game!
+                {"cat": "End Game!", "name": "Chill Laly Bites", "description": "Mango-Kulfi-Würfel mit Chili-Crunch & Goldstaub (sugar free)", "price": 13.90, "cost": 4.00},
+                {"cat": "End Game!", "name": "Golden Kaiser", "description": "Kaiserschmarrn mit Rosenwasser & Blattgold", "price": 17.90, "cost": 5.50},
+                {"cat": "End Game!", "name": "Glow & Spice", "description": "Safran-Panna-Cotta auf Erdbeer-Chili-Spiegel", "price": 12.50, "cost": 3.50},
+                {"cat": "End Game!", "name": "Rasmalai Tiramisu", "description": "Rasmalai auf Kardamom-Biskuit mit Chai-Zimt-Sirup", "price": 12.90, "cost": 4.00},
+                {"cat": "End Game!", "name": "Mango-Chia Kheer", "description": "Chia-Pudding mit Mandelmilch & Alphonso-Mango (vegan)", "price": 7.90, "cost": 2.00},
+            
+                # Kuchenglück & Kugelliebe
+                {"cat": "Kuchenglück & Kugelliebe", "name": "Streuselkuchen", "description": "", "price": 4.90, "cost": 1.50},
+                {"cat": "Kuchenglück & Kugelliebe", "name": "Verschiedene Torten", "description": "Ab 6,90 €", "price": 6.90, "cost": 2.00},
+                {"cat": "Kuchenglück & Kugelliebe", "name": "Kaffee & Kuchen ELB Spezial", "description": "Streuselkuchen & Filterkaffee", "price": 7.90, "cost": 2.50},
+                {"cat": "Kuchenglück & Kugelliebe", "name": "Ice, Ice Baby Schoko-Becher", "description": "Other variants: Eierlikör, Erdbeer, Früchte, Schweden", "price": 7.90, "cost": 2.50},
+            
+                # Hot Drinks
+                {"cat": "Hot Drinks", "name": "Espresso", "description": "", "price": 3.10, "cost": 0.50},
+                {"cat": "Hot Drinks", "name": "Espresso Macchiato", "description": "", "price": 4.90, "cost": 1.00},
+                {"cat": "Hot Drinks", "name": "Café au lait", "description": "", "price": 3.90, "cost": 0.80},
+                {"cat": "Hot Drinks", "name": "Cappuccino", "description": "", "price": 5.90, "cost": 1.50},
+                {"cat": "Hot Drinks", "name": "Latte Macchiato", "description": "", "price": 4.10, "cost": 1.00},
+                {"cat": "Hot Drinks", "name": "Kaffee Crème", "description": "", "price": 3.90, "cost": 0.80},
+                {"cat": "Hot Drinks", "name": "Kännchen Kaffee", "description": "", "price": 6.20, "cost": 1.50},
+                {"cat": "Hot Drinks", "name": "Heiße Schokolade", "description": "", "price": 4.50, "cost": 1.00},
+                {"cat": "Hot Drinks", "name": "Schokochino Spezial", "description": "", "price": 4.90, "cost": 1.00},
+                {"cat": "Hot Drinks", "name": "Tee nach Angebot", "description": "", "price": 3.50, "cost": 0.50},
             ]
 
             curated_count = 0
@@ -208,53 +418,9 @@ async def migrate_master():
             log(f"  [MENU] Curated items: {curated_count} added")
 
             # ---------------------------------------------------------
-            # 3c. IMPORT GASTRONOVI RAW ITEMS (additional items)
-            # ---------------------------------------------------------
-            base_dir = os.path.dirname(__file__)
-            json_path = os.path.join(base_dir, "data", "gastronovi_raw_items.json")
-            if not os.path.exists(json_path):
-                json_path = os.path.join(base_dir, "..", "data", "gastronovi_raw_items.json")
-
-            if os.path.exists(json_path):
-                with open(json_path, "r", encoding="utf-8") as f:
-                    raw_items = json.load(f)
-
-                imported_count = 0
-                for item in raw_items:
-                    if float(item.get("price", 0)) <= 0:
-                        continue  # Skip zero-price placeholders
-                    res = await db.execute(
-                        select(MenuItem).where(
-                            MenuItem.restaurant_id == rid,
-                            MenuItem.name == item["title"],
-                        )
-                    )
-                    if not res.scalar_one_or_none():
-                        db.add(MenuItem(
-                            restaurant_id=rid,
-                            category_id=cat_map["General"],
-                            name=item["title"],
-                            price=float(item["price"]),
-                            cost=float(item["price"]) * 0.3,
-                        ))
-                        imported_count += 1
-                log(f"  [MENU] Gastronovi import: {imported_count} added")
-            else:
-                log(f"  [MENU] gastronovi_raw_items.json not found — skipped")
-
-            # ---------------------------------------------------------
             # 3d. MENU MODIFIERS
             # ---------------------------------------------------------
-            modifiers_spec = [
-                {"name": "Extra Cheese", "group_name": "Additions", "price_adjustment": 2.00},
-                {"name": "Truffle Oil", "group_name": "Additions", "price_adjustment": 4.00},
-                {"name": "Side Salad", "group_name": "Sides", "price_adjustment": 3.50},
-                {"name": "Fries", "group_name": "Sides", "price_adjustment": 3.00},
-                {"name": "Gluten-Free Bread", "group_name": "Dietary", "price_adjustment": 1.50},
-                {"name": "Extra Spicy", "group_name": "Cooking", "price_adjustment": 0},
-                {"name": "Well Done", "group_name": "Cooking", "price_adjustment": 0},
-                {"name": "Medium Rare", "group_name": "Cooking", "price_adjustment": 0, "is_default": True},
-            ]
+            modifiers_spec = []
             mod_count = 0
             for m in modifiers_spec:
                 res = await db.execute(
@@ -272,10 +438,7 @@ async def migrate_master():
             # ---------------------------------------------------------
             # 3e. MENU COMBOS
             # ---------------------------------------------------------
-            combos_spec = [
-                {"name": "Lunch Special", "description": "Appetizer + Main + Dessert", "combo_price": 29.90, "items_json": {"appetizer": "Any appetizer", "main": "Any main course", "dessert": "Any dessert"}, "savings_amount": 8.00},
-                {"name": "Seafood Feast", "description": "Seafood platter + Sea bass + Wine", "combo_price": 79.90, "items_json": {"starter": "Seafood Platter", "main": "Grilled Sea Bass", "wine": "Bottle of white wine"}, "savings_amount": 15.00},
-            ]
+            combos_spec = []
             combo_count = 0
             for c in combos_spec:
                 res = await db.execute(

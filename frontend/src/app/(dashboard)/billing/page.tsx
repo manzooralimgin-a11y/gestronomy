@@ -623,10 +623,6 @@ export default function BillingPage() {
                       <span>Subtotal</span>
                       <span>€{selectedOrder.subtotal.toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between text-muted-foreground">
-                      <span>Tax</span>
-                      <span>€{selectedOrder.tax_amount.toFixed(2)}</span>
-                    </div>
                     {selectedOrder.discount_amount > 0 && (
                       <div className="flex justify-between text-emerald-400">
                         <span>Discount</span>
@@ -666,7 +662,7 @@ export default function BillingPage() {
                         Send to Kitchen
                       </button>
                     )}
-                    {["submitted", "preparing", "served"].includes(selectedOrder.status) && !bill && (
+                    {["open", "submitted", "preparing", "served"].includes(selectedOrder.status) && !bill && (
                       <button onClick={handleGenerateBill} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-accent-DEFAULT text-white text-sm font-medium hover:bg-accent-dark transition-colors">
                         <Receipt className="h-4 w-4" />
                         Generate Bill

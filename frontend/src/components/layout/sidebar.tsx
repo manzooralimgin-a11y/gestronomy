@@ -58,22 +58,22 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       >
         {/* ── Logo area ── */}
         <div className={cn(
-          "flex h-16 items-center shrink-0 border-b border-white/[0.06]",
-          collapsed ? "justify-center px-0" : "justify-between px-5"
+          "flex py-4 items-center shrink-0 border-b border-white/[0.06]",
+          collapsed ? "justify-center px-0 h-20" : "justify-center px-5 flex-col gap-2 h-32 relative"
         )}>
-          <Link href="/" className="flex items-center gap-2.5" onClick={onClose}>
+          <Link href="/" className="flex flex-col items-center justify-center gap-1.5" onClick={onClose}>
             {/* DAS ELB Logo */}
-            <div className="relative flex h-10 w-10 items-center justify-center bg-white rounded-xl p-1 shadow-glow-sm shrink-0">
+            <div className={cn("relative flex items-center justify-center bg-white rounded-xl p-1.5 shadow-glow-sm shrink-0", collapsed ? "h-10 w-10" : "h-14 w-14")}>
               <img src="/das-elb-logo.png" alt="DAS ELB" className="w-full h-auto object-contain" />
             </div>
             <AnimatePresence mode="wait">
               {!collapsed && (
                 <motion.span
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -8 }}
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.15 }}
-                  className="text-lg font-bold text-foreground tracking-widest uppercase"
+                  className="text-sm font-bold text-foreground tracking-[0.2em] uppercase"
                 >
                   DAS ELB
                 </motion.span>
@@ -86,7 +86,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
             onClick={onClose}
             type="button"
             aria-label="Close sidebar"
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-white/[0.06] md:hidden"
+            className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-white/[0.06] md:hidden"
           >
             <X className="h-4 w-4" />
           </button>
