@@ -266,10 +266,8 @@ function CheckoutInner() {
           {/* Receipt preview (German style) */}
           <div className="bg-white text-black p-8 shadow-2xl rounded-sm font-mono text-[13px] leading-tight space-y-4 max-w-sm mx-auto">
             <div className="text-center space-y-1">
-              <div className="flex flex-col items-center mb-2">
-                <div className="w-12 h-6 border-t-2 border-black rounded-[50%] mb-0.5"></div>
-                <div className="w-12 h-6 border-t-2 border-black rounded-[50%] -mt-4 mb-0.5"></div>
-                <div className="w-12 h-6 border-t-2 border-black rounded-[50%] -mt-4 mb-1"></div>
+              <div className="flex flex-col items-center mb-1">
+                <img src="/das-elb-logo.png" alt="DAS ELB Logo" className="w-16 h-auto mb-1 grayscale object-contain" />
                 <h2 className="text-xl font-bold tracking-widest mt-1">DAS ELB</h2>
               </div>
               <p className="text-[10px] leading-relaxed">
@@ -412,11 +410,9 @@ function CheckoutInner() {
         <div className="hidden print:block">
           <div className="max-w-[300px] mx-auto py-4 font-mono text-[11px] leading-tight text-black space-y-4">
             <div className="text-center space-y-1">
-              {/* CSS Logo Monogram */}
+              {/* Image Logo */}
               <div className="flex flex-col items-center mb-1">
-                <div className="w-10 h-4 border-t-2 border-black rounded-[50%]"></div>
-                <div className="w-10 h-4 border-t-2 border-black rounded-[50%] -mt-3"></div>
-                <div className="w-10 h-4 border-t-2 border-black rounded-[50%] -mt-3"></div>
+                <img src="/das-elb-logo.png" alt="DAS ELB Logo" className="w-12 h-auto mb-1 grayscale object-contain" />
                 <div className="text-lg font-bold mt-1 tracking-widest uppercase">DAS ELB</div>
               </div>
               

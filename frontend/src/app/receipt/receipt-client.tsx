@@ -82,10 +82,8 @@ export function PublicReceiptClient() {
             <div className="bg-white rounded-2xl shadow-lg max-w-[480px] w-full overflow-hidden">
                 {/* Header with DAS ELB Identity */}
                 <div className="bg-gray-900 text-white p-6 text-center">
-                    <div className="flex flex-col items-center mb-2">
-                        <div className="w-10 h-4 border-t-2 border-white/20 rounded-[50%]"></div>
-                        <div className="w-10 h-4 border-t-2 border-white/20 rounded-[50%] -mt-3"></div>
-                        <div className="w-10 h-4 border-t-2 border-white/20 rounded-[50%] -mt-3"></div>
+                    <div className="flex flex-col items-center mb-1">
+                        <img src="/das-elb-logo.png" alt="DAS ELB Logo" className="w-16 h-auto mb-1 grayscale object-contain" />
                     </div>
                     <h1 className="text-2xl font-bold tracking-widest uppercase">DAS ELB</h1>
                     <p className="text-gray-400 text-xs mt-1">Digitale Rechnung</p>
