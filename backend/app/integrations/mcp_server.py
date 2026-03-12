@@ -172,7 +172,9 @@ async def handle_sse(request: Request):
     """
     The initial Server-Sent Events connection point for VoiceBooker's MCP Client.
     """
-    logger.info("New MCP SSE Connection established.")
+    logger.info(f"MCP SSE Connection Attempt: {request.method} {request.url}")
+    logger.info(f"Headers: {dict(request.headers)}")
+    
     async with sse.connect_sse(request.scope, request.receive, request._send) as streams:
         await mcp.run(streams[0], streams[1], mcp.create_initialization_options())
 
@@ -180,6 +182,8 @@ async def handle_sse(request: Request):
 @router.post("/messages")
 async def handle_messages(request: Request):
     """
-    The endpoint where the VoiceBooker MCP Client sends JSON-RPC messages (e.g. tool execution requests).
+    The endpoint where the VoiceBooker MCP Client sends JSON-RPC messages.
     """
+    logger.info(f"MCP Message Received: {request.method} {request.url}")
+    logger.info(f"Headers: {dict(request.headers)}")
     await sse.handle_post_message(request.scope, request.receive, request._send)
