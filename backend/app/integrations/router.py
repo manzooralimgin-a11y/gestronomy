@@ -49,11 +49,18 @@ async def receive_voicebooker_webhook(
         inserted = await store_webhook_event(db, evt.event_id, payload_dict, headers_dict)
         
         if inserted:
-            from app.integrations.tasks import process_voicebooker_event
-            process_voicebooker_event.delay(evt.event_id)
+            from app.integrations.tasks import process_voicebooker_event, process_voicebooker_event_async
+            try:
+                process_voicebooker_event.delay(evt.event_id)
+            except Exception as celery_err:
+                import logging
+                logging.getLogger("integrations").warning(f"Celery/Redis unavailable ({celery_err}), falling back to standard BackgroundTasks.")
+                background_tasks.add_task(process_voicebooker_event_async, evt.event_id)
 
         return WebhookResponse(status="accepted", event_id=evt.event_id)
     except Exception as e:
         await db.rollback()
-        import traceback
-        return WebhookResponse(status=f"error: {str(e)} | trace: {traceback.format_exc()}", event_id=evt.event_id)
+        import logging
+        logging.getLogger("integrations").error(f"VoiceBooker webhook failure: {e}", exc_info=True)
+        from fastapi import HTTPException
+        raise HTTPException(status_code=500, detail="Internal processing error")
