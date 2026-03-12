@@ -44,11 +44,15 @@ async def receive_voicebooker_webhook(
         raise HTTPException(status_code=400, detail="Invalid JSON or schema")
         
     # 4. Idempotent Storage
-    headers_dict = dict(request.headers.items())
-    inserted = await store_webhook_event(db, evt.event_id, payload_dict, headers_dict)
-    
-    if inserted:
-        from app.integrations.tasks import process_voicebooker_event
-        process_voicebooker_event.delay(evt.event_id)
+    try:
+        headers_dict = dict(request.headers.items())
+        inserted = await store_webhook_event(db, evt.event_id, payload_dict, headers_dict)
+        
+        if inserted:
+            from app.integrations.tasks import process_voicebooker_event
+            process_voicebooker_event.delay(evt.event_id)
 
-    return WebhookResponse(status="accepted", event_id=evt.event_id)
+        return WebhookResponse(status="accepted", event_id=evt.event_id)
+    except Exception as e:
+        import traceback
+        return WebhookResponse(status=f"error: {str(e)} | trace: {traceback.format_exc()}", event_id=evt.event_id)
