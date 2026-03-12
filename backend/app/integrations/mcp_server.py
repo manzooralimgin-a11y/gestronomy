@@ -11,7 +11,6 @@ from mcp.server.sse import SseServerTransport
 from app.database import async_session
 from sqlalchemy import select, and_, or_
 from app.reservations.models import Reservation, Table
-from app.menu.models import MenuCategory, MenuItem
 
 logger = logging.getLogger(__name__)
 
@@ -19,42 +18,15 @@ logger = logging.getLogger(__name__)
 mcp = Server("gestronomy-voicebooker-mcp")
 
 # Important: SseServerTransport takes the *relative* URL path that handles POST messages.
-# According to MCP Spec, the client will append this to the SSE connection origin.
-sse = SseServerTransport("/api/mcp/voicebooker/messages")
+# We mount the router at /mcp/voicebooker, so the messages endpoint is /mcp/voicebooker/messages
+sse = SseServerTransport("/mcp/voicebooker/messages")
 
 router = APIRouter(prefix="/mcp/voicebooker", tags=["mcp"])
 
 # --- AI Tool Implementations ---
 
-async def get_restaurant_menu() -> str:
-    """Returns the current active Das Elb restaurant menu."""
-    async with async_session() as session:
-        result = await session.execute(
-            select(MenuCategory).order_by(MenuCategory.display_order)
-        )
-        categories = result.scalars().all()
-        
-        output = []
-        for cat in categories:
-            cat_result = await session.execute(
-                select(MenuItem).where(MenuItem.category_id == cat.id, MenuItem.is_active == True)
-            )
-            items = cat_result.scalars().all()
-            if not items:
-                continue
-            
-            output.append(f"### {cat.name}")
-            for item in items:
-                price_str = f"€{item.price:.2f}" if item.price else "Market Price"
-                desc = f" ({item.description})" if item.description else ""
-                output.append(f"- {item.name}: {price_str}{desc}")
-            output.append("")
-            
-        return "\n".join(output) if output else "The menu is currently unavailable."
-
-
 async def check_table_availability(date: str, time: str, party_size: int) -> str:
-    """Checks if the restaurant has an available table for a specific date, time, and party size."""
+    """Checks if the restaurant has an available table for a specific date (YYYY-MM-DD), time (HH:MM), and party size."""
     async with async_session() as session:
         try:
             req_datetime = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
@@ -85,8 +57,6 @@ async def check_table_availability(date: str, time: str, party_size: int) -> str
 
 async def create_reservation(name: str, phone: str, date: str, time: str, party_size: int, notes: str = "") -> str:
     """Officially creates a confirmed reservation in the database."""
-    from app.reservations.models import Reservation
-    
     async with async_session() as session:
         try:
             req_date = datetime.strptime(date, "%Y-%m-%d").date()
@@ -112,19 +82,31 @@ async def create_reservation(name: str, phone: str, date: str, time: str, party_
         return f"Reservation successfully confirmed for {name} on {date} at {time} (ID: {new_res.id})."
 
 
+async def cancel_reservation(reservation_id: int) -> str:
+    """Cancels an existing reservation by its ID."""
+    async with async_session() as session:
+        result = await session.execute(
+            select(Reservation).where(Reservation.id == reservation_id)
+        )
+        res = result.scalar_one_or_none()
+        
+        if not res:
+            return f"Error: Reservation with ID {reservation_id} not found."
+            
+        res.status = "cancelled"
+        await session.commit()
+        
+        return f"Reservation {reservation_id} for {res.guest_name} has been successfully cancelled."
+
+
 # --- MCP Tool Registrations ---
 
 @mcp.list_tools()
 async def handle_list_tools() -> list[types.Tool]:
     return [
         types.Tool(
-            name="get_restaurant_menu",
-            description="Returns the current active Das Elb restaurant menu, broken down by categories and items. Use this to strictly answer questions about food, drinks, vegan options, or pricing.",
-            inputSchema={"type": "object", "properties": {}}
-        ),
-        types.Tool(
             name="check_table_availability",
-            description="Checks if the restaurant has an available table for a specific date (YYYY-MM-DD), time (HH:MM), and party size. Returns a natural language string advising availability.",
+            description="Checks if the restaurant has an available table for a specific date (YYYY-MM-DD), time (HH:MM), and party size.",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -150,6 +132,17 @@ async def handle_list_tools() -> list[types.Tool]:
                 },
                 "required": ["name", "phone", "date", "time", "party_size"]
             }
+        ),
+        types.Tool(
+            name="cancel_reservation",
+            description="Cancels an existing reservation in the system using its unique ID.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "reservation_id": {"type": "integer", "description": "The unique ID of the reservation to cancel"}
+                },
+                "required": ["reservation_id"]
+            }
         )
     ]
 
@@ -157,12 +150,12 @@ async def handle_list_tools() -> list[types.Tool]:
 async def handle_call_tool(name: str, arguments: dict | None) -> list[types.TextContent]:
     args = arguments or {}
     try:
-        if name == "get_restaurant_menu":
-            result = await get_restaurant_menu()
-        elif name == "check_table_availability":
+        if name == "check_table_availability":
             result = await check_table_availability(**args)
         elif name == "create_reservation":
             result = await create_reservation(**args)
+        elif name == "cancel_reservation":
+            result = await cancel_reservation(**args)
         else:
             return [types.TextContent(type="text", text=f"Error: Unknown tool {name}")]
             
