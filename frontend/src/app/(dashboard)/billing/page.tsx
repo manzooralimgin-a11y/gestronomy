@@ -24,6 +24,7 @@ import {
   Mail,
   Phone,
   Link2,
+  Gift,
 } from "lucide-react";
 import { AuditTimeline } from "@/components/dashboard/audit-timeline";
 
@@ -179,6 +180,8 @@ export default function BillingPage() {
   const [cardBrand, setCardBrand] = useState("visa");
   const [walletType, setWalletType] = useState("apple_pay");
   const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
+  const [voucherCode, setVoucherCode] = useState("");
+  const [voucherError, setVoucherError] = useState("");
 
   /* Receipt state (F8) */
   const [receiptEmail, setReceiptEmail] = useState("");
@@ -340,6 +343,25 @@ export default function BillingPage() {
   const handlePayment = async () => {
     if (!bill || !paymentMethod) return;
     const tipAmount = tipPercent > 0 ? Math.round(bill.total * tipPercent) / 100 : 0;
+    
+    setVoucherError("");
+    if (paymentMethod === "voucher") {
+      if (!voucherCode.trim()) {
+        setVoucherError("Please enter or scan a voucher code.");
+        return;
+      }
+      try {
+        await api.post("/vouchers/redeem", {
+          code: voucherCode,
+          order_id: selectedOrder?.id,
+          deduction_amount: bill.total + tipAmount,
+        });
+      } catch (err: any) {
+        setVoucherError(err.response?.data?.detail || "Invalid voucher code or insufficient remaining balance.");
+        return;
+      }
+    }
+
     try {
       await api.post("/billing/payments", {
         bill_id: bill.id,
@@ -354,6 +376,8 @@ export default function BillingPage() {
       setPaymentMethod(null);
       setTipPercent(0);
       setCardLastFour("");
+      setVoucherCode("");
+      setVoucherError("");
       if (bill.receipt_token) {
         setShowSendReceipt(true);
       } else {
@@ -984,6 +1008,7 @@ export default function BillingPage() {
                   { method: "cash", label: "Cash", icon: Banknote, color: "bg-emerald-500" },
                   { method: "card", label: "Card", icon: CreditCard, color: "bg-blue-500" },
                   { method: "mobile", label: "Mobile Pay", icon: CircleDot, color: "bg-purple-500" },
+                  { method: "voucher", label: "Voucher", icon: Gift, color: "bg-pink-500" },
                   { method: "split", label: "Split Bill", icon: Split, color: "bg-amber-500" },
                 ].map((pm) => (
                   <button key={pm.method} onClick={() => setPaymentMethod(pm.method)}
@@ -994,6 +1019,16 @@ export default function BillingPage() {
                 ))}
               </div>
             </div>
+
+            {/* Voucher input */}
+            {paymentMethod === "voucher" && (
+              <div className="space-y-2">
+                <input type="text" placeholder="Scan QR or Enter Voucher Code (e.g. GV-XXXX)" value={voucherCode} onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
+                  className="w-full px-3 py-2 rounded-xl bg-muted border border-border text-sm text-foreground uppercase placeholder:normal-case"
+                />
+                {voucherError && <p className="text-xs text-red-500 font-medium">{voucherError}</p>}
+              </div>
+            )}
 
             {/* Card details */}
             {paymentMethod === "card" && (

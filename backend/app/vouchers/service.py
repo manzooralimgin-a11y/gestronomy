@@ -4,17 +4,25 @@ from datetime import datetime, timezone
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.vouchers.models import Voucher, VoucherRedemption, GiftCard, CustomerCard
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from fastapi import BackgroundTasks
+from app.vouchers.models import Voucher, VoucherRedemption, CustomerCard
+from app.vouchers.qr_service import generate_qr_base64
+from app.vouchers import email_service
 
 # ────────────────────── VOUCHERS ──────────────────────
 
 async def get_vouchers(db: AsyncSession, active_only: bool = False) -> list[Voucher]:
     q = select(Voucher).order_by(Voucher.created_at.desc())
     if active_only:
-        q = q.where(Voucher.is_active == True)
+        q = q.where(Voucher.status == "active")
     result = await db.execute(q)
-    return list(result.scalars().all())
+    vouchers = list(result.scalars().all())
+    for v in vouchers:
+        v.qr_code_base64 = generate_qr_base64(v.code)
+    return vouchers
 
 
 async def get_voucher(db: AsyncSession, voucher_id: int) -> Voucher | None:
@@ -22,11 +30,26 @@ async def get_voucher(db: AsyncSession, voucher_id: int) -> Voucher | None:
     return result.scalar_one_or_none()
 
 
-async def create_voucher(db: AsyncSession, data: dict) -> Voucher:
-    v = Voucher(**data)
+async def create_voucher(db: AsyncSession, data: dict, background_tasks: BackgroundTasks) -> Voucher:
+    code = f"GV-{secrets.token_hex(4).upper()}"
+    data["amount_remaining"] = data["amount_total"]
+    
+    v = Voucher(code=code, **data)
     db.add(v)
     await db.commit()
     await db.refresh(v)
+    v.qr_code_base64 = generate_qr_base64(v.code)
+    
+    if v.customer_email:
+        background_tasks.add_task(
+            email_service.send_voucher_email,
+            voucher_id=v.id,
+            code=v.code,
+            amount=v.amount_total,
+            email=v.customer_email,
+            name=v.customer_name
+        )
+        
     return v
 
 
@@ -51,64 +74,53 @@ async def delete_voucher(db: AsyncSession, voucher_id: int) -> bool:
     return True
 
 
-async def validate_voucher(db: AsyncSession, code: str, order_total: float | None = None):
-    """Validate a voucher code and return discount info."""
+async def validate_voucher(db: AsyncSession, code: str):
+    """Validate a voucher code against POS system rules."""
     result = await db.execute(select(Voucher).where(Voucher.code == code))
     v = result.scalar_one_or_none()
 
     if not v:
-        return {"valid": False, "message": "Voucher not found", "voucher": None, "discount": 0}
-    if not v.is_active:
-        return {"valid": False, "message": "Voucher is inactive", "voucher": v, "discount": 0}
-    if v.max_uses and v.uses_count >= v.max_uses:
-        return {"valid": False, "message": "Voucher has been fully redeemed", "voucher": v, "discount": 0}
+        return {"valid": False, "message": "Voucher not found", "voucher": None}
+    
+    if v.status != "active":
+        return {"valid": False, "message": f"Voucher is marked as {v.status}", "voucher": v}
+        
+    if v.amount_remaining <= 0:
+        return {"valid": False, "message": "Voucher balance is completely depleted", "voucher": v}
 
-    now = datetime.now(timezone.utc)
-    if v.valid_from and now < v.valid_from:
-        return {"valid": False, "message": "Voucher is not yet active", "voucher": v, "discount": 0}
-    if v.valid_until and now > v.valid_until:
-        return {"valid": False, "message": "Voucher has expired", "voucher": v, "discount": 0}
+    if v.expiry_date:
+        now = datetime.now(timezone.utc)
+        if now > v.expiry_date:
+            return {"valid": False, "message": "Voucher has expired", "voucher": v}
 
-    if v.min_order_value and order_total and order_total < float(v.min_order_value):
-        return {"valid": False, "message": f"Minimum order value is €{v.min_order_value}", "voucher": v, "discount": 0}
-
-    # Calculate discount
-    discount = 0.0
-    if order_total:
-        if v.voucher_type == "percentage_off":
-            discount = order_total * (float(v.value) / 100)
-        elif v.voucher_type == "fixed_amount":
-            discount = float(v.value)
-        elif v.voucher_type == "free_item":
-            discount = float(v.value)
-        elif v.voucher_type == "bogo":
-            discount = order_total * 0.5  # simplified: 50% off
-
-        if v.max_discount:
-            discount = min(discount, float(v.max_discount))
-
-    return {"valid": True, "message": "Voucher is valid", "voucher": v, "discount": round(discount, 2)}
+    v.qr_code_base64 = generate_qr_base64(v.code)
+    return {"valid": True, "message": "Voucher is valid", "voucher": v}
 
 
-async def redeem_voucher(db: AsyncSession, code: str, order_id: int | None, guest_id: int | None, order_total: float):
-    """Redeem a voucher — creates redemption record and increments uses."""
-    validation = await validate_voucher(db, code, order_total)
+async def redeem_voucher(db: AsyncSession, code: str, order_id: int | None, deduction_amount: float):
+    """Redeem a voucher securely. Deducts the amount and updates status if emptied."""
+    validation = await validate_voucher(db, code)
     if not validation["valid"]:
         return None
 
     v = validation["voucher"]
-    discount = validation["discount"]
+    
+    if float(v.amount_remaining) < deduction_amount:
+        return None
+        
+    v.amount_remaining = float(v.amount_remaining) - deduction_amount
+    
+    if float(v.amount_remaining) <= 0:
+        v.status = "used"
 
     redemption = VoucherRedemption(
         voucher_id=v.id,
         order_id=order_id,
-        guest_id=guest_id,
-        discount_applied=discount,
+        discount_applied=deduction_amount,
         redeemed_at=datetime.now(timezone.utc),
     )
     db.add(redemption)
 
-    v.uses_count += 1
     await db.commit()
     await db.refresh(redemption)
     return redemption
@@ -119,55 +131,6 @@ async def get_redemptions(db: AsyncSession, voucher_id: int) -> list[VoucherRede
         select(VoucherRedemption).where(VoucherRedemption.voucher_id == voucher_id).order_by(VoucherRedemption.redeemed_at.desc())
     )
     return list(result.scalars().all())
-
-
-# ────────────────────── GIFT CARDS ──────────────────────
-
-async def get_gift_cards(db: AsyncSession) -> list[GiftCard]:
-    result = await db.execute(select(GiftCard).order_by(GiftCard.created_at.desc()))
-    return list(result.scalars().all())
-
-
-async def create_gift_card(db: AsyncSession, data: dict) -> GiftCard:
-    code = f"GC-{secrets.token_hex(6).upper()}"
-    gc = GiftCard(code=code, current_balance=data["initial_balance"], **data)
-    db.add(gc)
-    await db.commit()
-    await db.refresh(gc)
-    return gc
-
-
-async def get_gift_card_by_code(db: AsyncSession, code: str) -> GiftCard | None:
-    result = await db.execute(select(GiftCard).where(GiftCard.code == code))
-    return result.scalar_one_or_none()
-
-
-async def charge_gift_card(db: AsyncSession, code: str, amount: float) -> GiftCard | None:
-    """Charge (deduct) from a gift card."""
-    gc = await get_gift_card_by_code(db, code)
-    if not gc or not gc.is_active:
-        return None
-    if gc.expires_at and datetime.now(timezone.utc) > gc.expires_at:
-        return None
-    if float(gc.current_balance) < amount:
-        return None
-
-    gc.current_balance = float(gc.current_balance) - amount
-    await db.commit()
-    await db.refresh(gc)
-    return gc
-
-
-async def reload_gift_card(db: AsyncSession, code: str, amount: float) -> GiftCard | None:
-    """Add balance to a gift card."""
-    gc = await get_gift_card_by_code(db, code)
-    if not gc:
-        return None
-    gc.current_balance = float(gc.current_balance) + amount
-    gc.is_active = True
-    await db.commit()
-    await db.refresh(gc)
-    return gc
 
 
 # ────────────────────── CUSTOMER CARDS ──────────────────────

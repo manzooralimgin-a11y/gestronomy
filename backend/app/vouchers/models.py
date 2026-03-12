@@ -10,17 +10,16 @@ class Voucher(Base):
     __tablename__ = "vouchers"
 
     code: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
-    voucher_type: Mapped[str] = mapped_column(String(50), nullable=False)  # percentage_off, fixed_amount, free_item, bogo
-    value: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
-    min_order_value: Mapped[float | None] = mapped_column(Numeric(10, 2), nullable=True)
-    max_discount: Mapped[float | None] = mapped_column(Numeric(10, 2), nullable=True)
-    applicable_items_json: Mapped[dict | None] = mapped_column(JSON, nullable=True)  # {"item_ids": [...]} or null for all
-    max_uses: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    uses_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
-    valid_from: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    valid_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
-    description: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    amount_total: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
+    amount_remaining: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
+    customer_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    customer_email: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    status: Mapped[str] = mapped_column(String(50), default="active", nullable=False) # active, used, expired
+    expiry_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_by_user_id: Mapped[int | None] = mapped_column(
+        Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
+    notes: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
 
 class VoucherRedemption(Base):
@@ -32,26 +31,8 @@ class VoucherRedemption(Base):
     order_id: Mapped[int | None] = mapped_column(
         Integer, ForeignKey("table_orders.id", ondelete="SET NULL"), nullable=True
     )
-    guest_id: Mapped[int | None] = mapped_column(
-        Integer, ForeignKey("guest_profiles.id", ondelete="SET NULL"), nullable=True
-    )
     discount_applied: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     redeemed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
-
-
-class GiftCard(Base):
-    __tablename__ = "gift_cards"
-
-    code: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
-    initial_balance: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
-    current_balance: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
-    purchaser_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    purchaser_email: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    recipient_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    recipient_email: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    message: Mapped[str | None] = mapped_column(String(500), nullable=True)
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
-    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
 class CustomerCard(Base):

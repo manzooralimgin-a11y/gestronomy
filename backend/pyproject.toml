@@ -25,6 +25,8 @@ dependencies = [
     "email-validator>=2.2.0",
     # Task queue
     "celery[redis]>=5.4.0",
+    # Integrations
+    "qrcode[pil]>=7.4.2",
     # AI / LLM
     "anthropic>=0.39.0",
     # ML / Data (Heavy dependencies removed for Render free tier deployment)

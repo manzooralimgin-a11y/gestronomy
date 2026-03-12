@@ -237,7 +237,6 @@ app.include_router(
     vouchers_router,
     prefix="/api/vouchers",
     tags=["Vouchers"],
-    dependencies=[Depends(require_roles(UserRole.admin, UserRole.manager))],
 )
 app.include_router(
     menu_designer_router,

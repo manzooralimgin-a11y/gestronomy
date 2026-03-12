@@ -112,6 +112,7 @@ export const navSections: NavSection[] = [
     title: "Finance",
     items: [
       { label: "Accounting", href: "/accounting", icon: Calculator, minRole: "admin" },
+      { label: "Vouchers", href: "/accounting/vouchers", icon: Ticket, minRole: "manager" },
       { label: "Reports", href: "/reports", icon: FileText, minRole: "manager" },
       { label: "Franchise", href: "/franchise", icon: Building2, minRole: "admin" },
       { label: "Simulation", href: "/simulation", icon: FlaskConical, minRole: "admin" },

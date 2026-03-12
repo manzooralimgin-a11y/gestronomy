@@ -8,6 +8,7 @@ import { useDashboardStore } from "@/stores/dashboard-store";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CommandBar } from "@/components/layout/command-bar";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 function getBreadcrumbs(pathname: string | null) {
@@ -88,6 +89,9 @@ export function Header({ onMenuToggle }: HeaderProps) {
         <div className="hidden md:block">
           <CommandBar />
         </div>
+
+        {/* Theme toggle */}
+        <ModeToggle />
 
         {/* Alert bell */}
         <Button

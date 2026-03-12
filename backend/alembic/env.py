@@ -26,7 +26,7 @@ from app.marketing.models import Review, Campaign, SocialPost  # noqa: F401
 from app.menu.models import MenuCategory, MenuItem, MenuModifier, MenuItemModifier, MenuCombo, UpsellRule  # noqa: F401
 from app.reservations.models import FloorSection, Table, Reservation, WaitlistEntry, TableSession, QRTableCode  # noqa: F401
 from app.billing.models import TableOrder, OrderItem, Bill, Payment, CashShift, KDSStationConfig  # noqa: F401
-from app.vouchers.models import Voucher, VoucherRedemption, GiftCard, CustomerCard  # noqa: F401
+from app.vouchers.models import Voucher, VoucherRedemption, CustomerCard  # noqa: F401
 from app.menu_designer.models import MenuTemplate, MenuDesign  # noqa: F401
 from app.signage.models import SignageScreen, SignageContent, SignagePlaylist  # noqa: F401
 from app.integrations.models import WebhookEvent, WebhookAudit  # noqa: F401
