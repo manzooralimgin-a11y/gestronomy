@@ -38,6 +38,7 @@ class Settings(BaseSettings):
 
     # Integrations
     voicebooker_secret: str = "dev_secret_key"
+    resend_api_key: str = ""
 
     # Celery
     celery_broker_url: str = "redis://localhost:6379/1"
