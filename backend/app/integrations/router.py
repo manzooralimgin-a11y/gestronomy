@@ -54,5 +54,6 @@ async def receive_voicebooker_webhook(
 
         return WebhookResponse(status="accepted", event_id=evt.event_id)
     except Exception as e:
+        await db.rollback()
         import traceback
         return WebhookResponse(status=f"error: {str(e)} | trace: {traceback.format_exc()}", event_id=evt.event_id)
