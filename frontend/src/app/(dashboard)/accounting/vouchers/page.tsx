@@ -63,7 +63,30 @@ export default function VouchersPage() {
 
       if (!res.ok) throw new Error("Creation failed");
       
-      toast.success("Voucher Created Successfully! Email sent to customer.");
+      const createdVoucher = await res.json();
+      
+      // Dispatch the Confirmation Email
+      if (customerEmail) {
+        try {
+          await fetch("/api/send-voucher", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              customerEmail,
+              customerName: customerName || "",
+              amountTotal,
+              voucherCode: createdVoucher.code,
+              expiryDate: expiryDate || undefined,
+              notes: notes || undefined
+            })
+          });
+        } catch (mailErr) {
+          console.error("Failed to send email to Resend:", mailErr);
+          toast.warning("Voucher saved, but email failed to send.");
+        }
+      }
+
+      toast.success(customerEmail ? "Voucher Created & Email Sent!" : "Voucher Created! (No email sent)");
       
       // Reset Form
       setAmountTotal("");

@@ -6,7 +6,7 @@ import httpx
 import uuid
 from datetime import datetime, timezone
 
-WEBHOOK_URL = "http://localhost:8000/webhooks/voicebooker"
+WEBHOOK_URL = "https://gestronomy-api.onrender.com/webhooks/voicebooker"
 SECRET = "dev_secret_key"
 
 def generate_signature(secret: str, timestamp: str, raw_body: str) -> str:
@@ -54,7 +54,7 @@ def send_mock_booking():
     print(f"Event ID: {event_id}")
     try:
          # Use content=raw_body (rather than json=payload) to retain exact byte strings for HMAC verification
-         response = httpx.post(WEBHOOK_URL, content=raw_body.encode('utf-8'), headers=headers)
+         response = httpx.post(WEBHOOK_URL, content=raw_body.encode('utf-8'), headers=headers, timeout=60.0)
          print(f"Status Code: {response.status_code}")
          print(f"Response: {response.text}")
     except Exception as e:
