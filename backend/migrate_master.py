@@ -99,6 +99,8 @@ async def migrate_master():
             existing_admin.is_active = True
             existing_admin.restaurant_id = restaurants[0].id
             await db.flush()
+            log(f"[USER] Verified admin: {admin_email}")
+            await db.flush()
             log(f"[USER] Admin user synced: {admin_email}")
 
         # =============================================================
@@ -456,6 +458,15 @@ async def migrate_master():
             # ---------------------------------------------------------
             # 3f. FLOOR SECTIONS & TABLES
             # ---------------------------------------------------------
+            from app.reservations.models import Table
+            from sqlalchemy import delete
+            
+            # PURGE STALE SEATING DATA TO PREVENT ALIGNMENT MESS
+            await db.execute(delete(Table).where(Table.restaurant_id == rid))
+            await db.execute(delete(FloorSection).where(FloorSection.restaurant_id == rid))
+            await db.flush()
+            log("  [SEATING] Purged stale sections and tables for clean seed")
+
             sections_data = [
                 {"name": "Restaurant", "description": "175 seats indoor dining", "sort_order": 1},
                 {"name": "Terrasse", "description": "174 seats outdoor area", "sort_order": 2},

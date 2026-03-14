@@ -862,11 +862,11 @@ export default function ReservationsPage() {
                           const sc = STATUS_COLORS[table.status] || STATUS_COLORS.available;
                           const res = getTableReservation(table.id);
                           
-                          // Liquid Glass Effect Logic
+                          // Liquid Glass Effect Logic with defensive defaults
                           const glassStyle = {
                             position: "absolute" as const,
-                            left: `${table.position_x}px`,
-                            top: `${table.position_y}px`,
+                            left: `${table.position_x ?? 0}px`,
+                            top: `${table.position_y ?? 0}px`,
                             width: `${table.width || 80}px`,
                             height: `${table.height || 80}px`,
                             transform: `rotate(${table.rotation || 0}deg)`,

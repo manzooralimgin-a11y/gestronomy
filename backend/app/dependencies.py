@@ -59,10 +59,14 @@ async def get_current_tenant_user(current_user=Depends(get_current_user)):
 
 def require_roles(*allowed_roles: UserRole) -> Callable:
     async def role_guard(current_user=Depends(get_current_tenant_user)):
-        if current_user.role not in allowed_roles:
+        # Ensure we compare values correctly regardless of whether role is enum or string
+        user_role_val = current_user.role.value if hasattr(current_user.role, "value") else str(current_user.role)
+        allowed_vals = [r.value if hasattr(r, "value") else str(r) for r in allowed_roles]
+        
+        if user_role_val not in allowed_vals:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Insufficient permissions",
+                detail=f"Insufficient permissions. User role: {user_role_val}, Required one of: {allowed_vals}",
             )
         return current_user
 
