@@ -62,7 +62,7 @@ export function hasRoleAccess(role: string | undefined, minRole?: AppRole): bool
   return roleRank[currentRole] >= roleRank[minRole];
 }
 
-export const navSections: NavSection[] = [
+export const gestronomyNavSections: NavSection[] = [
   {
     title: "Agents",
     items: [
@@ -120,6 +120,52 @@ export const navSections: NavSection[] = [
     ],
   },
 ];
+
+export const managementNavSections: NavSection[] = [
+  {
+    title: "HMS Core",
+    items: [
+      { label: "Dashboard", href: "/hms/dashboard", icon: LayoutDashboard },
+      { label: "Front Desk", href: "/hms/front-desk", icon: Monitor },
+      { label: "Reservations", href: "/hms/reservations", icon: CalendarDays },
+    ],
+  },
+  {
+    title: "Operations",
+    items: [
+      { label: "Housekeeping", href: "/hms/housekeeping", icon: ClipboardList },
+      { label: "Maintenance", href: "/hms/maintenance", icon: Wrench },
+      { label: "Inventory", href: "/hms/inventory", icon: Package },
+    ],
+  },
+  {
+    title: "Guests",
+    items: [
+      { label: "CRM", href: "/hms/crm", icon: Users },
+      { label: "Marketing", href: "/hms/marketing", icon: Megaphone },
+      { label: "Communications", href: "/hms/comms", icon: Bell },
+    ],
+  },
+  {
+    title: "Revenue",
+    items: [
+      { label: "Channels", href: "/hms/channels", icon: Building2 },
+      { label: "Rate Manager", href: "/hms/rates", icon: TrendingUp },
+      { label: "Analytics", href: "/hms/analytics", icon: Calculator },
+    ],
+  },
+  {
+    title: "System",
+    items: [
+      { label: "AI Agents", href: "/hms/agents", icon: Bot },
+      { label: "Finance", href: "/hms/finance", icon: Receipt },
+      { label: "Security", href: "/hms/security", icon: ShieldCheck },
+      { label: "Settings", href: "/hms/settings", icon: Settings },
+    ],
+  },
+];
+
+export const navSections = gestronomyNavSections; // Fallback for backward compatibility
 
 export const quickActions: QuickAction[] = [
   {

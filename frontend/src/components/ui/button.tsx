@@ -4,25 +4,25 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold ring-offset-background transition-all duration-fast ease-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold font-body ring-offset-background transition-all duration-200 ease-editorial focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-soft hover:shadow-glow-sm hover:brightness-110 active:scale-[0.98]",
+          "bg-[rgba(212,175,55,0.12)] backdrop-blur-[12px] border border-[rgba(212,175,55,0.25)] text-[#FFFDF0] shadow-[inset_0_1px_0_rgba(255,253,240,0.04)] hover:bg-[rgba(212,175,55,0.2)] hover:border-[rgba(212,175,55,0.4)] hover:shadow-[0_0_20px_rgba(212,175,55,0.08)] active:bg-[rgba(212,175,55,0.28)] active:scale-[0.98]",
         destructive:
-          "bg-status-danger text-white shadow-soft hover:bg-status-danger/90 active:scale-[0.98]",
+          "bg-[rgba(230,57,70,0.1)] backdrop-blur-[10px] border border-[rgba(230,57,70,0.2)] text-status-danger hover:bg-[rgba(230,57,70,0.18)] hover:border-[rgba(230,57,70,0.3)] active:scale-[0.98]",
         outline:
-          "glass-input text-foreground hover:bg-[hsl(var(--glass-highlight))] hover:border-[hsl(var(--glass-elevated-border))] active:scale-[0.98]",
+          "bg-[rgba(255,253,240,0.04)] backdrop-blur-[10px] border border-[rgba(255,253,240,0.08)] text-foreground hover:bg-[rgba(255,253,240,0.08)] hover:border-[rgba(212,175,55,0.15)] active:scale-[0.98]",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-soft hover:bg-secondary/80 active:scale-[0.98]",
+          "bg-[rgba(255,253,240,0.04)] backdrop-blur-[10px] border border-[rgba(255,253,240,0.08)] text-foreground shadow-[inset_0_1px_0_rgba(255,253,240,0.04)] hover:bg-[rgba(255,253,240,0.08)] hover:border-[rgba(212,175,55,0.15)] active:scale-[0.98]",
         ghost:
-          "text-foreground hover:bg-[hsl(var(--glass-highlight))] active:scale-[0.98]",
-        link: "text-primary underline-offset-4 hover:underline",
+          "text-foreground hover:bg-[rgba(255,253,240,0.05)] active:scale-[0.98]",
+        link: "text-gold underline-offset-4 hover:underline",
         glass:
-          "glass-card text-foreground hover:shadow-raised active:scale-[0.98]",
+          "glass-card text-foreground hover:border-[rgba(212,175,55,0.18)] active:scale-[0.98]",
         glow:
-          "bg-primary text-primary-foreground shadow-glow hover:shadow-glow-lg hover:brightness-110 active:scale-[0.98]",
+          "bg-[rgba(212,175,55,0.15)] backdrop-blur-[12px] border border-[rgba(212,175,55,0.3)] text-[#FFFDF0] shadow-[0_0_20px_rgba(212,175,55,0.1)] hover:shadow-[0_0_30px_rgba(212,175,55,0.15)] hover:bg-[rgba(212,175,55,0.22)] active:scale-[0.98]",
       },
       size: {
         default: "h-10 px-5 py-2",

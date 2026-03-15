@@ -5,38 +5,81 @@ import { useEffect, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 /* ═══════════════════════════════════════
-   ANIMATION VARIANTS
+   EDITORIAL ANIMATION SYSTEM
+   All animations are scroll-triggered
    ═══════════════════════════════════════ */
+
+const EDITORIAL_EASE = [0.16, 1, 0.3, 1] as const;
+
 export const fadeIn: Variants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.3, ease: [0.2, 0.8, 0.2, 1] } },
+  visible: { opacity: 1, transition: { duration: 0.5, ease: EDITORIAL_EASE } },
 };
 
 export const slideUp: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.2, 0.8, 0.2, 1] } },
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EDITORIAL_EASE } },
 };
 
 export const scaleIn: Variants = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.25, ease: [0.2, 0.8, 0.2, 1] } },
+  hidden: { opacity: 0, scale: 0.96 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: EDITORIAL_EASE } },
 };
 
 export const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.06, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
   },
 };
 
 export const staggerItem: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.2, 0.8, 0.2, 1] } },
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EDITORIAL_EASE } },
 };
 
 /* ═══════════════════════════════════════
-   MOTION CARD — Glass card with hover lift
+   SCROLL REVEAL — Core scroll-triggered wrapper
+   ═══════════════════════════════════════ */
+interface ScrollRevealProps {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+  direction?: "up" | "down" | "left" | "right" | "none";
+  distance?: number;
+}
+
+export function ScrollReveal({
+  children,
+  className,
+  delay = 0,
+  direction = "up",
+  distance = 28,
+}: ScrollRevealProps) {
+  const initial: Record<string, number> = { opacity: 0 };
+  const animate: Record<string, number> = { opacity: 1 };
+
+  if (direction === "up") { initial.y = distance; animate.y = 0; }
+  else if (direction === "down") { initial.y = -distance; animate.y = 0; }
+  else if (direction === "left") { initial.x = distance; animate.x = 0; }
+  else if (direction === "right") { initial.x = -distance; animate.x = 0; }
+
+  return (
+    <motion.div
+      initial={initial}
+      whileInView={animate}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.7, delay, ease: EDITORIAL_EASE }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════
+   MOTION CARD — Glass card with subtle hover
    ═══════════════════════════════════════ */
 interface MotionCardProps {
   children: React.ReactNode;
@@ -45,19 +88,15 @@ interface MotionCardProps {
   glowOnHover?: boolean;
 }
 
-export function MotionCard({ children, className, delay = 0, glowOnHover = false }: MotionCardProps) {
+export function MotionCard({ children, className, delay = 0 }: MotionCardProps) {
   return (
     <motion.div
-      variants={staggerItem}
-      initial="hidden"
-      animate="visible"
-      transition={{ delay }}
-      whileHover={{ y: -3, transition: { duration: 0.2 } }}
-      className={cn(
-        "glass-card p-5",
-        glowOnHover && "hover:glow-border",
-        className
-      )}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.6, delay, ease: EDITORIAL_EASE }}
+      whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
+      className={cn("glass-card p-5", className)}
     >
       {children}
     </motion.div>
@@ -65,7 +104,7 @@ export function MotionCard({ children, className, delay = 0, glowOnHover = false
 }
 
 /* ═══════════════════════════════════════
-   MOTION STAGGER — Staggered children
+   MOTION STAGGER — Scroll-triggered stagger
    ═══════════════════════════════════════ */
 interface MotionStaggerProps {
   children: React.ReactNode;
@@ -77,7 +116,8 @@ export function MotionStagger({ children, className }: MotionStaggerProps) {
     <motion.div
       variants={staggerContainer}
       initial="hidden"
-      animate="visible"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-60px" }}
       className={className}
     >
       {children}
@@ -86,7 +126,7 @@ export function MotionStagger({ children, className }: MotionStaggerProps) {
 }
 
 /* ═══════════════════════════════════════
-   MOTION FADE IN
+   MOTION FADE IN — Scroll-triggered
    ═══════════════════════════════════════ */
 interface MotionFadeInProps {
   children: React.ReactNode;
@@ -98,8 +138,9 @@ export function MotionFadeIn({ children, className, delay = 0 }: MotionFadeInPro
   return (
     <motion.div
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3, delay, ease: [0.2, 0.8, 0.2, 1] }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay, ease: EDITORIAL_EASE }}
       className={className}
     >
       {children}
@@ -108,7 +149,7 @@ export function MotionFadeIn({ children, className, delay = 0 }: MotionFadeInPro
 }
 
 /* ═══════════════════════════════════════
-   MOTION SLIDE UP
+   MOTION SLIDE UP — Scroll-triggered
    ═══════════════════════════════════════ */
 interface MotionSlideUpProps {
   children: React.ReactNode;
@@ -119,9 +160,10 @@ interface MotionSlideUpProps {
 export function MotionSlideUp({ children, className, delay = 0 }: MotionSlideUpProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay, ease: [0.2, 0.8, 0.2, 1] }}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.7, delay, ease: EDITORIAL_EASE }}
       className={className}
     >
       {children}
@@ -143,7 +185,7 @@ interface AnimatedCounterProps {
 
 export function AnimatedCounter({
   value,
-  duration = 1.2,
+  duration = 1.4,
   prefix = "",
   suffix = "",
   className,
@@ -162,7 +204,6 @@ export function AnimatedCounter({
     const animate = () => {
       const elapsed = (Date.now() - startTime.current) / 1000;
       const progress = Math.min(elapsed / duration, 1);
-      // Ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = start + (target - start) * eased;
       setDisplay(current);
@@ -199,18 +240,18 @@ interface StatusDotProps {
 
 export function StatusDot({ status, pulse = false, size = "sm" }: StatusDotProps) {
   const colors: Record<string, string> = {
-    success: "bg-emerald-400",
-    warning: "bg-amber-400",
-    danger: "bg-red-400",
-    info: "bg-blue-400",
-    neutral: "bg-gray-400",
+    success: "bg-status-success",
+    warning: "bg-status-warning",
+    danger: "bg-status-danger",
+    info: "bg-status-info",
+    neutral: "bg-foreground-dim",
   };
 
   const glowColors: Record<string, string> = {
-    success: "shadow-[0_0_8px_rgba(52,211,153,0.6)]",
-    warning: "shadow-[0_0_8px_rgba(251,191,36,0.6)]",
-    danger: "shadow-[0_0_8px_rgba(248,113,113,0.6)]",
-    info: "shadow-[0_0_8px_rgba(96,165,250,0.6)]",
+    success: "shadow-[0_0_8px_var(--status-success)]",
+    warning: "shadow-[0_0_8px_var(--status-warning)]",
+    danger: "shadow-[0_0_8px_var(--status-danger)]",
+    info: "shadow-[0_0_8px_var(--status-info)]",
     neutral: "",
   };
 

@@ -9,11 +9,12 @@ import { useUIStore } from "@/stores/ui-store";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default function HMSLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const setUser = useAuthStore((s) => s.setUser);
   const token = useAuthStore((s) => s.token);
+  const activeSection = useAuthStore((s) => s.activeSection);
   const sidebarCollapsed = useUIStore((s) => s.sidebarCollapsed);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -26,25 +27,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     getMe()
       .then((user) => {
         setUser(user);
-        if (pathname === "/") {
-          const target = getDefaultDashboardRoute(user.role);
-          if (target !== "/") {
-            router.replace(target);
-          }
+        // Force redirect if in the wrong section group
+        if (!pathname.startsWith("/hms") && activeSection === "management") {
+           router.replace("/hms/dashboard");
         }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error("Auth check failed", err);
         router.replace("/login");
       });
-  }, [token, setUser, router, pathname]);
+  }, [token, setUser, router, pathname, activeSection]);
 
   return (
     <div className="atmospheric-bg min-h-screen">
       {/* Floating orbs — atmospheric color for glass bleed-through */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
-        <div className="absolute top-[10%] left-[15%] w-[400px] h-[400px] rounded-full bg-[rgba(45,106,79,0.08)] blur-[120px] animate-orb-drift" />
-        <div className="absolute bottom-[20%] right-[10%] w-[350px] h-[350px] rounded-full bg-[rgba(212,175,55,0.05)] blur-[100px] animate-orb-drift" style={{ animationDelay: "-7s" }} />
-        <div className="absolute top-[60%] left-[50%] w-[300px] h-[300px] rounded-full bg-[rgba(82,183,136,0.04)] blur-[100px] animate-orb-drift" style={{ animationDelay: "-14s" }} />
+        <div className="absolute top-[10%] left-[15%] w-[400px] h-[400px] rounded-full bg-[rgba(59,130,246,0.08)] blur-[120px] animate-orb-drift" />
+        <div className="absolute bottom-[20%] right-[10%] w-[350px] h-[350px] rounded-full bg-[rgba(147,51,234,0.05)] blur-[100px] animate-orb-drift" style={{ animationDelay: "-7s" }} />
+        <div className="absolute top-[60%] left-[50%] w-[300px] h-[300px] rounded-full bg-[rgba(37,99,235,0.04)] blur-[100px] animate-orb-drift" style={{ animationDelay: "-14s" }} />
       </div>
 
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />

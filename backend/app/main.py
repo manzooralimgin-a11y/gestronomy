@@ -131,6 +131,7 @@ from app.vouchers.router import router as vouchers_router  # noqa: E402
 from app.menu_designer.router import router as menu_designer_router  # noqa: E402
 from app.signage.router import router as signage_router  # noqa: E402
 from app.integrations.router import router as integrations_router  # noqa: E402
+from app.hms.router import router as hms_router  # noqa: E402
 from app.integrations.mcp_server import mcp_app  # noqa: E402
 
 app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
@@ -249,6 +250,12 @@ app.include_router(
     prefix="/api/signage",
     tags=["Signage"],
     dependencies=[Depends(require_roles(UserRole.admin, UserRole.manager))],
+)
+app.include_router(
+    hms_router,
+    prefix="/api/hms",
+    tags=["HMS"],
+    dependencies=[Depends(get_current_tenant_user)],
 )
 app.include_router(integrations_router)
 

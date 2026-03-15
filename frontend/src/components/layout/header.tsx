@@ -45,31 +45,31 @@ export function Header({ onMenuToggle }: HeaderProps) {
   };
 
   return (
-    <header className="flex h-14 md:h-16 items-center justify-between glass border-b border-border/50 px-4 md:px-6 sticky top-0 z-30">
+    <header className="flex h-14 md:h-16 items-center justify-between glass-header px-4 md:px-8 sticky top-0 z-30">
       <div className="flex items-center gap-3">
         {/* Hamburger — mobile only */}
         <button
           type="button"
           aria-label="Open navigation menu"
           onClick={onMenuToggle}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-[hsl(var(--glass-highlight))] hover:text-foreground transition-colors md:hidden"
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-foreground-muted hover:bg-[rgba(255,253,240,0.05)] hover:text-foreground transition-colors md:hidden"
         >
           <Menu className="h-5 w-5" />
         </button>
 
         {/* Breadcrumbs */}
-        <nav className="hidden sm:flex items-center gap-1 text-sm">
+        <nav className="hidden sm:flex items-center gap-1 text-sm font-body">
           {breadcrumbs.map((crumb, index) => (
             <span key={crumb.href} className="flex items-center gap-1">
               {index > 0 && (
-                <span className="text-muted-foreground/25 mx-0.5">/</span>
+                <span className="text-foreground-dim mx-0.5">/</span>
               )}
               <span
                 className={cn(
                   "transition-colors",
                   index === breadcrumbs.length - 1
                     ? "font-medium text-foreground"
-                    : "text-muted-foreground/50 hover:text-muted-foreground"
+                    : "text-foreground-dim hover:text-foreground-muted"
                 )}
               >
                 {crumb.label}
@@ -79,7 +79,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
         </nav>
 
         {/* Mobile title */}
-        <span className="text-sm font-semibold text-foreground sm:hidden">
+        <span className="text-sm font-body font-semibold text-foreground sm:hidden">
           {breadcrumbs[breadcrumbs.length - 1]?.label || "Dashboard"}
         </span>
       </div>
@@ -97,7 +97,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
         <Button
           variant="ghost"
           size="icon-sm"
-          className="relative text-muted-foreground hover:text-foreground"
+          className="relative text-foreground-muted hover:text-foreground"
           aria-label="Open alerts"
           onClick={() => router.push("/alerts")}
         >
@@ -117,14 +117,14 @@ export function Header({ onMenuToggle }: HeaderProps) {
               className="flex items-center gap-2 px-2"
               aria-label="Open user menu"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-xs font-semibold text-white ring-2 ring-brand-500/20">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[rgba(212,175,55,0.12)] border border-[rgba(212,175,55,0.2)] text-xs font-editorial font-semibold text-gold">
                 {user?.full_name
                   ?.split(" ")
                   .map((n) => n[0])
                   .join("")
                   .toUpperCase() || <User className="h-3.5 w-3.5" />}
               </div>
-              <span className="hidden text-sm font-medium text-foreground/80 md:block">
+              <span className="hidden text-sm font-body font-medium text-foreground/80 md:block">
                 {user?.full_name || "User"}
               </span>
             </Button>
@@ -136,12 +136,12 @@ export function Header({ onMenuToggle }: HeaderProps) {
               align="end"
               sideOffset={8}
             >
-              <div className="px-3 py-2 text-xs text-muted-foreground">
+              <div className="px-3 py-2 text-xs text-foreground-muted font-body">
                 {user?.email || "user@example.com"}
               </div>
-              <DropdownMenu.Separator className="my-1 divider-subtle" />
+              <DropdownMenu.Separator className="my-1 divider-gold" />
               <DropdownMenu.Item
-                className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-status-danger hover:bg-status-danger/10 outline-none transition-colors"
+                className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm font-body text-status-danger hover:bg-[rgba(230,57,70,0.08)] outline-none transition-colors"
                 onSelect={handleLogout}
               >
                 <LogOut className="h-4 w-4" />

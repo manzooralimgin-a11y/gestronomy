@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, X, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth-store";
 import { useUIStore } from "@/stores/ui-store";
-import { hasRoleAccess, navSections } from "@/lib/navigation";
+import { hasRoleAccess, gestronomyNavSections, managementNavSections } from "@/lib/navigation";
+import { getDefaultDashboardRoute } from "@/lib/role-routing";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface SidebarProps {
@@ -15,11 +16,15 @@ interface SidebarProps {
 }
 
 export function Sidebar({ open, onClose }: SidebarProps) {
+  const router = useRouter();
   const pathname = usePathname();
   const userRole = useAuthStore((s) => s.user?.role);
   const userName = useAuthStore((s) => s.user?.full_name);
+  const activeSection = useAuthStore((s) => s.activeSection);
   const collapsed = useUIStore((s) => s.sidebarCollapsed);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
+
+  const sections = activeSection === "management" ? managementNavSections : gestronomyNavSections;
 
   const initials = userName
     ?.split(" ")
@@ -31,14 +36,14 @@ export function Sidebar({ open, onClose }: SidebarProps) {
     <>
       {/* Mobile overlay */}
       <AnimatePresence>
-        {open && (
+        {activeSection === "gestronomy" && open && (
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             type="button"
-            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-40 bg-[rgba(8,12,8,0.6)] backdrop-blur-sm md:hidden"
             aria-label="Close navigation menu"
             onClick={onClose}
           />
@@ -47,8 +52,8 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-300 ease-spring",
-          "glass border-r border-border/50",
+          "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-300 ease-editorial",
+          "glass-sidebar",
           collapsed ? "md:w-[72px]" : "md:w-[260px]",
           "md:translate-x-0",
           open ? "translate-x-0 w-[280px]" : "-translate-x-full w-[280px]",
@@ -56,13 +61,13 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       >
         {/* Logo area */}
         <div className={cn(
-          "flex py-4 items-center shrink-0 border-b border-border/50",
+          "flex py-4 items-center shrink-0 border-b border-[var(--sidebar-border)]",
           collapsed ? "justify-center px-0 h-20" : "justify-center px-5 flex-col gap-2 h-32 relative"
         )}>
           <Link href="/" className="flex flex-col items-center justify-center gap-1.5" onClick={onClose}>
             <div className={cn(
-              "relative flex items-center justify-center bg-white rounded-xl p-1.5 shadow-soft shrink-0 transition-all duration-base",
-              "hover:shadow-glow-sm",
+              "relative flex items-center justify-center bg-[rgba(255,253,240,0.06)] rounded-xl p-1.5 border border-[rgba(212,175,55,0.1)] shrink-0 transition-all duration-200",
+              "hover:border-[rgba(212,175,55,0.2)]",
               collapsed ? "h-10 w-10" : "h-14 w-14"
             )}>
               <img src="/das-elb-logo.png" alt="DAS ELB" className="w-full h-auto object-contain" />
@@ -74,7 +79,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.15 }}
-                  className="text-sm font-bold text-foreground tracking-[0.2em] uppercase"
+                  className="text-sm font-editorial font-bold text-foreground tracking-[0.2em] uppercase"
                 >
                   DAS ELB
                 </motion.span>
@@ -82,12 +87,42 @@ export function Sidebar({ open, onClose }: SidebarProps) {
             </AnimatePresence>
           </Link>
 
+          {/* SECTION SWITCHER IN SIDEBAR */}
+          {!collapsed && (
+            <div className="flex p-0.5 bg-white/5 rounded-md border border-white/10 mt-2">
+               <button 
+                onClick={() => {
+                   useAuthStore.getState().setActiveSection("gestronomy");
+                   router.push(getDefaultDashboardRoute(userRole, "gestronomy"));
+                }}
+                className={cn(
+                  "px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded transition-all",
+                  activeSection === "gestronomy" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                G
+              </button>
+              <button 
+                onClick={() => {
+                   useAuthStore.getState().setActiveSection("management");
+                   router.push(getDefaultDashboardRoute(userRole, "management"));
+                }}
+                className={cn(
+                  "px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded transition-all",
+                  activeSection === "management" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                M
+              </button>
+            </div>
+          )}
+
           {/* Close — mobile only */}
           <button
             onClick={onClose}
             type="button"
             aria-label="Close sidebar"
-            className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-[hsl(var(--glass-highlight))] hover:text-foreground transition-colors md:hidden"
+            className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted hover:bg-[rgba(255,253,240,0.05)] hover:text-foreground transition-colors md:hidden"
           >
             <X className="h-4 w-4" />
           </button>
@@ -98,7 +133,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           "flex-1 overflow-y-auto py-4",
           collapsed ? "px-2" : "px-3"
         )}>
-          {navSections.map((section, sectionIdx) => {
+          {sections.map((section, sectionIdx) => {
             const visibleItems = section.items.filter((item) =>
               hasRoleAccess(userRole, item.minRole)
             );
@@ -107,7 +142,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
             return (
               <div key={section.title} className="mb-4">
                 {sectionIdx > 0 && (
-                  <div className={cn("divider-subtle mb-4", collapsed ? "mx-1" : "mx-2")} />
+                  <div className={cn("divider-gold mb-4", collapsed ? "mx-1" : "mx-2")} />
                 )}
 
                 <AnimatePresence mode="wait">
@@ -117,7 +152,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.1 }}
-                      className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/50"
+                      className="mb-2 px-3 text-[10px] font-body font-semibold uppercase tracking-[0.15em] text-foreground-dim"
                     >
                       {section.title}
                     </motion.p>
@@ -137,20 +172,20 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                           href={item.href}
                           onClick={onClose}
                           className={cn(
-                            "flex items-center rounded-lg text-sm font-medium transition-all duration-200",
+                            "flex items-center rounded-lg text-sm font-body font-medium transition-all duration-200 ease-editorial",
                             collapsed
                               ? "justify-center h-10 w-full"
                               : "gap-3 px-3 py-2",
                             isActive
-                              ? "bg-primary/10 text-primary nav-active-bar"
-                              : "text-muted-foreground hover:bg-[hsl(var(--glass-highlight))] hover:text-foreground"
+                              ? "nav-active-bar text-gold"
+                              : "text-foreground-muted hover:bg-[rgba(255,253,240,0.03)] hover:text-foreground"
                           )}
                         >
                           <Icon
                             className={cn(
                               "shrink-0 transition-colors duration-200",
                               collapsed ? "h-[18px] w-[18px]" : "h-4 w-4",
-                              isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+                              isActive ? "text-gold" : "text-foreground-muted group-hover:text-foreground"
                             )}
                           />
 
@@ -168,12 +203,12 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                           </AnimatePresence>
 
                           {collapsed && isActive && (
-                            <span className="absolute right-1.5 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--glow-primary)/0.6)]" />
+                            <span className="absolute right-1.5 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-gold shadow-[0_0_6px_var(--gold)]" />
                           )}
                         </Link>
 
                         {collapsed && (
-                          <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 rounded-lg glass-modal text-xs text-foreground font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-[60]">
+                          <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 rounded-lg glass-modal text-xs text-foreground font-body font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-[60]">
                             {item.label}
                           </div>
                         )}
@@ -188,14 +223,14 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
         {/* Bottom zone */}
         <div className={cn(
-          "shrink-0 border-t border-border/50 py-3",
+          "shrink-0 border-t border-[var(--sidebar-border)] py-3",
           collapsed ? "px-2" : "px-3"
         )}>
           <Link
             href="/settings"
             onClick={onClose}
             className={cn(
-              "flex items-center rounded-lg text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-[hsl(var(--glass-highlight))] hover:text-foreground mb-2",
+              "flex items-center rounded-lg text-sm font-body font-medium text-foreground-muted transition-all duration-200 ease-editorial hover:bg-[rgba(255,253,240,0.03)] hover:text-foreground mb-2",
               collapsed ? "justify-center h-10" : "gap-3 px-3 py-2"
             )}
           >
@@ -218,7 +253,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
             "flex items-center",
             collapsed ? "flex-col gap-2" : "justify-between px-2"
           )}>
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-xs font-semibold text-white ring-2 ring-brand-500/20 shrink-0 shadow-glow-sm">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[rgba(212,175,55,0.12)] border border-[rgba(212,175,55,0.2)] text-xs font-editorial font-semibold text-gold shrink-0">
               {initials}
             </div>
 
@@ -226,7 +261,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
               onClick={toggleSidebar}
               type="button"
               aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-              className="hidden md:flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-[hsl(var(--glass-highlight))] hover:text-foreground transition-colors"
+              className="hidden md:flex h-7 w-7 items-center justify-center rounded-lg text-foreground-muted hover:bg-[rgba(255,253,240,0.05)] hover:text-foreground transition-colors"
             >
               {collapsed ? (
                 <ChevronRight className="h-3.5 w-3.5" />

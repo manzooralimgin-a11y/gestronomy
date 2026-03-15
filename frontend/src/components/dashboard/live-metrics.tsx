@@ -71,9 +71,11 @@ export function LiveMetrics() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        {METRIC_CONFIGS.map((config) => (
-          <SkeletonCard key={config.metricName} />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12">
+        {METRIC_CONFIGS.map((config, i) => (
+          <div key={config.metricName} className={i === 0 ? "lg:col-span-4" : "lg:col-span-2"}>
+            <SkeletonCard />
+          </div>
         ))}
       </div>
     );
@@ -82,26 +84,41 @@ export function LiveMetrics() {
   const kpiMap = new Map(kpis.map((k) => [k.metric_name, k]));
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-      {METRIC_CONFIGS.map((config) => {
-        const kpi = kpiMap.get(config.metricName);
-        if (!kpi) return null;
+    <div>
+      {/* Section header */}
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-editorial font-light text-foreground tracking-tight">
+          Live Performance
+        </h2>
+        <span className="text-[10px] font-body font-semibold text-foreground-dim uppercase tracking-[0.15em]">
+          Real-time KPIs
+        </span>
+      </div>
 
-        return (
-          <StatCard
-            key={config.metricName}
-            title={config.label}
-            value={config.format(kpi.value)}
-            change={computeChange(kpi)}
-            target={
-              kpi.target_value != null
-                ? config.format(kpi.target_value)
-                : undefined
-            }
-            icon={config.icon}
-          />
-        );
-      })}
+      {/* Asymmetric grid — first card wider */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12">
+        {METRIC_CONFIGS.map((config, i) => {
+          const kpi = kpiMap.get(config.metricName);
+          if (!kpi) return null;
+
+          return (
+            <div key={config.metricName} className={i === 0 ? "lg:col-span-4" : "lg:col-span-2"}>
+              <StatCard
+                title={config.label}
+                value={config.format(kpi.value)}
+                change={computeChange(kpi)}
+                target={
+                  kpi.target_value != null
+                    ? config.format(kpi.target_value)
+                    : undefined
+                }
+                icon={config.icon}
+                featured={i === 0}
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

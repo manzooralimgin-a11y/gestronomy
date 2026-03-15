@@ -1,10 +1,29 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import { Geist } from "next/font/google";
+import { Playfair_Display, DM_Sans, JetBrains_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const editorial = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-editorial",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const body = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-body",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Gestronomy — AI Restaurant Management",
@@ -17,12 +36,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
-      <body className="font-sans">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn(editorial.variable, body.variable, mono.variable)}
+    >
+      <body className="font-body antialiased">
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
         <Providers>{children}</Providers>
+
+        {/* Grain overlay — fixed, always present */}
+        <div className="grain-overlay" aria-hidden="true" />
       </body>
     </html>
   );

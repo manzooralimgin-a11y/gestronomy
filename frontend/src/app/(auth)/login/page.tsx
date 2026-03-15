@@ -9,11 +9,12 @@ import { getDefaultDashboardRoute } from "@/lib/role-routing";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function LoginPage() {
   const router = useRouter();
-  const setToken = useAuthStore((s) => s.setToken);
-  const setUser = useAuthStore((s) => s.setUser);
+  const setActiveSection = useAuthStore((s) => s.setActiveSection);
+  const activeSection = useAuthStore((s) => s.activeSection);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -26,10 +27,10 @@ export default function LoginPage() {
 
     try {
       const tokenResponse = await login({ email, password });
-      setToken(tokenResponse.access_token);
+      useAuthStore.getState().setToken(tokenResponse.access_token);
       const user = await getMe();
-      setUser(user);
-      router.push(getDefaultDashboardRoute(user.role));
+      useAuthStore.getState().setUser(user);
+      router.push(getDefaultDashboardRoute(user.role, activeSection));
     } catch (err: unknown) {
       const axiosErr = err as { response?: { data?: { detail?: string | Array<{ msg: string }> }; status?: number }; code?: string };
       if (!axiosErr.response) {
@@ -56,8 +57,34 @@ export default function LoginPage() {
         <div className="flex justify-center mb-4">
           <img src="/das-elb-logo.png" alt="DAS ELB Logo" className="h-[72px] w-auto object-contain" />
         </div>
-        <h1 className="text-3xl font-bold text-primary text-glow tracking-widest uppercase">DAS ELB</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Sign in to your account</p>
+        <h1 className="text-3xl font-bold text-primary text-glow tracking-widest uppercase mb-2">DAS ELB</h1>
+        <div className="flex p-1 bg-muted/50 rounded-lg max-w-[280px] mx-auto mb-6 border border-white/5">
+          <button
+            type="button"
+            onClick={() => setActiveSection("gestronomy")}
+            className={cn(
+              "flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-300",
+              activeSection === "gestronomy"
+                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            Gestronomy
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveSection("management")}
+            className={cn(
+              "flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-300",
+              activeSection === "management"
+                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            Management
+          </button>
+        </div>
+        <p className="text-sm text-muted-foreground">Sign in to {activeSection === "gestronomy" ? "Restaurant System" : "Hotel Management"}</p>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">

@@ -91,7 +91,7 @@ export function AiChat() {
                 )}
               >
                 {msg.role === "assistant" && (
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-500/10">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[rgba(212,175,55,0.08)]">
                     <Bot className="h-4 w-4 text-brand-500" />
                   </div>
                 )}
@@ -114,7 +114,7 @@ export function AiChat() {
             ))}
             {loading && (
               <div className="flex gap-3">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-500/10">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[rgba(212,175,55,0.08)]">
                   <Bot className="h-4 w-4 text-brand-500" />
                 </div>
                 <div className="flex items-center gap-2 rounded-lg bg-white/[0.05] px-3 py-2 text-sm text-muted-foreground">
