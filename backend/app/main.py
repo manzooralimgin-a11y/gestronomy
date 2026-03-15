@@ -19,16 +19,22 @@ from app.config import settings
 from app.dependencies import get_current_tenant_user, require_roles
 from app.security.rate_limit import enforce_rate_limit, get_client_identifier
 from app.observability.metrics import api_metrics, get_queue_lag
-from app.database import get_db, AsyncSession
+from app.database import engine, get_db, AsyncSession
+from app.middleware.request_id import RequestIdMiddleware
 
 logger = logging.getLogger("app.security")
+startup_logger = logging.getLogger("app.lifecycle")
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
+    startup_logger.info("Gestronomy API starting up")
     yield
-    # Shutdown
+    # Shutdown — release connections cleanly
+    startup_logger.info("Gestronomy API shutting down, disposing database engine...")
+    await engine.dispose()
+    startup_logger.info("Database engine disposed. Goodbye.")
 
 
 app = FastAPI(
@@ -47,15 +53,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/restore-all")
-async def trigger_migration_v2(db: AsyncSession = Depends(get_db)):
-    """Triggers the master data restoration. Restricted to admin review."""
-    try:
-        from migrate_master import migrate_master
-        logs = await migrate_master()
-        return {"status": "success", "message": "Master migration executed.", "logs": logs}
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
+app.add_middleware(RequestIdMiddleware)
 
 
 @app.middleware("http")
@@ -133,10 +131,10 @@ from app.vouchers.router import router as vouchers_router  # noqa: E402
 from app.menu_designer.router import router as menu_designer_router  # noqa: E402
 from app.signage.router import router as signage_router  # noqa: E402
 from app.integrations.router import router as integrations_router  # noqa: E402
-from app.integrations.mcp_server import router as mcp_router  # noqa: E402
+from app.integrations.mcp_server import mcp_app  # noqa: E402
 
 app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
-app.include_router(mcp_router)
+app.mount("/mcp/voicebooker", mcp_app)
 app.include_router(
     agents_router,
     prefix="/api/agents",
@@ -275,8 +273,12 @@ async def health_check(db: AsyncSession = Depends(get_db)):
 
 @app.get("/api/metrics", tags=["Observability"])
 async def get_metrics(window_minutes: int = 15):
-    """Exposes internal API metrics and background queue lag."""
+    """Exposes internal API metrics, endpoint analytics, and background queue lag."""
     snapshot = await api_metrics.snapshot(window_minutes=window_minutes)
     lag = await get_queue_lag()
     snapshot["celery_queue_lag"] = lag
+    snapshot["total_requests_all_time"] = api_metrics.total_requests
+    snapshot["total_errors_all_time"] = api_metrics.total_errors
+    snapshot["top_endpoints"] = await api_metrics.top_endpoints(limit=10)
+    snapshot["slowest_endpoints"] = await api_metrics.slowest_endpoints(limit=10)
     return snapshot

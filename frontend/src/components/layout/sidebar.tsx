@@ -38,7 +38,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             type="button"
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden"
             aria-label="Close navigation menu"
             onClick={onClose}
           />
@@ -47,23 +47,24 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-300 ease-standard",
-          "glass border-r border-border",
-          // Desktop: collapsed (72px) or expanded (260px)
+          "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-300 ease-spring",
+          "glass border-r border-border/50",
           collapsed ? "md:w-[72px]" : "md:w-[260px]",
           "md:translate-x-0",
-          // Mobile: full width slide-in
           open ? "translate-x-0 w-[280px]" : "-translate-x-full w-[280px]",
         )}
       >
-        {/* ── Logo area ── */}
+        {/* Logo area */}
         <div className={cn(
-          "flex py-4 items-center shrink-0 border-b border-border",
+          "flex py-4 items-center shrink-0 border-b border-border/50",
           collapsed ? "justify-center px-0 h-20" : "justify-center px-5 flex-col gap-2 h-32 relative"
         )}>
           <Link href="/" className="flex flex-col items-center justify-center gap-1.5" onClick={onClose}>
-            {/* DAS ELB Logo */}
-            <div className={cn("relative flex items-center justify-center bg-white rounded-xl p-1.5 shadow-glow-sm shrink-0", collapsed ? "h-10 w-10" : "h-14 w-14")}>
+            <div className={cn(
+              "relative flex items-center justify-center bg-white rounded-xl p-1.5 shadow-soft shrink-0 transition-all duration-base",
+              "hover:shadow-glow-sm",
+              collapsed ? "h-10 w-10" : "h-14 w-14"
+            )}>
               <img src="/das-elb-logo.png" alt="DAS ELB" className="w-full h-auto object-contain" />
             </div>
             <AnimatePresence mode="wait">
@@ -86,13 +87,13 @@ export function Sidebar({ open, onClose }: SidebarProps) {
             onClick={onClose}
             type="button"
             aria-label="Close sidebar"
-            className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-foreground/[0.06] md:hidden"
+            className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-[hsl(var(--glass-highlight))] hover:text-foreground transition-colors md:hidden"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        {/* ── Navigation ── */}
+        {/* Navigation */}
         <nav className={cn(
           "flex-1 overflow-y-auto py-4",
           collapsed ? "px-2" : "px-3"
@@ -105,12 +106,10 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
             return (
               <div key={section.title} className="mb-4">
-                {/* Section divider (not on first) */}
                 {sectionIdx > 0 && (
-                  <div className={cn("glow-divider mb-4", collapsed ? "mx-1" : "mx-2")} />
+                  <div className={cn("divider-subtle mb-4", collapsed ? "mx-1" : "mx-2")} />
                 )}
 
-                {/* Section title */}
                 <AnimatePresence mode="wait">
                   {!collapsed && (
                     <motion.p
@@ -118,14 +117,13 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.1 }}
-                      className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/60"
+                      className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/50"
                     >
                       {section.title}
                     </motion.p>
                   )}
                 </AnimatePresence>
 
-                {/* Items */}
                 <ul className="space-y-0.5">
                   {visibleItems.map((item) => {
                     const isActive =
@@ -145,7 +143,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                               : "gap-3 px-3 py-2",
                             isActive
                               ? "bg-primary/10 text-primary nav-active-bar"
-                              : "text-muted-foreground hover:bg-foreground/[0.04] hover:text-foreground"
+                              : "text-muted-foreground hover:bg-[hsl(var(--glass-highlight))] hover:text-foreground"
                           )}
                         >
                           <Icon
@@ -156,7 +154,6 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                             )}
                           />
 
-                          {/* Label */}
                           <AnimatePresence mode="wait">
                             {!collapsed && (
                               <motion.span
@@ -170,15 +167,13 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                             )}
                           </AnimatePresence>
 
-                          {/* Active glow dot — collapsed only */}
                           {collapsed && isActive && (
                             <span className="absolute right-1.5 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--glow-primary)/0.6)]" />
                           )}
                         </Link>
 
-                        {/* Tooltip — collapsed only */}
                         {collapsed && (
-                          <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 rounded-lg glass text-xs text-foreground font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-[60] shadow-raised">
+                          <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 rounded-lg glass-modal text-xs text-foreground font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-[60]">
                             {item.label}
                           </div>
                         )}
@@ -191,17 +186,16 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           })}
         </nav>
 
-        {/* ── Bottom zone ── */}
+        {/* Bottom zone */}
         <div className={cn(
-          "shrink-0 border-t border-border py-3",
+          "shrink-0 border-t border-border/50 py-3",
           collapsed ? "px-2" : "px-3"
         )}>
-          {/* Settings link */}
           <Link
             href="/settings"
             onClick={onClose}
             className={cn(
-              "flex items-center rounded-lg text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-foreground/[0.04] hover:text-foreground mb-2",
+              "flex items-center rounded-lg text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-[hsl(var(--glass-highlight))] hover:text-foreground mb-2",
               collapsed ? "justify-center h-10" : "gap-3 px-3 py-2"
             )}
           >
@@ -220,22 +214,19 @@ export function Sidebar({ open, onClose }: SidebarProps) {
             </AnimatePresence>
           </Link>
 
-          {/* User + collapse toggle */}
           <div className={cn(
             "flex items-center",
             collapsed ? "flex-col gap-2" : "justify-between px-2"
           )}>
-            {/* User avatar */}
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500/80 to-emerald-600/80 text-xs font-semibold text-white ring-2 ring-emerald-500/20 shrink-0">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-xs font-semibold text-white ring-2 ring-brand-500/20 shrink-0 shadow-glow-sm">
               {initials}
             </div>
 
-            {/* Expand / Collapse — desktop only */}
             <button
               onClick={toggleSidebar}
               type="button"
               aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-              className="hidden md:flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-foreground/[0.06] hover:text-foreground transition-colors"
+              className="hidden md:flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-[hsl(var(--glass-highlight))] hover:text-foreground transition-colors"
             >
               {collapsed ? (
                 <ChevronRight className="h-3.5 w-3.5" />

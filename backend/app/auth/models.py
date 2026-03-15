@@ -22,10 +22,11 @@ class User(Base):
         Enum(UserRole, name="user_role", native_enum=False),
         default=UserRole.staff,
         nullable=False,
+        index=True,
     )
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     restaurant_id: Mapped[int | None] = mapped_column(
-        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
+        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True, index=True
     )
 
     restaurant: Mapped["Restaurant | None"] = relationship(back_populates="users")

@@ -24,7 +24,7 @@ export default function VouchersPage() {
   const [expiryDate, setExpiryDate] = useState("");
 
   const getBaseUrl = () => {
-    const url = process.env.NEXT_PUBLIC_API_URL || 'https://gestronomy-api.onrender.com';
+    const url = process.env.NEXT_PUBLIC_API_URL || '';
     return url.replace(/\/+$/, ""); // ensure no trailing slash
   };
 

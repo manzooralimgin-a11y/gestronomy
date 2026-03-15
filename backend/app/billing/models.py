@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, JSON, Numeric, String, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, ForeignKey, Index, Integer, JSON, Numeric, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
@@ -8,9 +8,12 @@ from app.database import Base
 
 class TableOrder(Base):
     __tablename__ = "table_orders"
+    __table_args__ = (
+        Index("ix_table_orders_created_at", "created_at"),
+    )
 
     restaurant_id: Mapped[int | None] = mapped_column(
-        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
+        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True, index=True
     )
     session_id: Mapped[int | None] = mapped_column(
         Integer, ForeignKey("table_sessions.id", ondelete="SET NULL"), nullable=True
@@ -21,7 +24,7 @@ class TableOrder(Base):
     server_id: Mapped[int | None] = mapped_column(
         Integer, ForeignKey("employees.id", ondelete="SET NULL"), nullable=True
     )
-    status: Mapped[str] = mapped_column(String(20), default="open", nullable=False)
+    status: Mapped[str] = mapped_column(String(20), default="open", nullable=False, index=True)
     order_type: Mapped[str] = mapped_column(String(20), default="dine_in", nullable=False)
     subtotal: Mapped[float] = mapped_column(Numeric(12, 2), default=0, nullable=False)
     tax_amount: Mapped[float] = mapped_column(Numeric(10, 2), default=0, nullable=False)
@@ -40,7 +43,7 @@ class OrderItem(Base):
         Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
     )
     order_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("table_orders.id", ondelete="CASCADE"), nullable=False
+        Integer, ForeignKey("table_orders.id", ondelete="CASCADE"), nullable=False, index=True
     )
     menu_item_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("menu_items.id", ondelete="SET NULL"), nullable=False
@@ -50,7 +53,7 @@ class OrderItem(Base):
     unit_price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     total_price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     modifiers_json: Mapped[dict | None] = mapped_column(JSON, nullable=True)
-    status: Mapped[str] = mapped_column(String(20), default="pending", nullable=False)
+    status: Mapped[str] = mapped_column(String(20), default="pending", nullable=False, index=True)
     notes: Mapped[str | None] = mapped_column(String(500), nullable=True)
     sent_to_kitchen_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
@@ -73,7 +76,7 @@ class Bill(Base):
         Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
     )
     order_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("table_orders.id", ondelete="CASCADE"), nullable=False
+        Integer, ForeignKey("table_orders.id", ondelete="CASCADE"), nullable=False, index=True
     )
     bill_number: Mapped[str] = mapped_column(String(50), nullable=False)
     subtotal: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False)
@@ -101,7 +104,7 @@ class Payment(Base):
         Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
     )
     bill_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("bills.id", ondelete="CASCADE"), nullable=False
+        Integer, ForeignKey("bills.id", ondelete="CASCADE"), nullable=False, index=True
     )
     amount: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False)
     method: Mapped[str] = mapped_column(String(30), nullable=False)

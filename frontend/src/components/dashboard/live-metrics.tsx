@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useDashboardStore, type KPI } from "@/stores/dashboard-store";
 import { StatCard } from "@/components/shared/stat-card";
+import { SkeletonCard } from "@/components/ui/skeleton";
 import { formatCurrency, formatPercent, formatNumber } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 
@@ -62,18 +63,6 @@ const METRIC_CONFIGS: MetricConfig[] = [
 function computeChange(kpi: KPI): number | undefined {
   if (kpi.previous_value == null || kpi.previous_value === 0) return undefined;
   return ((kpi.value - kpi.previous_value) / Math.abs(kpi.previous_value)) * 100;
-}
-
-function SkeletonCard() {
-  return (
-    <div className="glass-card p-5">
-      <div className="space-y-3">
-        <div className="h-4 w-24 rounded shimmer" />
-        <div className="h-8 w-32 rounded shimmer" />
-        <div className="h-3 w-16 rounded shimmer" />
-      </div>
-    </div>
-  );
 }
 
 export function LiveMetrics() {

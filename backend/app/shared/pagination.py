@@ -1,5 +1,5 @@
 import math
-from typing import Any, TypeVar
+from typing import Any, Generic, List, TypeVar
 
 from pydantic import BaseModel, Field
 from sqlalchemy import Select, func, select
@@ -11,6 +11,16 @@ T = TypeVar("T")
 class PaginationParams(BaseModel):
     page: int = Field(default=1, ge=1)
     per_page: int = Field(default=20, ge=1, le=100)
+
+
+class PaginatedResponse(BaseModel, Generic[T]):
+    """Standardized pagination response wrapper."""
+
+    items: List[T]
+    total: int
+    page: int
+    page_size: int
+    pages: int
 
 
 async def paginate(
@@ -31,6 +41,6 @@ async def paginate(
         "items": items,
         "total": total,
         "page": params.page,
-        "per_page": params.per_page,
+        "page_size": params.per_page,
         "pages": math.ceil(total / params.per_page) if total > 0 else 0,
     }

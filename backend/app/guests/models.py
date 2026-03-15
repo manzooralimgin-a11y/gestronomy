@@ -10,10 +10,10 @@ class GuestProfile(Base):
     __tablename__ = "guest_profiles"
 
     restaurant_id: Mapped[int | None] = mapped_column(
-        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
+        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True, index=True
     )
     name: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    email: Mapped[str | None] = mapped_column(String(255), unique=True, nullable=True)
+    email: Mapped[str | None] = mapped_column(String(255), unique=True, nullable=True, index=True)
     phone: Mapped[str | None] = mapped_column(String(50), nullable=True)
     dietary_json: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     flavor_profile_json: Mapped[dict | None] = mapped_column(JSON, nullable=True)
@@ -32,7 +32,7 @@ class Order(Base):
         Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
     )
     guest_id: Mapped[int | None] = mapped_column(
-        Integer, ForeignKey("guest_profiles.id", ondelete="SET NULL"), nullable=True
+        Integer, ForeignKey("guest_profiles.id", ondelete="SET NULL"), nullable=True, index=True
     )
     order_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     channel: Mapped[str] = mapped_column(String(50), default="dine_in", nullable=False)

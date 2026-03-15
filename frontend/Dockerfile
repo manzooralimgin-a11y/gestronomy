@@ -10,6 +10,10 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Accept API URL at build time — Next.js bakes NEXT_PUBLIC_* vars into the static bundle
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+
 RUN npm run build
 
 FROM nginx:alpine AS runner

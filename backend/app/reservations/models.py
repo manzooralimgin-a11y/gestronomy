@@ -22,10 +22,10 @@ class Table(Base):
     __tablename__ = "tables"
 
     restaurant_id: Mapped[int | None] = mapped_column(
-        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
+        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True, index=True
     )
     section_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("floor_sections.id", ondelete="CASCADE"), nullable=False
+        Integer, ForeignKey("floor_sections.id", ondelete="CASCADE"), nullable=False, index=True
     )
     table_number: Mapped[str] = mapped_column(String(50), nullable=False)
     capacity: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -44,7 +44,7 @@ class Reservation(Base):
     __tablename__ = "reservations"
 
     restaurant_id: Mapped[int | None] = mapped_column(
-        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
+        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True, index=True
     )
     guest_id: Mapped[int | None] = mapped_column(
         Integer, ForeignKey("guest_profiles.id", ondelete="SET NULL"), nullable=True
@@ -56,11 +56,11 @@ class Reservation(Base):
         Integer, ForeignKey("tables.id", ondelete="SET NULL"), nullable=True
     )
     party_size: Mapped[int] = mapped_column(Integer, nullable=False)
-    reservation_date: Mapped[date] = mapped_column(Date, nullable=False)
+    reservation_date: Mapped[date] = mapped_column(Date, nullable=False, index=True)
     start_time: Mapped[time] = mapped_column(Time, nullable=False)
     end_time: Mapped[time | None] = mapped_column(Time, nullable=True)
     duration_min: Mapped[int] = mapped_column(Integer, default=90, nullable=False)
-    status: Mapped[str] = mapped_column(String(20), default="confirmed", nullable=False)
+    status: Mapped[str] = mapped_column(String(20), default="confirmed", nullable=False, index=True)
     special_requests: Mapped[str | None] = mapped_column(String(1000), nullable=True)
     notes: Mapped[str | None] = mapped_column(String(500), nullable=True)
     source: Mapped[str] = mapped_column(String(20), default="phone", nullable=False)
@@ -104,7 +104,7 @@ class TableSession(Base):
         Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
     )
     table_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("tables.id", ondelete="CASCADE"), nullable=False
+        Integer, ForeignKey("tables.id", ondelete="CASCADE"), nullable=False, index=True
     )
     reservation_id: Mapped[int | None] = mapped_column(
         Integer, ForeignKey("reservations.id", ondelete="SET NULL"), nullable=True

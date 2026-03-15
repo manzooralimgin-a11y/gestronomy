@@ -8,7 +8,7 @@ class MenuCategory(Base):
     __tablename__ = "menu_categories"
 
     restaurant_id: Mapped[int | None] = mapped_column(
-        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
+        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True, index=True
     )
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str | None] = mapped_column(String(500), nullable=True)
@@ -22,10 +22,10 @@ class MenuItem(Base):
     __tablename__ = "menu_items"
 
     restaurant_id: Mapped[int | None] = mapped_column(
-        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
+        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True, index=True
     )
     category_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("menu_categories.id", ondelete="CASCADE"), nullable=False
+        Integer, ForeignKey("menu_categories.id", ondelete="CASCADE"), nullable=False, index=True
     )
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[str | None] = mapped_column(String(1000), nullable=True)

@@ -17,7 +17,7 @@ interface DisplayData {
   content: ContentItem[];
 }
 
-const API = process.env.NEXT_PUBLIC_API_URL || "https://gestronomy-api.onrender.com";
+const API = process.env.NEXT_PUBLIC_API_URL || "";
 
 export function DisplayClient() {
   const searchParams = useSearchParams();

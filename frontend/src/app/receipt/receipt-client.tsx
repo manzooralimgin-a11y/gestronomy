@@ -47,7 +47,7 @@ export function PublicReceiptClient() {
 
     useEffect(() => {
         if (!token) return;
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://gestronomy-api.onrender.com"}/api/billing/receipt/${token}`)
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || ""}/api/billing/receipt/${token}`)
             .then(async (res) => {
                 if (!res.ok) throw new Error("Receipt not found");
                 return res.json();

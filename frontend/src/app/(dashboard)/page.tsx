@@ -165,7 +165,7 @@ export default function DashboardPage() {
                   <Clock className="h-3.5 w-3.5" />
                   {time}
                 </span>
-                <span className="text-white/10">|</span>
+                <span className="text-border">|</span>
                 <span className="flex items-center gap-1.5">
                   <StatusDot status={systemHealthy ? "success" : "warning"} pulse={!systemHealthy} />
                   {systemHealthy ? "All systems nominal" : `${todayStrip.criticalAlerts} alert${todayStrip.criticalAlerts > 1 ? "s" : ""} need attention`}

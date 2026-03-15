@@ -10,7 +10,7 @@ class Vendor(Base):
     __tablename__ = "vendors"
 
     restaurant_id: Mapped[int | None] = mapped_column(
-        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
+        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True, index=True
     )
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     contact_email: Mapped[str | None] = mapped_column(String(255), nullable=True)
@@ -32,9 +32,9 @@ class InventoryItem(Base):
     __tablename__ = "inventory_items"
 
     restaurant_id: Mapped[int | None] = mapped_column(
-        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
+        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True, index=True
     )
-    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    name: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     category: Mapped[str] = mapped_column(String(100), nullable=False)
     unit: Mapped[str] = mapped_column(String(50), nullable=False)
     current_stock: Mapped[float] = mapped_column(Float, default=0, nullable=False)
@@ -51,12 +51,12 @@ class PurchaseOrder(Base):
     __tablename__ = "purchase_orders"
 
     restaurant_id: Mapped[int | None] = mapped_column(
-        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True
+        Integer, ForeignKey("restaurants.id", ondelete="SET NULL"), nullable=True, index=True
     )
     vendor_id: Mapped[int | None] = mapped_column(
         Integer, ForeignKey("vendors.id", ondelete="SET NULL"), nullable=True
     )
-    status: Mapped[str] = mapped_column(String(20), default="draft", nullable=False)
+    status: Mapped[str] = mapped_column(String(20), default="draft", nullable=False, index=True)
     total: Mapped[float] = mapped_column(Numeric(12, 2), default=0, nullable=False)
     order_date: Mapped[date] = mapped_column(Date, nullable=False)
     delivery_date: Mapped[date | None] = mapped_column(Date, nullable=True)

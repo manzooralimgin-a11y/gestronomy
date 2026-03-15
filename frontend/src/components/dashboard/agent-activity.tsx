@@ -27,7 +27,7 @@ function getAgentColor(name: string): string {
 
 function ActivityItem({ activity }: { activity: AgentActivity }) {
   return (
-    <div className="flex items-start gap-3 rounded-md px-3 py-2 transition-colors hover:bg-white/[0.04]">
+    <div className="flex items-start gap-3 rounded-md px-3 py-2 transition-colors hover:bg-[hsl(var(--glass-highlight))]">
       <Badge
         className={`mt-0.5 shrink-0 border-0 text-[10px] ${getAgentColor(activity.agent_name)}`}
       >

@@ -1,6 +1,11 @@
 import os
+import logging
 from pydantic_settings import BaseSettings
 from pydantic import model_validator
+
+_config_logger = logging.getLogger("app.config")
+
+_DEFAULT_SECRET = "change-me-to-a-random-secret-key-in-production"
 
 
 class Settings(BaseSettings):
@@ -20,7 +25,7 @@ class Settings(BaseSettings):
     redis_url: str = "redis://localhost:6379/0"
 
     # Auth
-    secret_key: str = "change-me-to-a-random-secret-key-in-production"
+    secret_key: str = _DEFAULT_SECRET
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
     algorithm: str = "HS256"
@@ -85,6 +90,35 @@ class Settings(BaseSettings):
         ]
         all_origins = list(dict.fromkeys(configured + desktop_origins))  # deduplicate, preserve order
         return all_origins
+
+    @property
+    def sql_echo(self) -> bool:
+        """Only echo SQL in development. Never in production, even if debug=True."""
+        return self.debug and self.app_env.lower() == "development"
+
+    @model_validator(mode="after")
+    def _validate_production_settings(self) -> "Settings":
+        """Fail-fast if critical settings are unsafe for production."""
+        is_prod = self.app_env.lower() == "production"
+
+        if is_prod:
+            if self.secret_key == _DEFAULT_SECRET:
+                raise ValueError(
+                    "CRITICAL: SECRET_KEY must be set to a secure random value in production. "
+                    "Generate one with: python -c \"import secrets; print(secrets.token_urlsafe(64))\""
+                )
+            if self.debug:
+                _config_logger.warning("DEBUG=true in production — this may leak sensitive data")
+            if self.voicebooker_secret == "dev_secret_key":
+                _config_logger.warning("VOICEBOOKER_SECRET is still the dev default in production")
+
+        # Warn about missing optional integrations (any env)
+        if not self.anthropic_api_key:
+            _config_logger.warning("ANTHROPIC_API_KEY is not set — AI features will be disabled")
+        if not self.resend_api_key:
+            _config_logger.warning("RESEND_API_KEY is not set — email sending will be disabled")
+
+        return self
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8", "extra": "ignore"}
 

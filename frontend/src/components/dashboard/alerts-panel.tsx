@@ -47,7 +47,7 @@ function AlertRow({
   return (
     <div
       className={cn(
-        "flex items-start gap-3 border-l-4 rounded-r-md bg-white/[0.03] p-3 transition-colors hover:bg-white/[0.06]",
+        "flex items-start gap-3 border-l-4 rounded-r-md bg-[hsl(var(--glass-highlight))] p-3 transition-colors hover:bg-[hsl(var(--glass-border))]",
         config.color,
         alert.is_read && "opacity-60"
       )}
