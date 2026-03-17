@@ -8,22 +8,22 @@ import { CalendarCheck, ShoppingCart, PackageSearch, AlertTriangle, UserPlus, Ca
 import api from "@/lib/api";
 import { cn } from "@/lib/utils";
 import Meldeschein, { MeldescheinData, emptyMeldeschein } from "@/components/hms/meldeschein";
-import Rechnung, { RechnungData, RechnungItem, emptyRechnung } from "@/components/hms/rechnung";
+import Rechnung, { RechnungData, RechnungItem, emptyRechnung, ZahlungsMethode, ZahlungsStatus } from "@/components/hms/rechnung";
 
-type Arrival = { id: string; guest_name: string; room: string; room_type: string; check_in_time: string; check_in: string; check_out: string; status: "expected" | "checked-in" | "late" | "no-show" };
-type Departure = { id: string; guest_name: string; room: string; room_type: string; check_out_time: string; check_in: string; check_out: string; status: "pending" | "checked-out" | "late" };
+type Arrival = { id: string; anrede: string; guest_name: string; room: string; room_type: string; check_in_time: string; check_in: string; check_out: string; status: "expected" | "checked-in" | "late" | "no-show"; zahlungs_methode: string; zahlungs_status: string };
+type Departure = { id: string; anrede: string; guest_name: string; room: string; room_type: string; check_out_time: string; check_in: string; check_out: string; status: "pending" | "checked-out" | "late"; zahlungs_methode: string; zahlungs_status: string };
 
 const fallbackArrivals: Arrival[] = [
-  { id: "R-13300", guest_name: "Anna Bergmann", room: "203", room_type: "Komfort Plus", check_in_time: "14:00", check_in: "2026-03-17", check_out: "2026-03-20", status: "expected" },
-  { id: "R-13301", guest_name: "Thomas Krause", room: "305", room_type: "Suite", check_in_time: "15:00", check_in: "2026-03-17", check_out: "2026-03-19", status: "expected" },
-  { id: "R-13302", guest_name: "Sophie Richter", room: "102", room_type: "Komfort", check_in_time: "12:00", check_in: "2026-03-17", check_out: "2026-03-18", status: "checked-in" },
-  { id: "R-13303", guest_name: "Markus Weber", room: "401", room_type: "Komfort Plus", check_in_time: "16:00", check_in: "2026-03-17", check_out: "2026-03-22", status: "late" },
+  { id: "R-13300", anrede: "Frau", guest_name: "Anna Bergmann", room: "203", room_type: "Komfort Plus", check_in_time: "14:00", check_in: "2026-03-17", check_out: "2026-03-20", status: "expected", zahlungs_methode: "booking.com", zahlungs_status: "bezahlt" },
+  { id: "R-13301", anrede: "Herr", guest_name: "Thomas Krause", room: "305", room_type: "Suite", check_in_time: "15:00", check_in: "2026-03-17", check_out: "2026-03-19", status: "expected", zahlungs_methode: "", zahlungs_status: "offen" },
+  { id: "R-13302", anrede: "Frau Dr.", guest_name: "Sophie Richter", room: "102", room_type: "Komfort", check_in_time: "12:00", check_in: "2026-03-17", check_out: "2026-03-18", status: "checked-in", zahlungs_methode: "kartenzahlung", zahlungs_status: "bezahlt" },
+  { id: "R-13303", anrede: "Herr", guest_name: "Markus Weber", room: "401", room_type: "Komfort Plus", check_in_time: "16:00", check_in: "2026-03-17", check_out: "2026-03-22", status: "late", zahlungs_methode: "", zahlungs_status: "offen" },
 ];
 
 const fallbackDepartures: Departure[] = [
-  { id: "R-13280", guest_name: "Klaus Fischer", room: "303", room_type: "Suite", check_out_time: "10:00", check_in: "2026-03-14", check_out: "2026-03-17", status: "checked-out" },
-  { id: "R-13281", guest_name: "Maria Schmidt", room: "105", room_type: "Komfort", check_out_time: "11:00", check_in: "2026-03-15", check_out: "2026-03-17", status: "pending" },
-  { id: "R-13282", guest_name: "Lukas Braun", room: "204", room_type: "Komfort Plus", check_out_time: "10:00", check_in: "2026-03-16", check_out: "2026-03-17", status: "late" },
+  { id: "R-13280", anrede: "Herr", guest_name: "Klaus Fischer", room: "303", room_type: "Suite", check_out_time: "10:00", check_in: "2026-03-14", check_out: "2026-03-17", status: "checked-out", zahlungs_methode: "bar", zahlungs_status: "bezahlt" },
+  { id: "R-13281", anrede: "Frau", guest_name: "Maria Schmidt", room: "105", room_type: "Komfort", check_out_time: "11:00", check_in: "2026-03-15", check_out: "2026-03-17", status: "pending", zahlungs_methode: "kartenzahlung", zahlungs_status: "bezahlt" },
+  { id: "R-13282", anrede: "Herr", guest_name: "Lukas Braun", room: "204", room_type: "Komfort Plus", check_out_time: "10:00", check_in: "2026-03-16", check_out: "2026-03-17", status: "late", zahlungs_methode: "", zahlungs_status: "offen" },
 ];
 
 const statusColors: Record<string, string> = {
@@ -38,7 +38,7 @@ const statusColors: Record<string, string> = {
 const roomRates: Record<string, number> = { "Komfort": 89, "Komfort Plus": 129, "Suite": 199 };
 
 function buildMeldeschein(guest: Arrival | Departure): MeldescheinData {
-  return { ...emptyMeldeschein, nachname: guest.guest_name.split(" ").slice(-1)[0], vorname: guest.guest_name.split(" ").slice(0, -1).join(" "), anreise: guest.check_in, abreise: guest.check_out, reservierung_nr: guest.id.replace("R-", ""), zimmer: guest.room };
+  return { ...emptyMeldeschein, anrede: guest.anrede || "", nachname: guest.guest_name.split(" ").slice(-1)[0], vorname: guest.guest_name.split(" ").slice(0, -1).join(" "), anreise: guest.check_in, abreise: guest.check_out, reservierung_nr: guest.id.replace("R-", ""), zimmer: guest.room };
 }
 
 function buildRechnung(guest: Arrival | Departure): RechnungData {
@@ -67,12 +67,15 @@ function buildRechnung(guest: Arrival | Departure): RechnungData {
     folio: `${guest.id.replace("R-", "")}-1`,
     reservierung_nr: guest.id.replace("R-", ""),
     datum: new Date().toISOString().slice(0, 10),
-    gast_name: guest.guest_name, gast_strasse: "", gast_plz_stadt: "", gast_land: "Deutschland",
+    gast_name: guest.guest_name, gast_anrede: guest.anrede || "", gast_strasse: "", gast_plz_stadt: "", gast_land: "Deutschland",
     zimmer: guest.room, zimmer_typ: guest.room_type,
     anreise: guest.check_in, abreise: guest.check_out,
     items,
     netto_7: netto7, mwst_7: mwst7, netto_19: kurtaxeNetto, mwst_19: kurtaxeMwst,
     gesamtsumme: gesamt, kurtaxe, anzahlung: 0, anzahlung_label: "", zahlung: gesamt,
+    zahlungs_methode: (guest.zahlungs_methode || "") as ZahlungsMethode,
+    zahlungs_status: (guest.zahlungs_status || "offen") as ZahlungsStatus,
+    zahlungs_datum: guest.zahlungs_status === "bezahlt" ? guest.check_out : "",
   };
 }
 

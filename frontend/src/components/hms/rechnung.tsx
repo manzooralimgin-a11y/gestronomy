@@ -14,6 +14,9 @@ export interface RechnungItem {
   brutto: number;
 }
 
+export type ZahlungsMethode = "bar" | "kartenzahlung" | "booking.com" | "expedia" | "ueberweisung" | "";
+export type ZahlungsStatus = "bezahlt" | "offen" | "teilweise";
+
 export interface RechnungData {
   rechnungs_nr: string;
   folio: string;
@@ -21,6 +24,7 @@ export interface RechnungData {
   datum: string; // invoice date
   // Guest address
   gast_name: string;
+  gast_anrede: string; // Herr, Frau, Dr., etc.
   gast_strasse: string;
   gast_plz_stadt: string;
   gast_land: string;
@@ -47,15 +51,20 @@ export interface RechnungData {
   anzahlung: number; // deposit (e.g. Booking.de)
   anzahlung_label: string;
   zahlung: number; // final payment
+  // Payment info
+  zahlungs_methode: ZahlungsMethode;
+  zahlungs_status: ZahlungsStatus;
+  zahlungs_datum: string; // date payment received
 }
 
 export const emptyRechnung: RechnungData = {
   rechnungs_nr: "", folio: "", reservierung_nr: "", datum: new Date().toISOString().slice(0, 10),
-  gast_name: "", gast_strasse: "", gast_plz_stadt: "", gast_land: "Deutschland",
+  gast_name: "", gast_anrede: "", gast_strasse: "", gast_plz_stadt: "", gast_land: "Deutschland",
   firma_name: "", firma_strasse: "", firma_plz_stadt: "", firma_land: "", firma_ust_id: "",
   zimmer: "", zimmer_typ: "Komfort", anreise: "", abreise: "",
   items: [], netto_7: 0, mwst_7: 0, netto_19: 0, mwst_19: 0,
   gesamtsumme: 0, kurtaxe: 0, anzahlung: 0, anzahlung_label: "", zahlung: 0,
+  zahlungs_methode: "", zahlungs_status: "offen", zahlungs_datum: "",
 };
 
 interface Props { data: RechnungData }
@@ -67,9 +76,23 @@ const Rechnung = forwardRef<HTMLDivElement, Props>(({ data }, ref) => {
   };
   const fmtEur = (n: number) => n.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " \u20AC";
 
+  const guestDisplayName = data.gast_anrede ? `${data.gast_anrede} ${data.gast_name}` : data.gast_name;
   const billingAddress = data.firma_name
-    ? { name: data.firma_name, strasse: data.firma_strasse, plz_stadt: data.firma_plz_stadt, land: data.firma_land }
-    : { name: data.gast_name, strasse: data.gast_strasse, plz_stadt: data.gast_plz_stadt, land: data.gast_land };
+    ? { name: data.firma_name, extra: guestDisplayName, strasse: data.firma_strasse, plz_stadt: data.firma_plz_stadt, land: data.firma_land }
+    : { name: guestDisplayName, extra: "", strasse: data.gast_strasse, plz_stadt: data.gast_plz_stadt, land: data.gast_land };
+
+  const zahlungsMethodeLabel: Record<string, string> = {
+    "bar": "Barzahlung",
+    "kartenzahlung": "Kartenzahlung (EC/Kreditkarte)",
+    "booking.com": "Booking.com (Online-Zahlung)",
+    "expedia": "Expedia (Online-Zahlung)",
+    "ueberweisung": "\u00DCberweisung",
+  };
+  const zahlungsStatusLabel: Record<string, { text: string; color: string }> = {
+    "bezahlt": { text: "BEZAHLT", color: "text-green-700 bg-green-50 border-green-200" },
+    "offen": { text: "OFFEN", color: "text-red-700 bg-red-50 border-red-200" },
+    "teilweise": { text: "TEILWEISE BEZAHLT", color: "text-amber-700 bg-amber-50 border-amber-200" },
+  };
 
   return (
     <div ref={ref} className="bg-white text-black w-[210mm] min-h-[297mm] mx-auto p-[15mm] text-[10px] leading-relaxed font-sans print:p-[12mm] print:shadow-none" style={{ fontFamily: "'Segoe UI', Arial, sans-serif" }}>
@@ -89,7 +112,7 @@ const Rechnung = forwardRef<HTMLDivElement, Props>(({ data }, ref) => {
           <p className="mt-2">Telefon: 0391 / 543 288 8</p>
           <p>Steuernummer: 102/113/00839</p>
           <p>Gerichtsstand: Magdeburg</p>
-          <p className="mt-2">Gesch{"\u00E4"}ftsf{"\u00FC"}hrung: Navtej Singh</p>
+          <p className="mt-2">Gesch{"\u00E4"}ftsf{"\u00FC"}hrung: Bhupinder Singh</p>
           <p>E-Mail: info@das-elb.de</p>
           <p>www.das-elb.de</p>
         </div>
@@ -103,6 +126,7 @@ const Rechnung = forwardRef<HTMLDivElement, Props>(({ data }, ref) => {
       {/* Billing address */}
       <div className="mb-4">
         <p className="font-medium text-[11px]">{billingAddress.name}</p>
+        {billingAddress.extra && <p className="text-[9px] text-black/60">{billingAddress.extra}</p>}
         {billingAddress.strasse && <p>{billingAddress.strasse}</p>}
         {billingAddress.plz_stadt && <p>{billingAddress.plz_stadt}</p>}
         {billingAddress.land && billingAddress.land !== "Deutschland" && <p>{billingAddress.land}</p>}
@@ -182,6 +206,33 @@ const Rechnung = forwardRef<HTMLDivElement, Props>(({ data }, ref) => {
           <div className="flex justify-between font-bold pt-1 border-t border-black/30">
             <span>Zahlung</span>
             <span>{fmtEur(data.zahlung)}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Zahlungseingang / Payment Status */}
+      <div className="mb-4 border border-black/20 p-3">
+        <p className="text-[8px] font-bold uppercase tracking-wider text-black/50 mb-2">Zahlungseingang / Payment</p>
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-1 text-[10px]">
+            {data.zahlungs_methode && (
+              <div className="flex gap-2">
+                <span className="text-black/50">Zahlungsart:</span>
+                <span className="font-medium">{zahlungsMethodeLabel[data.zahlungs_methode] || data.zahlungs_methode}</span>
+              </div>
+            )}
+            {data.zahlungs_datum && (
+              <div className="flex gap-2">
+                <span className="text-black/50">Zahlungsdatum:</span>
+                <span className="font-medium">{fmtDate(data.zahlungs_datum)}</span>
+              </div>
+            )}
+            {!data.zahlungs_methode && !data.zahlungs_datum && data.zahlungs_status === "offen" && (
+              <p className="text-black/50">Zahlung ausstehend. Bitte {"\u00FC"}berweisen Sie den Betrag an &quot;Das ELB&quot;.</p>
+            )}
+          </div>
+          <div className={`px-3 py-1.5 border rounded text-[10px] font-bold tracking-wider ${zahlungsStatusLabel[data.zahlungs_status]?.color || "text-black/60 bg-black/5 border-black/20"}`}>
+            {zahlungsStatusLabel[data.zahlungs_status]?.text || "OFFEN"}
           </div>
         </div>
       </div>

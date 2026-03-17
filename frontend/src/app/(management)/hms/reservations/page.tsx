@@ -8,22 +8,22 @@ import { CalendarPlus, Search, Edit, X, FileText, Receipt, Printer, Building2 } 
 import api from "@/lib/api";
 import { cn } from "@/lib/utils";
 import Meldeschein, { MeldescheinData, emptyMeldeschein } from "@/components/hms/meldeschein";
-import Rechnung, { RechnungData, RechnungItem, emptyRechnung } from "@/components/hms/rechnung";
+import Rechnung, { RechnungData, RechnungItem, emptyRechnung, ZahlungsMethode, ZahlungsStatus } from "@/components/hms/rechnung";
 
 type Reservation = {
-  id: string; guest_name: string; email: string; phone: string; room_type: string;
+  id: string; anrede: string; guest_name: string; email: string; phone: string; room_type: string;
   check_in: string; check_out: string; nights: number; adults: number; children: number;
   status: "confirmed" | "checked-in" | "checked-out" | "cancelled"; special_requests: string;
-  room: string;
+  room: string; zahlungs_methode: string; zahlungs_status: string;
 };
 
 const fallbackData: Reservation[] = [
-  { id: "R-13300", guest_name: "Anna Bergmann", email: "anna@example.de", phone: "+49 170 1234567", room_type: "Komfort Plus", check_in: "2026-03-18", check_out: "2026-03-21", nights: 3, adults: 2, children: 0, status: "confirmed", special_requests: "Late check-in", room: "203" },
-  { id: "R-13301", guest_name: "Thomas Krause", email: "thomas@example.de", phone: "+49 171 2345678", room_type: "Komfort", check_in: "2026-03-17", check_out: "2026-03-19", nights: 2, adults: 1, children: 0, status: "checked-in", special_requests: "", room: "102" },
-  { id: "R-13302", guest_name: "Sophie Richter", email: "sophie@example.de", phone: "+49 172 3456789", room_type: "Suite", check_in: "2026-03-15", check_out: "2026-03-17", nights: 2, adults: 2, children: 1, status: "checked-out", special_requests: "Extra pillows", room: "501" },
-  { id: "R-13303", guest_name: "Markus Weber", email: "markus@example.de", phone: "+49 173 4567890", room_type: "Suite", check_in: "2026-03-20", check_out: "2026-03-25", nights: 5, adults: 2, children: 2, status: "confirmed", special_requests: "Anniversary celebration", room: "502" },
-  { id: "R-13304", guest_name: "Klaus Fischer", email: "klaus@example.de", phone: "+49 174 5678901", room_type: "Komfort", check_in: "2026-03-10", check_out: "2026-03-12", nights: 2, adults: 1, children: 0, status: "cancelled", special_requests: "", room: "105" },
-  { id: "R-13305", guest_name: "Maria Schmidt", email: "maria@example.de", phone: "+49 175 6789012", room_type: "Komfort Plus", check_in: "2026-03-19", check_out: "2026-03-22", nights: 3, adults: 2, children: 0, status: "confirmed", special_requests: "Airport transfer", room: "204" },
+  { id: "R-13300", anrede: "Frau", guest_name: "Anna Bergmann", email: "anna@example.de", phone: "+49 170 1234567", room_type: "Komfort Plus", check_in: "2026-03-18", check_out: "2026-03-21", nights: 3, adults: 2, children: 0, status: "confirmed", special_requests: "Late check-in", room: "203", zahlungs_methode: "booking.com", zahlungs_status: "bezahlt" },
+  { id: "R-13301", anrede: "Herr", guest_name: "Thomas Krause", email: "thomas@example.de", phone: "+49 171 2345678", room_type: "Komfort", check_in: "2026-03-17", check_out: "2026-03-19", nights: 2, adults: 1, children: 0, status: "checked-in", special_requests: "", room: "102", zahlungs_methode: "kartenzahlung", zahlungs_status: "bezahlt" },
+  { id: "R-13302", anrede: "Frau Dr.", guest_name: "Sophie Richter", email: "sophie@example.de", phone: "+49 172 3456789", room_type: "Suite", check_in: "2026-03-15", check_out: "2026-03-17", nights: 2, adults: 2, children: 1, status: "checked-out", special_requests: "Extra pillows", room: "501", zahlungs_methode: "bar", zahlungs_status: "bezahlt" },
+  { id: "R-13303", anrede: "Herr", guest_name: "Markus Weber", email: "markus@example.de", phone: "+49 173 4567890", room_type: "Suite", check_in: "2026-03-20", check_out: "2026-03-25", nights: 5, adults: 2, children: 2, status: "confirmed", special_requests: "Anniversary celebration", room: "502", zahlungs_methode: "", zahlungs_status: "offen" },
+  { id: "R-13304", anrede: "Herr", guest_name: "Klaus Fischer", email: "klaus@example.de", phone: "+49 174 5678901", room_type: "Komfort", check_in: "2026-03-10", check_out: "2026-03-12", nights: 2, adults: 1, children: 0, status: "cancelled", special_requests: "", room: "105", zahlungs_methode: "", zahlungs_status: "offen" },
+  { id: "R-13305", anrede: "Frau", guest_name: "Maria Schmidt", email: "maria@example.de", phone: "+49 175 6789012", room_type: "Komfort Plus", check_in: "2026-03-19", check_out: "2026-03-22", nights: 3, adults: 2, children: 0, status: "confirmed", special_requests: "Airport transfer", room: "204", zahlungs_methode: "booking.com", zahlungs_status: "bezahlt" },
 ];
 
 const statusColors: Record<string, string> = {
@@ -36,10 +36,10 @@ const statusColors: Record<string, string> = {
 const tabs = ["Upcoming", "Today", "Past", "Cancelled"] as const;
 const roomRates: Record<string, number> = { "Komfort": 89, "Komfort Plus": 129, "Suite": 199 };
 
-const emptyForm = { guest_name: "", email: "", phone: "", room_type: "Komfort", check_in: "", check_out: "", adults: "1", children: "0", special_requests: "" };
+const emptyForm = { anrede: "", guest_name: "", email: "", phone: "", room_type: "Komfort", check_in: "", check_out: "", adults: "1", children: "0", special_requests: "", zahlungs_methode: "", zahlungs_status: "offen" };
 
 function buildMeldeschein(r: Reservation): MeldescheinData {
-  return { ...emptyMeldeschein, nachname: r.guest_name.split(" ").slice(-1)[0], vorname: r.guest_name.split(" ").slice(0, -1).join(" "), anreise: r.check_in, abreise: r.check_out, reservierung_nr: r.id.replace("R-", ""), zimmer: r.room, email: r.email, telefon: r.phone };
+  return { ...emptyMeldeschein, anrede: r.anrede || "", nachname: r.guest_name.split(" ").slice(-1)[0], vorname: r.guest_name.split(" ").slice(0, -1).join(" "), anreise: r.check_in, abreise: r.check_out, reservierung_nr: r.id.replace("R-", ""), zimmer: r.room, email: r.email, telefon: r.phone };
 }
 
 function buildRechnung(r: Reservation): RechnungData {
@@ -64,10 +64,13 @@ function buildRechnung(r: Reservation): RechnungData {
   return {
     ...emptyRechnung, rechnungs_nr: `RE-${r.id.replace("R-", "")}`, folio: `${r.id.replace("R-", "")}-1`,
     reservierung_nr: r.id.replace("R-", ""), datum: new Date().toISOString().slice(0, 10),
-    gast_name: r.guest_name, gast_strasse: "", gast_plz_stadt: "", gast_land: "Deutschland",
+    gast_name: r.guest_name, gast_anrede: r.anrede || "", gast_strasse: "", gast_plz_stadt: "", gast_land: "Deutschland",
     zimmer: r.room, zimmer_typ: r.room_type, anreise: r.check_in, abreise: r.check_out,
     items, netto_7: netto7, mwst_7: mwst7, netto_19: kurtaxeNetto, mwst_19: kurtaxeMwst,
     gesamtsumme: gesamt, kurtaxe, anzahlung: 0, anzahlung_label: "", zahlung: gesamt,
+    zahlungs_methode: (r.zahlungs_methode || "") as ZahlungsMethode,
+    zahlungs_status: (r.zahlungs_status || "offen") as ZahlungsStatus,
+    zahlungs_datum: r.zahlungs_status === "bezahlt" ? r.check_out : "",
   };
 }
 
@@ -105,7 +108,7 @@ export default function ReservationsPage() {
 
   const openEdit = (r: Reservation) => {
     setEditId(r.id);
-    setForm({ guest_name: r.guest_name, email: r.email, phone: r.phone, room_type: r.room_type, check_in: r.check_in, check_out: r.check_out, adults: String(r.adults), children: String(r.children), special_requests: r.special_requests });
+    setForm({ anrede: r.anrede || "", guest_name: r.guest_name, email: r.email, phone: r.phone, room_type: r.room_type, check_in: r.check_in, check_out: r.check_out, adults: String(r.adults), children: String(r.children), special_requests: r.special_requests, zahlungs_methode: r.zahlungs_methode || "", zahlungs_status: r.zahlungs_status || "offen" });
     setDialogOpen(true);
   };
 
@@ -113,7 +116,7 @@ export default function ReservationsPage() {
     e.preventDefault();
     setSaving(true);
     const nights = Math.max(1, Math.ceil((new Date(form.check_out).getTime() - new Date(form.check_in).getTime()) / 86400000));
-    const payload = { ...form, adults: Number(form.adults), children: Number(form.children), nights };
+    const payload = { ...form, adults: Number(form.adults), children: Number(form.children), nights, anrede: form.anrede, zahlungs_methode: form.zahlungs_methode, zahlungs_status: form.zahlungs_status };
     try {
       if (editId) {
         await api.put(`/hms/reservations/${editId}`, payload);
@@ -180,7 +183,21 @@ export default function ReservationsPage() {
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4 mt-2">
               <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2">
+                <div>
+                  <label className="text-xs font-semibold text-foreground-muted uppercase tracking-wider block mb-1.5">Anrede / Title</label>
+                  <select value={form.anrede} onChange={e => setForm(f => ({ ...f, anrede: e.target.value }))} className="w-full bg-muted rounded-lg px-3 py-2.5 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/30">
+                    <option value="">-- Bitte w{"\u00E4"}hlen --</option>
+                    <option value="Herr">Herr</option>
+                    <option value="Frau">Frau</option>
+                    <option value="Herr Dr.">Herr Dr.</option>
+                    <option value="Frau Dr.">Frau Dr.</option>
+                    <option value="Herr Prof.">Herr Prof.</option>
+                    <option value="Frau Prof.">Frau Prof.</option>
+                    <option value="Herr Prof. Dr.">Herr Prof. Dr.</option>
+                    <option value="Frau Prof. Dr.">Frau Prof. Dr.</option>
+                  </select>
+                </div>
+                <div>
                   <label className="text-xs font-semibold text-foreground-muted uppercase tracking-wider block mb-1.5">Guest Name</label>
                   <input required value={form.guest_name} onChange={e => setForm(f => ({ ...f, guest_name: e.target.value }))} className="w-full bg-muted rounded-lg px-3 py-2.5 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/30" />
                 </div>
@@ -217,6 +234,25 @@ export default function ReservationsPage() {
                 <div className="col-span-2">
                   <label className="text-xs font-semibold text-foreground-muted uppercase tracking-wider block mb-1.5">Special Requests</label>
                   <textarea value={form.special_requests} onChange={e => setForm(f => ({ ...f, special_requests: e.target.value }))} rows={2} className="w-full bg-muted rounded-lg px-3 py-2.5 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/30 resize-none" />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-foreground-muted uppercase tracking-wider block mb-1.5">Zahlungsart / Payment</label>
+                  <select value={form.zahlungs_methode} onChange={e => setForm(f => ({ ...f, zahlungs_methode: e.target.value }))} className="w-full bg-muted rounded-lg px-3 py-2.5 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/30">
+                    <option value="">-- Noch offen --</option>
+                    <option value="bar">Barzahlung</option>
+                    <option value="kartenzahlung">Kartenzahlung (EC/Kreditkarte)</option>
+                    <option value="booking.com">Booking.com</option>
+                    <option value="expedia">Expedia</option>
+                    <option value="ueberweisung">{"\u00DC"}berweisung</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-foreground-muted uppercase tracking-wider block mb-1.5">Zahlungsstatus</label>
+                  <select value={form.zahlungs_status} onChange={e => setForm(f => ({ ...f, zahlungs_status: e.target.value }))} className="w-full bg-muted rounded-lg px-3 py-2.5 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/30">
+                    <option value="offen">Offen</option>
+                    <option value="bezahlt">Bezahlt</option>
+                    <option value="teilweise">Teilweise bezahlt</option>
+                  </select>
                 </div>
               </div>
               <div className="flex justify-end gap-3 pt-2">
@@ -263,7 +299,7 @@ export default function ReservationsPage() {
                   <tr key={r.id} className="hover:bg-foreground/[0.01] transition-colors">
                     <td className="px-6 py-4 font-mono text-foreground-muted text-xs">{r.id}</td>
                     <td className="px-6 py-4">
-                      <div className="font-medium text-foreground">{r.guest_name}</div>
+                      <div className="font-medium text-foreground">{r.anrede ? `${r.anrede} ` : ""}{r.guest_name}</div>
                       <div className="text-xs text-foreground-muted">{r.email}</div>
                     </td>
                     <td className="px-6 py-4 text-foreground-muted">{r.room_type}</td>
