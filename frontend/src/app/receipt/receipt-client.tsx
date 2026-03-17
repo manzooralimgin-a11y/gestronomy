@@ -167,6 +167,17 @@ export function PublicReceiptClient() {
                         </div>
                     )}
 
+                    {/* Download / Print Button */}
+                    <div className="flex gap-3 print:hidden">
+                        <button
+                            onClick={() => window.print()}
+                            className="flex-1 bg-foreground text-white py-3 rounded-xl font-semibold text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                            Download Receipt (PDF)
+                        </button>
+                    </div>
+
                     {/* Business Details & Footer */}
                     <div className="text-center pt-6 space-y-3 border-t border-border">
                         <div className="text-[10px] text-muted-foreground leading-relaxed uppercase tracking-widest">
@@ -181,6 +192,15 @@ export function PublicReceiptClient() {
                     </div>
                 </div>
             </div>
+
+            {/* Print styles */}
+            <style jsx global>{`
+                @media print {
+                    body { background: white !important; }
+                    .print\\:hidden { display: none !important; }
+                    @page { margin: 0; size: 80mm auto; }
+                }
+            `}</style>
         </div>
     );
 }
