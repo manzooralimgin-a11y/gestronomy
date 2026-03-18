@@ -8,7 +8,7 @@ class Settings(BaseSettings):
                 debug: bool = True
                 backend_url: str = "http://localhost:8000"
                 frontend_url: str = "http://localhost:3000"
-                cors_origins: str = "http://localhost:3000"
+                cors_origins: str = "http://localhost:3000,https://gestronomy-web.onrender.com,https://das-elb-hotel.onrender.com,https://das-elb-rest.onrender.com"
                 database_url: str = "postgresql+asyncpg://gestronomy:gestronomy@localhost:5432/gestronomy"
                 database_url_sync: str = "postgresql://gestronomy:gestronomy@localhost:5432/gestronomy"
                 redis_url: str = "redis://localhost:6379/0"
