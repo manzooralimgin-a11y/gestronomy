@@ -2,6 +2,6 @@
   "name": "das-elb-rest",
   "private": true,
   "scripts": {
-    "build": "mkdir -p out && cp -r public/* out/"
+    "build": "mkdir -p dist && cp -r public/* dist/"
   }
 }
