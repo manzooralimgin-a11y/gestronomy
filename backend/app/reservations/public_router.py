@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.reservations.models import Reservation
 from app.websockets.connection_manager import manager
+from app.qr_ordering import service as qr_service, schemas as qr_schemas
 
 router = APIRouter()
 
@@ -42,7 +43,6 @@ async def create_restaurant_reservation(
         special_requests=res.special_requests,
         status="confirmed",
         source="online",
-        payment_status="paid" # Restaurant reservations are free or paid on-site in this version
     )
 
     db.add(new_res)
@@ -67,3 +67,35 @@ async def create_restaurant_reservation(
         "status": new_res.status,
         "guest_name": new_res.guest_name
     }
+
+
+# ── Public aliases for menu / table / order ──────────────────────────
+
+@router.get("/menu")
+async def public_restaurant_menu(db: AsyncSession = Depends(get_db)):
+    """Get full restaurant menu (public)."""
+    menu = await qr_service.get_public_menu(db)
+    return {"categories": menu}
+
+
+@router.get("/table/{code}")
+async def public_table_info(code: str, db: AsyncSession = Depends(get_db)):
+    """Get table info by QR code."""
+    info = await qr_service.get_table_by_code(db, code)
+    if not info:
+        raise HTTPException(status_code=404, detail="Invalid or expired QR code")
+    return info
+
+
+@router.post("/order", response_model=qr_schemas.QROrderResponse)
+async def public_submit_order(
+    data: qr_schemas.QROrderSubmit, db: AsyncSession = Depends(get_db)
+):
+    """Submit an order from the restaurant app."""
+    result = await qr_service.submit_qr_order(
+        db, data.table_code, data.guest_name,
+        [item.model_dump() for item in data.items], data.notes
+    )
+    if not result:
+        raise HTTPException(status_code=400, detail="Invalid QR code or table")
+    return result

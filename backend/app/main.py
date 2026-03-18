@@ -135,6 +135,7 @@ from app.hms.router import router as hms_router  # noqa: E402
 from app.hms.public_router import router as hms_public_router  # noqa: E402
 from app.reservations.public_router import router as res_public_router  # noqa: E402
 from app.billing.stripe_router import router as stripe_router  # noqa: E402
+from app.landing_adapter import router as landing_router  # noqa: E402
 from app.websockets.router import router as ws_router  # noqa: E402
 from app.integrations.mcp_server import mcp_app  # noqa: E402
 app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
@@ -264,6 +265,7 @@ app.include_router(
 app.include_router(stripe_router, prefix="/api/webhooks/stripe", tags=["Webhooks"])
 app.include_router(hms_public_router, prefix="/api/public/hotel", tags=["Public Hotel"])
 app.include_router(res_public_router, prefix="/api/public/restaurant", tags=["Public Restaurant"])
+app.include_router(landing_router, prefix="/api", tags=["Landing Page"])
 app.include_router(ws_router, prefix="/ws")
 app.include_router(integrations_router)
 
