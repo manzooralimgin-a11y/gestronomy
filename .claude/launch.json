@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "backend",
+      "runtimeExecutable": "/opt/homebrew/bin/python3.12",
+      "runtimeArgs": ["/Users/ali/Desktop/gestronomy/backend/run_server.py"],
+      "port": 8001
+    },
+    {
+      "name": "frontend",
+      "runtimeExecutable": "/opt/homebrew/bin/node",
+      "runtimeArgs": ["/Users/ali/Desktop/gestronomy/frontend/node_modules/next/dist/bin/next", "dev", "/Users/ali/Desktop/gestronomy/frontend", "--port", "3000"],
+      "port": 3000
+    }
+  ]
+}
